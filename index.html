@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Comic Reader</title>
+  <style>
+    body { margin:0; padding:0; background:#111; color:white; font-family:Arial; text-align:center; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px; padding:20px; }
+    .card { background:#222; border-radius:10px; overflow:hidden; transition:0.3s; }
+    .card:hover { transform:scale(1.05); }
+    .card img { width:100%; height:auto; }
+    .card h3 { margin:10px; }
+    a { text-decoration:none; color:white; }
+  </style>
+</head>
+<body>
+  <h1 style="padding:20px; background:#000;">Comic Reader</h1>
+  <div class="grid">
+    <a href="pages/one-piece.html">
+      <div class="card">
+        <img src="https://files.catbox.moe/PLACEHOLDER_ONEPIECE_COVER.jpg" alt="One Piece">
+        <h3>One Piece</h3>
+      </div>
+    </a>
+
+    <a href="pages/solo-leveling.html">
+      <div class="card">
+        <img src="https://files.catbox.moe/PLACEHOLDER_SOLOLEVE_COVER.jpg" alt="Solo Leveling">
+        <h3>Solo Leveling</h3>
+      </div>
+    </a>
+
+    <a href="pages/jujutsu-kaisen.html">
+      <div class="card">
+        <img src="https://files.catbox.moe/PLACEHOLDER_JJK_COVER.jpg" alt="Jujutsu Kaisen">
+        <h3>Jujutsu Kaisen</h3>
+      </div>
+    </a>
+    <!-- Yahan naye comics add karte jao -->
+  </div>
+</body>
+</html>
