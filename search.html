@@ -1,35 +1,65 @@
-<script>
-  function searchComic() {
-    const input = document.getElementById('searchInput').value.trim();
-    const query = input.toLowerCase(); // lower case mein convert
-    const resultDiv = document.getElementById('result');
-    const comicName = document.getElementById('comicName');
-    const comicLink = document.getElementById('comicLink');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Search Comics</title>
+  <style>
+    body { margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px; }
+    h1 { position:relative; }
+    .search-icon { position:absolute; right:20px; top:20px; font-size:28px; cursor:pointer; }
+    input { width:80%; max-width:500px; padding:15px; font-size:20px; border-radius:10px; border:none; margin:20px; }
+    .result { margin:20px; padding:20px; background:#222; border-radius:15px; display:none; }
+    .result a { color:white; text-decoration:none; font-size:22px; }
+    .back { margin:50px; }
+    .back a { color:#888; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <h1>🔍 Search Comics
+    <span class="search-icon" onclick="window.location.href='search.html'">🔍</span>
+  </h1>
+  <input type="text" id="searchInput" placeholder="Comic name type karo..." onkeyup="searchComic()">
 
-    const comics = {
-      "ishq par jor nahi": "pages/ishq-par-jor-nahi.html",
-      "ishq": "pages/ishq-par-jor-nahi.html",
-      "ishqparjornahi": "pages/ishq-par-jor-nahi.html",
-      "one piece": "pages/one-piece.html",
-      "solo leveling": "pages/solo-leveling.html"
-      // NAYA COMIC ADD KARNE KE LIYE YE LINE COPY KARO
-      // "comic name": "pages/comic-file.html",
-    };
+  <div id="result" class="result">
+    <p id="comicName"></p>
+    <a id="comicLink" href="">Comic Info Page Par Jao →</a>
+  </div>
 
-    let found = false;
-    for (const key in comics) {
-      if (key.includes(query) || query.includes(key)) { // partial match bhi kaam karega
-        resultDiv.style.display = "block";
-        comicName.textContent = key.toUpperCase() + " found!";
-        comicLink.href = comics[key];
-        comicLink.textContent = "Comic Info Page Par Jao →";
-        found = true;
-        break;
+  <div class="back">
+    <a href="index.html">← Back to Home</a>
+  </div>
+
+  <script>
+    function searchComic() {
+      const input = document.getElementById('searchInput').value.trim();
+      const query = input.toLowerCase();
+      const resultDiv = document.getElementById('result');
+      const comicName = document.getElementById('comicName');
+      const comicLink = document.getElementById('comicLink');
+
+      const comics = {
+        "ishq par jor nahi": "pages/ishq-par-jor-nahi.html",
+        "ishq": "pages/ishq-par-jor-nahi.html",
+        "one piece": "pages/one-piece.html",
+        "solo leveling": "pages/solo-leveling.html"
+      };
+
+      let found = false;
+      for (const key in comics) {
+        if (key.includes(query) || query.includes(key)) {
+          resultDiv.style.display = "block";
+          comicName.textContent = key.toUpperCase() + " found!";
+          comicLink.href = comics[key];
+          found = true;
+          break;
+        }
+      }
+
+      if (!found) {
+        resultDiv.style.display = "none";
       }
     }
-
-    if (!found) {
-      resultDiv.style.display = "none";
-    }
-  }
-</script>
+  </script>
+</body>
+</html>
