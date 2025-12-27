@@ -5,21 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Comic Reader</title>
   <style>
-    body { margin:0; background:#111; color:white; font-family:Arial; text-align:center; }
-    h1 { padding:20px; background:#000; margin:0; }
-    .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:20px; padding:20px; }
+    body { margin:0; background:#111; color:white; font-family:Arial; }
+    h1 { text-align:center; padding:20px; background:#000; margin:0; position:relative; }
+    .search-icon { position:absolute; right:20px; top:20px; font-size:28px; cursor:pointer; }
+    .grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:20px; padding:20px; }
+    @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
     .card { background:#222; border-radius:15px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.6); transition:0.3s; }
     .card:hover { transform:scale(1.05); }
     .card img { width:100%; height:auto; }
-    .card h3 { margin:20px; font-size:20px; }
+    .card h3 { margin:20px; font-size:20px; text-align:center; }
     a { text-decoration:none; color:white; }
   </style>
 </head>
 <body>
-  <h1>COMIC READER</h1>
+  <h1>COMIC READER
+    <span class="search-icon" onclick="window.location.href='search.html'">🔍</span>
+  </h1>
+
   <div class="grid">
-    <!-- Ishq Par Jor Nahi -->
-    <a href="pages/ishq-par-jor-nahi.html">
+    <a href="info.html">
       <div class="card">
         <img src="https://i.ibb.co/1YQsb3S1/file-00000000f1807206b0510a520d89fa32.jpg" alt="Ishq Par Jor Nahi" loading="lazy">
         <h3>Ishq Par Jor Nahi</h3>
@@ -28,14 +32,13 @@
 
     <!-- NAYA COMIC ADD KARNE KE LIYE YE COPY KARO -->
     <!--
-    <a href="info/one-piece.html">
+    <a href="info.html">
       <div class="card">
-        <img src="ONEPIECE_COVER_LINK" alt="One Piece" loading="lazy">
-        <h3>One Piece</h3>
+        <img src="NEW_COVER_LINK" alt="New Comic" loading="lazy">
+        <h3>New Comic</h3>
       </div>
     </a>
     -->
-
   </div>
 </body>
 </html>
