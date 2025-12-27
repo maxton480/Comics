@@ -12,15 +12,32 @@
   </style>
 </head>
 <body>
-  <h1>✅ Access Granted for 12 Hours!</h1>
-  <p>Ab tum saare episodes padh sakte ho.</p>
-  <a href="index.html">Homepage Par Jao</a>
 
   <script>
-    // 12 hours cookie set kar do
-    const d = new Date();
-    d.setTime(d.getTime() + (12 * 60 * 60 * 1000));
-    document.cookie = "site_access=true; expires=" + d.toUTCString() + "; path=/";
+    const referrer = document.referrer.toLowerCase();
+
+    if (referrer.includes("gplinks.co") || referrer.includes("gplinks")) {
+      // GPLinks se aaya hai – cookie set kar do
+      const d = new Date();
+      d.setTime(d.getTime() + (12 * 60 * 60 * 1000)); // 12 hours
+      document.cookie = "site_access=true; expires=" + d.toUTCString() + "; path=/";
+
+      // Normal message dikhao
+      document.body.innerHTML = `
+        <h1>✅ Access Granted for 12 Hours!</h1>
+        <p>Ab tum saare episodes padh sakte ho.</p>
+        <a href="index.html">Homepage Par Jao</a>
+      `;
+    } else {
+      // Direct ya dusre site se aaya – block
+      document.body.innerHTML = `
+        <div style="font-size:24px;">
+          ⚠️ Invalid Access<br><br>
+          Sirf GPLinks shortener solve karne ke baad hi access milega.<br><br>
+          Wapas shortener link se try karo.
+        </div>`;
+    }
   </script>
+
 </body>
 </html>
