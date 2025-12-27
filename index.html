@@ -7,38 +7,35 @@
   <style>
     body { margin:0; background:#111; color:white; font-family:Arial; text-align:center; }
     h1 { padding:20px; background:#000; margin:0; }
-    .card { max-width:500px; margin:40px auto; background:#222; border-radius:15px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.6); }
+    .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:20px; padding:20px; }
+    .card { background:#222; border-radius:15px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.6); transition:0.3s; }
+    .card:hover { transform:scale(1.05); }
     .card img { width:100%; height:auto; }
-    .card h2 { margin:20px; font-size:24px; }
+    .card h3 { margin:20px; font-size:20px; }
     a { text-decoration:none; color:white; }
   </style>
 </head>
 <body>
-
-  <!-- PROTECTION SCRIPT -->
-  <script>
-    function getCookie(name) {
-      let matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([.$?*|{}()[\]\\/+^])/g, '\\$1') + "=([^;]*)"));
-      return matches ? decodeURIComponent(matches[1]) : "";
-    }
-
-    if (getCookie("site_access") !== "true") {
-      document.body.innerHTML = `
-        <div style="color:white; text-align:center; margin-top:100px; font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
-          ⚠️ Direct Access Blocked<br><br>
-          Shortener solve karke hi site open hogi.<br><br>
-          <a href="gate.html" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
-        </div>`;
-      throw new Error("Access blocked");
-    }
-  </script>
-
   <h1>COMIC READER</h1>
-  <a href="info.html">
-    <div class="card">
-      <img src="https://i.ibb.co/1YQsb3S1/file-00000000f1807206b0510a520d89fa32.jpg" alt="Ishq Par Jor Nahi" loading="lazy">
-      <h2>Ishq Par Jor Nahi</h2>
-    </div>
-  </a>
+  <div class="grid">
+    <!-- Ishq Par Jor Nahi -->
+    <a href="pages/ishq-par-jor-nahi.html">
+      <div class="card">
+        <img src="https://i.ibb.co/1YQsb3S1/file-00000000f1807206b0510a520d89fa32.jpg" alt="Ishq Par Jor Nahi" loading="lazy">
+        <h3>Ishq Par Jor Nahi</h3>
+      </div>
+    </a>
+
+    <!-- NAYA COMIC ADD KARNE KE LIYE YE COPY KARO -->
+    <!--
+    <a href="info/one-piece.html">
+      <div class="card">
+        <img src="ONEPIECE_COVER_LINK" alt="One Piece" loading="lazy">
+        <h3>One Piece</h3>
+      </div>
+    </a>
+    -->
+
+  </div>
 </body>
 </html>
