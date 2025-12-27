@@ -6,8 +6,10 @@
   <title>Ishq Par Jor Nahi</title>
   <style>
     body { margin:0; background:#111; color:white; text-align:center; font-family:Arial; }
-    h1 { padding:20px; margin:0; }
+    h1 { padding:20px; margin:0; position:relative; }
+    .search-icon { position:absolute; right:20px; top:20px; font-size:28px; cursor:pointer; }
     .cover { max-width:90%; margin:30px auto; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.8); }
+    .summary { max-width:90%; margin:20px auto; padding:20px; background:#222; border-radius:12px; font-size:18px; line-height:1.6; }
     .episodes { padding:20px; }
     .btn { display:block; background:#333; margin:15px auto; padding:20px; max-width:700px; border-radius:12px; text-decoration:none; color:white; font-size:20px; }
     .btn:hover { background:#555; }
@@ -16,32 +18,19 @@
   </style>
 </head>
 <body>
-
-  <!-- PROTECTION SCRIPT -->
-  <script>
-    function getCookie(name) {
-      let matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([.$?*|{}()[\]\\/+^])/g, '\\$1') + "=([^;]*)"));
-      return matches ? decodeURIComponent(matches[1]) : "";
-    }
-
-    if (getCookie("site_access") !== "true") {
-      document.body.innerHTML = `
-        <div style="color:white; text-align:center; margin-top:100px; font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
-          ⚠️ Direct Access Blocked<br><br>
-          Shortener solve karke hi site open hogi.<br><br>
-          <a href="gate.html" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
-        </div>`;
-      throw new Error("Access blocked");
-    }
-  </script>
-
-  <h1>Ishq Par Jor Nahi</h1>
+  <h1>Ishq Par Jor Nahi
+    <span class="search-icon" onclick="window.location.href='search.html'">🔍</span>
+  </h1>
   <img src="https://i.ibb.co/1YQsb3S1/file-00000000f1807206b0510a520d89fa32.jpg" alt="Cover" class="cover" loading="lazy">
 
+  <div class="summary">
+    <p>Ahaan and Ishqi's beautiful love story filled with romance, drama, and emotions. Follow their journey of love and challenges in this heart-touching tale.</p>
+  </div>
+
   <div class="episodes">
-    <a href="reader.html?ch=ch1" class="btn">Episode 1</a>
-    <a href="reader.html?ch=ch2" class="btn">Episode 2</a>
-    <a href="reader.html?ch=ch3" class="btn">Episode 3</a>
+    <a href="reader/ishq-par-jor-nahi/ch1.html" class="btn">Episode 1</a>
+    <a href="reader/ishq-par-jor-nahi/ch2.html" class="btn">Episode 2</a>
+    <a href="reader/ishq-par-jor-nahi/ch3.html" class="btn">Episode 3</a>
     <!-- Naye episodes yahan add karo -->
   </div>
 
