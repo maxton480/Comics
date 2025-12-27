@@ -84,32 +84,4 @@
     }
   </script>
 </body>
-</html>      const resultDiv = document.getElementById('result');
-      const comicName = document.getElementById('comicName');
-      const comicLink = document.getElementById('comicLink');
-
-      const comics = {
-        "ishq par jor nahi": "pages/ishq-par-jor-nahi.html",
-        "ishq": "pages/ishq-par-jor-nahi.html",
-        "one piece": "pages/one-piece.html",
-        "solo leveling": "pages/solo-leveling.html"
-      };
-
-      let found = false;
-      for (const key in comics) {
-        if (key.includes(query) || query.includes(key)) {
-          resultDiv.style.display = "block";
-          comicName.textContent = key.toUpperCase() + " found!";
-          comicLink.href = comics[key];
-          found = true;
-          break;
-        }
-      }
-
-      if (!found) {
-        resultDiv.style.display = "none";
-      }
-    }
-  </script>
-</body>
 </html>
