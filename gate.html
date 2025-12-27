@@ -19,7 +19,7 @@
   <script>
     // 12 hours cookie set kar do
     const d = new Date();
-    d.setTime(d.getTime() + (12 * 60 * 60 * 1000)); // 12 hours
+    d.setTime(d.getTime() + (12 * 60 * 60 * 1000));
     document.cookie = "site_access=true; expires=" + d.toUTCString() + "; path=/";
   </script>
 </body>
