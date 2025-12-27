@@ -6,24 +6,25 @@
   <title>Search Comics</title>
   <style>
     body { margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px; }
-    h1 { position:relative; }
+    h1 { position:relative; padding-right:60px; }
     .search-icon { position:absolute; right:20px; top:20px; font-size:28px; cursor:pointer; }
     input { width:80%; max-width:500px; padding:15px; font-size:20px; border-radius:10px; border:none; margin:20px; }
-    .result { margin:20px; padding:20px; background:#222; border-radius:15px; display:none; }
-    .result a { color:white; text-decoration:none; font-size:22px; }
+    .result { margin:20px auto; max-width:400px; display:none; cursor:pointer; }
+    .result img { width:100%; height:auto; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.6); }
+    .result h3 { margin:20px 0 0; font-size:22px; }
     .back { margin:50px; }
-    .back a { color:#888; text-decoration:none; }
+    .back a { color:#888; text-decoration:none; font-size:18px; }
   </style>
 </head>
 <body>
-  <h1>🔍 Search Comics
+  <h1>Search Comics
     <span class="search-icon" onclick="window.location.href='search.html'">🔍</span>
   </h1>
   <input type="text" id="searchInput" placeholder="Comic name type karo..." onkeyup="searchComic()">
 
-  <div id="result" class="result">
-    <p id="comicName"></p>
-    <a id="comicLink" href="">Comic Info Page Par Jao →</a>
+  <div id="result" class="result" onclick="goToComic()">
+    <img id="comic-cover" src="" alt="Cover" loading="lazy">
+    <h3 id="comic-title"></h3>
   </div>
 
   <div class="back">
@@ -31,10 +32,59 @@
   </div>
 
   <script>
+    let foundLink = "";
+
     function searchComic() {
       const input = document.getElementById('searchInput').value.trim();
       const query = input.toLowerCase();
       const resultDiv = document.getElementById('result');
+      const comicCover = document.getElementById('comic-cover');
+      const comicTitle = document.getElementById('comic-title');
+
+      const comics = {
+        "ishq par jor nahi": {
+          title: "Ishq Par Jor Nahi",
+          cover: "https://i.ibb.co/1YQsb3S1/file-00000000f1807206b0510a520d89fa32.jpg",
+          link: "pages/ishq-par-jor-nahi.html"
+        },
+        "ishq": {
+          title: "Ishq Par Jor Nahi",
+          cover: "https://i.ibb.co/1YQsb3S1/file-00000000f1807206b0510a520d89fa32.jpg",
+          link: "pages/ishq-par-jor-nahi.html"
+        }
+        // NAYA COMIC ADD KARNE KE LIYE YE COPY KARO
+        // "one piece": {
+        //   title: "One Piece",
+        //   cover: "ONEPIECE_COVER_LINK",
+        //   link: "pages/one-piece.html"
+        // }
+      };
+
+      let found = false;
+      for (const key in comics) {
+        if (key.includes(query) && query.length >= 3) { // Minimum 3 letters + exact match
+          resultDiv.style.display = "block";
+          comicTitle.textContent = comics[key].title;
+          comicCover.src = comics[key].cover;
+          foundLink = comics[key].link;
+          found = true;
+          break;
+        }
+      }
+
+      if (!found) {
+        resultDiv.style.display = "none";
+      }
+    }
+
+    function goToComic() {
+      if (foundLink) {
+        window.location.href = foundLink;
+      }
+    }
+  </script>
+</body>
+</html>      const resultDiv = document.getElementById('result');
       const comicName = document.getElementById('comicName');
       const comicLink = document.getElementById('comicLink');
 
