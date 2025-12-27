@@ -18,6 +18,28 @@
   </style>
 </head>
 <body>
+  <script>
+  function getCookie(name) {
+    let matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([.$?*|{}()[\]\\/+^])/g, '\\$1') + "=([^;]*)"));
+    return matches ? decodeURIComponent(matches[1]) : "";
+  }
+
+  // Gate.html direct access block
+  if (window.location.pathname.includes("gate.html") && document.referrer === "") {
+    document.body.innerHTML = "<div style='color:white; text-align:center; margin-top:100px; font-size:24px;'>Direct access not allowed</div>";
+  }
+
+  // Baaki pages par cookie check
+  if (!window.location.pathname.includes("gate.html") && getCookie("site_access") !== "true") {
+    document.body.innerHTML = `
+      <div style="color:white; text-align:center; margin-top:100px; font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
+        ⚠️ Direct Access Blocked<br><br>
+        Shortener solve karke hi site open hogi.<br><br>
+        <a href="gate.html" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
+      </div>`;
+    throw new Error("Access blocked");
+  }
+  </script>
   <h1>COMIC READER
     <span class="search-icon" onclick="window.location.href='search.html'">🔍</span>
   </h1>
