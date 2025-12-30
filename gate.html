@@ -8,7 +8,9 @@
     body { margin:0; background:#111; color:white; text-align:center; font-family:Arial; padding:50px; }
     h1 { font-size:28px; }
     p { font-size:20px; margin:30px; }
-    a { background:#0f0; color:black; padding:15px 30px; border-radius:10px; text-decoration:none; font-size:20px; }
+    .timer { font-size:32px; color:#0f0; margin:40px; }
+    a { background:#0f0; color:black; padding:15px 30px; border-radius:10px; text-decoration:none; font-size:20px; opacity:0.5; pointer-events:none; }
+    a.active { opacity:1; pointer-events:auto; }
   </style>
 </head>
 <body>
@@ -17,19 +19,36 @@
     const referrer = document.referrer.toLowerCase();
 
     if (referrer.includes("gplinks.co") || referrer.includes("gplinks")) {
-      // GPLinks se aaya hai – cookie set kar do
+      // Cookie set kar do (24 hours)
       const d = new Date();
       d.setTime(d.getTime() + (24 * 60 * 60 * 1000));
       document.cookie = "site_access=true; expires=" + d.toUTCString() + "; path=/";
 
-      // Normal message dikhao
+      // Timer message dikhao
       document.body.innerHTML = `
         <h1>✅ Access Granted for 24 Hours!</h1>
-        <p>Ab tum saare episodes padh sakte ho.</p>
-        <a href="index.html">Homepage Par Jao</a>
+        <p>Redirecting in <span class="timer" id="timer">15</span> seconds...</p>
+        <a id="homeBtn" href="index.html">Homepage Par Jao (Wait Karein)</a>
       `;
+
+      // 15 seconds countdown
+      let timeLeft = 15;
+      const timerElement = document.getElementById('timer');
+      const homeBtn = document.getElementById('homeBtn');
+
+      const countdown = setInterval(() => {
+        timeLeft--;
+        timerElement.textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+          clearInterval(countdown);
+          homeBtn.textContent = "Homepage Par Jao";
+          homeBtn.classList.add('active');
+        }
+      }, 1000);
+
     } else {
-      // Direct ya dusre site se aaya – block
+      // Invalid access
       document.body.innerHTML = `
         <div style="font-size:24px;">
           ⚠️ Invalid Access<br><br>
