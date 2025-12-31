@@ -8,7 +8,7 @@
     body { margin:0; background:#111; color:white; text-align:center; font-family:Arial; padding:50px; }
     h1 { font-size:28px; }
     p { font-size:20px; margin:30px; }
-    .timer { font-size:32px; color:#0f0; margin:40px; }
+    .timer { font-size:32px; color:#0f0; }
     a { background:#0f0; color:black; padding:15px 30px; border-radius:10px; text-decoration:none; font-size:20px; opacity:0.5; pointer-events:none; }
     a.active { opacity:1; pointer-events:auto; }
   </style>
@@ -19,19 +19,19 @@
     const referrer = document.referrer.toLowerCase();
 
     if (referrer.includes("gplinks.co") || referrer.includes("gplinks")) {
-      // Cookie set kar do (24 hours)
+      // Valid shortener se aaya – cookie set kar do (24 hours)
       const d = new Date();
       d.setTime(d.getTime() + (24 * 60 * 60 * 1000));
       document.cookie = "site_access=true; expires=" + d.toUTCString() + "; path=/";
 
-      // Timer message dikhao
+      // Message + countdown
       document.body.innerHTML = `
         <h1>✅ Access Granted for 24 Hours!</h1>
         <p>Redirecting in <span class="timer" id="timer">15</span> seconds...</p>
-        <a id="homeBtn" href="index.html">Homepage Par Jao (Wait Karein)</a>
+        <a id="homeBtn" href="index.html">Homepage Par Jao</a>
       `;
 
-      // 15 seconds countdown
+      // 15 seconds countdown (back button loophole block – time spend ho jayega)
       let timeLeft = 15;
       const timerElement = document.getElementById('timer');
       const homeBtn = document.getElementById('homeBtn');
@@ -44,11 +44,13 @@
           clearInterval(countdown);
           homeBtn.textContent = "Homepage Par Jao";
           homeBtn.classList.add('active');
+          // Auto redirect (user back button press karega toh referrer nahi milega)
+          window.location.href = "index.html";
         }
       }, 1000);
 
     } else {
-      // Invalid access
+      // Invalid (direct ya back button se) – block
       document.body.innerHTML = `
         <div style="font-size:24px;">
           ⚠️ Invalid Access<br><br>
