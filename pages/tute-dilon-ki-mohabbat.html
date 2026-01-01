@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ishq Par Jor Nahi</title>
+  <style>
+    body { margin:0; background:#111; color:white; text-align:center; font-family:Arial; }
+    h1 { padding:20px; margin:0; position:relative; }
+    .search-icon { position:absolute; right:20px; top:20px; font-size:28px; cursor:pointer; }
+    .cover { max-width:90%; margin:30px auto; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.8); }
+    .summary { max-width:90%; margin:20px auto; padding:20px; background:#222; border-radius:12px; font-size:18px; line-height:1.6; }
+    .episodes { padding:20px; }
+    .btn { display:block; background:#333; margin:15px auto; padding:20px; max-width:700px; border-radius:12px; text-decoration:none; color:white; font-size:20px; }
+    .btn:hover { background:#555; }
+    .back { margin:50px 0; }
+    .back a { color:#888; text-decoration:none; font-size:18px; }
+  </style>
+</head>
+<body>
+  <script>
+  function getCookie(name) {
+    let matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([.$?*|{}()[\]\\/+^])/g, '\\$1') + "=([^;]*)"));
+    return matches ? decodeURIComponent(matches[1]) : "";
+  }
+
+  if (getCookie("site_access") !== "true") {
+    // Poora body replace kar do aur sab stop kar do
+    document.documentElement.innerHTML = `
+      <head><title>Access Blocked</title></head>
+      <body style="margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px;">
+        <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
+          ⚠️ Direct Access Blocked<br><br>
+          Shortener solve karke hi site open hogi.<br><br>
+          <a href="gate.html" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
+        </div>
+      </body>`;
+    // Sab JS stop kar do
+    while (document.body.firstChild) {
+      document.body.removeChild(document.body.firstChild);
+    }
+    throw ""; // Stop execution
+  }
+  </script>
+  <h1>Ishq Par Jor Nahi
+    <span class="search-icon" onclick="window.location.href='../search.html'">🔍</span>
+  </h1>
+  <img src="https://i.ibb.co/1YQsb3S1/file-00000000f1807206b0510a520d89fa32.jpg" alt="Cover" class="cover" loading="lazy">
+
+  <div class="summary">
+    <p>माँ के गुज़र जाने के बाद गौरी के चाचा ने उसे मुंबई रवाना कर दिया, जहाँ उसे उसके पिता के पुराने मित्र रमाकांत के घर पर आसरा मिला, भोली-भाली गौरी मुंबई जैसे महानगर में रह कर अपना डिज़ाइनर बनने का सपना पूरा करना चाहती थी पर क्या होगा जब उसकी ज़िन्दगी में होगी इश्क़ की दस्तक ? किसी ने सच ही कहा है किसी का भी "इश्क़ पर जोर नहीं" चलता</p>
+  </div>
+
+  <div class="episodes">
+    <a href="../reader//ch1.html" class="btn">Episode 1</a>
+    <a href="../reader//ch2.html" class="btn">Episode 2</a>
+    <a href="../reader//ch3.html" class="btn">Episode 3</a>
+    <a href="../reader//ch4.html" class="btn">Episode 4</a>
+    <a href="../reader//ch5.html" class="btn">Episode 5</a>
+    <a href="../reader//ch6.html" class="btn">Episode 6</a>
+    <a href="../reader//ch7.html" class="btn">Episode 7</a>
+    <a href="../reader//ch8.html" class="btn">Episode 8</a>
+    <!-- Naye episodes yahan add karo -->
+  </div>
+
+  <div class="back">
+    <a href="../index.html">← Back to Home</a>
+  </div>
+</body>
+</html>
