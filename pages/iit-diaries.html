@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IIT Diaries</title>
+  <style>
+    body { margin:0; background:#111; color:white; text-align:center; font-family:Arial; }
+    h1 { padding:20px; margin:0; position:relative; }
+    .search-icon { position:absolute; right:20px; top:20px; font-size:28px; cursor:pointer; }
+    .cover { max-width:90%; margin:30px auto; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.8); }
+    .summary { max-width:90%; margin:20px auto; padding:20px; background:#222; border-radius:12px; font-size:18px; line-height:1.6; }
+    .episodes { padding:20px; }
+    .btn { display:block; background:#333; margin:15px auto; padding:20px; max-width:700px; border-radius:12px; text-decoration:none; color:white; font-size:20px; }
+    .btn:hover { background:#555; }
+    .back { margin:50px 0; }
+    .back a { color:#888; text-decoration:none; font-size:18px; }
+  </style>
+</head>
+<body>
+  <script>
+  function getCookie(name) {
+    let matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([.$?*|{}()[\]\\/+^])/g, '\\$1') + "=([^;]*)"));
+    return matches ? decodeURIComponent(matches[1]) : "";
+  }
+
+  if (getCookie("site_access") !== "true") {
+    // Poora body replace kar do aur sab stop kar do
+    document.documentElement.innerHTML = `
+      <head><title>Access Blocked</title></head>
+      <body style="margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px;">
+        <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
+          ⚠️ Direct Access Blocked<br><br>
+          Shortener solve karke hi site open hogi.<br><br>
+          <a href="gate.html" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
+        </div>
+      </body>`;
+    // Sab JS stop kar do
+    while (document.body.firstChild) {
+      document.body.removeChild(document.body.firstChild);
+    }
+    throw ""; // Stop execution
+  }
+  </script>
+  <h1>IIT Diaries
+    <span class="search-icon" onclick="window.location.href='../search.html'">🔍</span>
+  </h1>
+  <img src="https://i.ibb.co/r2110rRm/file-000000006a347207b62dd11547f3048d.png" alt="Cover" class="cover" loading="lazy">
+
+  <div class="summary">
+    <p>ध्र्वन जो अपने गाँव से बडे अरमानों के साथ आईआ्डटी की पढार्ड के लिए पहंचा और जा टकराया शोख चंचल और चुलबुली श्रेया से और उसके दिल के तार डनडाना उठे। पर उसकी माँ ने उससे वचन लिया थ कि वह कभी भी किसी लडकी के प्यार के चक्कर में नहीं पडेगा और अपनी पढ़ाई पर ध्यान देगा। क्या ध्रूवन अपनी माँ की कसम निभा पाएगा? जानने के लिए पढें।?</p>
+  </div>
+
+  <div class="episodes">
+    <a href="../reader/iit-diaries/ch1.html" class="btn">Episode 1</a>
+    <a href="../reader/iit-diaries/ch2.html" class="btn">Episode 2</a>
+    <a href="../reader/iit-diaries/ch3.html" class="btn">Episode 3</a>
+    <a href="../reader/iit-diaries/ch4.html" class="btn">Episode 4</a>
+    <a href="../reader/iit-diaries/ch5.html" class="btn">Episode 5</a>
+    <a href="../reader/iit-diaries/ch6.html" class="btn">Episode 6</a>
+    <a href="../reader/iit-diaries/ch7.html" class="btn">Episode 7</a>
+    <a href="../reader/iit-diaries/ch8.html" class="btn">Episode 8</a>
+    <!-- Naye episodes yahan add karo -->
+  </div>
+
+  <div class="back">
+    <a href="../index.html">← Back to Home</a>
+  </div>
+</body>
+</html>
