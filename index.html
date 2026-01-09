@@ -11,16 +11,9 @@
     
     .grid { 
       display: grid; 
-      grid-template-columns: repeat(2, 1fr);  /* Hamesha 2 columns */
+      grid-template-columns: repeat(2, 1fr);  /* Fixed 2 columns hamesha */
       gap: 20px; 
       padding: 20px; 
-    }
-    
-    /* Sirf bahut chhoti screens pe 1 column */
-    @media (max-width: 600px) { 
-      .grid { 
-        grid-template-columns: 1fr; 
-      } 
     }
     
     .card { 
@@ -35,8 +28,8 @@
     .card:hover { 
       transform:scale(1.05); 
     }
-    .card img { width:100%; height:auto; }
-    .card h3 { margin:20px; font-size:20px; text-align:center; }
+    .card img { width:100%; height:auto; display:block; }
+    .card h3 { margin:15px 0; font-size:18px; text-align:center; }
     a { text-decoration:none; color:white; }
   </style>
 </head>
