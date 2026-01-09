@@ -8,10 +8,33 @@
     body { margin:0; background:#111; color:white; font-family:Arial; text-align:center; }
     h1 { padding:20px; background:#000; margin:0; position:relative; }
     .search-icon { position:absolute; right:20px; top:20px; font-size:28px; cursor:pointer; }
-    .grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:20px; padding:20px; }
-    @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
-    .card { background:#222; border-radius:15px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.6); transition:0.3s; }
-    .card:hover { transform:scale(1.05); }
+    
+    .grid { 
+      display: grid; 
+      grid-template-columns: repeat(2, 1fr);  /* Hamesha 2 columns */
+      gap: 20px; 
+      padding: 20px; 
+    }
+    
+    /* Sirf bahut chhoti screens pe 1 column */
+    @media (max-width: 600px) { 
+      .grid { 
+        grid-template-columns: 1fr; 
+      } 
+    }
+    
+    .card { 
+      background:#222; 
+      border-radius:15px; 
+      overflow:hidden; 
+      box-shadow:0 10px 30px rgba(0,0,0,0.6); 
+      transition:0.3s; 
+      width: 100%; 
+      box-sizing: border-box;
+    }
+    .card:hover { 
+      transform:scale(1.05); 
+    }
     .card img { width:100%; height:auto; }
     .card h3 { margin:20px; font-size:20px; text-align:center; }
     a { text-decoration:none; color:white; }
@@ -25,28 +48,24 @@
   }
 
   if (getCookie("site_access") !== "true") {
-    // Poora body replace kar do aur sab stop kar do
     document.documentElement.innerHTML = `
       <head><title>Access Blocked</title></head>
       <body style="margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px;">
         <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
           ⚠️ Direct Access Blocked<br><br>
           Shortener solve karke hi site open hogi.<br><br>
-      </div>
+        </div>
       </body>`;
-    // Sab JS stop kar do
-    while (document.body.firstChild) {
-      document.body.removeChild(document.body.firstChild);
-    }
     throw ""; // Stop execution
   }
   </script>
+  
   <h1>COMIC READER
     <span class="search-icon" onclick="window.location.href='search.html'">🔍</span>
   </h1>
 
   <div class="grid">
-    <!-- Ishq Par Jor Nahi – pages/ folder mein link -->
+    <!-- Ishq Par Jor Nahi -->
     <a href="pages/ishq-par-jor-nahi.html">
       <div class="card">
         <img src="https://i.ibb.co/1YQsb3S1/file-00000000f1807206b0510a520d89fa32.jpg" alt="Ishq Par Jor Nahi" loading="lazy">
@@ -54,6 +73,7 @@
       </div>
     </a>
 
+    <!-- Tute Dilon Ki Mohabbat -->
     <a href="pages/tute-dilon-ki-mohabbat.html">
       <div class="card">
         <img src="https://i.ibb.co/gMHFzhTm/file-000000004a9c71fab00a52d8e6d0d5f9.png" alt="Tute Dilon Ki Mohabbat" loading="lazy">
@@ -61,7 +81,6 @@
       </div>
     </a>
 
-    
     <!-- NAYA COMIC ADD KARNE KE LIYE YE COPY KARO -->
     <!--
     <a href="pages/one-piece.html">
