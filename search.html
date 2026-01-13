@@ -5,45 +5,92 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Search Comics</title>
   <style>
-    body { margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px; }
-    h1 { position:relative; padding-right:60px; }
-    .search-icon { position:absolute; right:20px; top:20px; font-size:28px; cursor:pointer; }
-    input { width:80%; max-width:500px; padding:15px; font-size:20px; border-radius:10px; border:none; margin:20px; }
-    .result { margin:20px auto; max-width:400px; display:none; cursor:pointer; }
-    .result img { width:100%; height:auto; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.6); }
-    .result h3 { margin:20px 0 0; font-size:22px; }
-    .back { margin:50px; }
-    .back a { color:#888; text-decoration:none; font-size:18px; }
+    body { 
+      margin:0; 
+      background:#111; 
+      color:white; 
+      font-family:Arial; 
+      text-align:center; 
+      padding:50px; 
+    }
+    h1 { 
+      position:relative; 
+      padding-right:60px; 
+    }
+    .search-icon { 
+      position:absolute; 
+      right:20px; 
+      top:20px; 
+      font-size:28px; 
+      cursor:pointer; 
+    }
+    input { 
+      width:80%; 
+      max-width:500px; 
+      padding:15px; 
+      font-size:20px; 
+      border-radius:10px; 
+      border:none; 
+      margin:20px; 
+    }
+    .result { 
+      margin:20px auto; 
+      max-width:400px; 
+      display:none; 
+      cursor:pointer; 
+    }
+    .result img { 
+      width:100%; 
+      height:auto; 
+      border-radius:15px; 
+      box-shadow:0 10px 30px rgba(0,0,0,0.6); 
+    }
+    .result h3 { 
+      margin:20px 0 0; 
+      font-size:22px; 
+    }
+    .back { 
+      margin:50px; 
+    }
+    .back a { 
+      color:#888; 
+      text-decoration:none; 
+      font-size:18px; 
+    }
   </style>
 </head>
 <body>
+  <!-- Protection code - bilkul same rakha hai -->
   <script>
-  function getCookie(name) {
-    let matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([.$?*|{}()[\]\\/+^])/g, '\\$1') + "=([^;]*)"));
-    return matches ? decodeURIComponent(matches[1]) : "";
-  }
-
-  if (getCookie("site_access") !== "true") {
-    // Poora body replace kar do aur sab stop kar do
-    document.documentElement.innerHTML = `
-      <head><title>Access Blocked</title></head>
-      <body style="margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px;">
-        <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
-          ⚠️ Direct Access Blocked<br><br>
-          Shortener solve karke hi site open hogi.<br><br>
-          <a href="gate.html" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
-        </div>
-      </body>`;
-    // Sab JS stop kar do
-    while (document.body.firstChild) {
-      document.body.removeChild(document.body.firstChild);
+    function getCookie(name) {
+      let matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([.$?*|{}()[\]\\/+^])/g, '\\$1') + "=([^;]*)"));
+      return matches ? decodeURIComponent(matches[1]) : "";
     }
-    throw ""; // Stop execution
-  }
+
+    if (getCookie("site_access") !== "true") {
+      // Poora body replace kar do aur sab stop kar do
+      document.documentElement.innerHTML = `
+        <head><title>Access Blocked</title></head>
+        <body style="margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px;">
+          <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
+            ⚠️ Direct Access Blocked<br><br>
+            Shortener solve karke hi site open hogi.<br><br>
+            <a href="gate.html" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
+          </div>
+        </body>`;
+      // Sab JS stop kar do
+      while (document.body.firstChild) {
+        document.body.removeChild(document.body.firstChild);
+      }
+      throw ""; // Stop execution
+    }
   </script>
+
+  <!-- Visible content - yeh tabhi dikhega jab cookie pass ho -->
   <h1>Search Comics
     <span class="search-icon" onclick="window.location.href='search.html'">🔍</span>
   </h1>
+
   <input type="text" id="searchInput" placeholder="Comic name type karo..." onkeyup="searchComic()">
 
   <div id="result" class="result" onclick="goToComic()">
@@ -55,6 +102,7 @@
     <a href="index.html">← Back to Home</a>
   </div>
 
+  <!-- Search logic script -->
   <script>
     let foundLink = "";
 
@@ -65,6 +113,7 @@
       const comicCover = document.getElementById('comic-cover');
       const comicTitle = document.getElementById('comic-title');
 
+      // Comics data - sab comma sahi, trailing comma safe
       const comics = {
         "ishq par jor nahi": {
           title: "Ishq Par Jor Nahi",
@@ -85,12 +134,12 @@
           title: "IIT Diaries",
           cover: "https://i.ibb.co/r2110rRm/file-000000006a347207b62dd11547f3048d.png",
           link: "pages/iit-diaries.html"
-        },
+        }
       };
 
       let found = false;
       for (const key in comics) {
-        if (key.includes(query) && query.length >= 3) { // Minimum 3 letters + exact match
+        if (key.includes(query) && query.length >= 3) {
           resultDiv.style.display = "block";
           comicTitle.textContent = comics[key].title;
           comicCover.src = comics[key].cover;
