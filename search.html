@@ -3,146 +3,55 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Comic Search</title>
+  <title>Search Comics</title>
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      background: linear-gradient(135deg, #0f0f1a, #1a1a2e);
-      color: #e0e0ff;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      min-height: 100vh;
-      padding: 30px 15px;
-      text-align: center;
-    }
-    header {
-      margin-bottom: 40px;
-    }
-    h1 {
-      font-size: 2.8rem;
-      margin-bottom: 10px;
-      color: #a78bfa;
-      text-shadow: 0 2px 10px rgba(167,139,250,0.4);
-    }
-    .search-container {
-      max-width: 600px;
-      margin: 0 auto 40px;
-      position: relative;
-    }
-    input {
-      width: 100%;
-      padding: 18px 20px 18px 50px;
-      font-size: 1.1rem;
-      border: none;
-      border-radius: 50px;
-      background: rgba(255,255,255,0.08);
-      color: white;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-      transition: all 0.3s ease;
-    }
-    input:focus {
-      outline: none;
-      background: rgba(255,255,255,0.12);
-      box-shadow: 0 12px 40px rgba(167,139,250,0.3);
-      transform: scale(1.02);
-    }
-    .search-icon {
-      position: absolute;
-      left: 18px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1.4rem;
-      color: #a78bfa;
-      pointer-events: none;
-    }
-    #result {
-      max-width: 420px;
-      margin: 0 auto;
-      background: rgba(30,30,50,0.7);
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(167,139,250,0.15);
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: none;
-    }
-    #result:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 25px 60px rgba(167,139,250,0.25);
-    }
-    #comic-cover {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-    #comic-title {
-      padding: 18px;
-      font-size: 1.4rem;
-      background: linear-gradient(135deg, rgba(167,139,250,0.15), transparent);
-    }
-    .back-link {
-      margin-top: 60px;
-      font-size: 1.1rem;
-    }
-    .back-link a {
-      color: #a0a0ff;
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-    .back-link a:hover {
-      color: #c4b5fd;
-    }
-    @media (max-width: 500px) {
-      h1 { font-size: 2.2rem; }
-      input { padding: 16px 18px 16px 45px; font-size: 1rem; }
-    }
+    body { margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px; }
+    h1 { position:relative; padding-right:60px; }
+    .search-icon { position:absolute; right:20px; top:20px; font-size:28px; cursor:pointer; }
+    input { width:80%; max-width:500px; padding:15px; font-size:20px; border-radius:10px; border:none; margin:20px; }
+    .result { margin:20px auto; max-width:400px; display:none; cursor:pointer; }
+    .result img { width:100%; height:auto; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.6); }
+    .result h3 { margin:20px 0 0; font-size:22px; }
+    .back { margin:50px; }
+    .back a { color:#888; text-decoration:none; font-size:18px; }
   </style>
 </head>
 <body>
-
-  <!-- Protection code - bilkul same rakha hai -->
   <script>
-    function getCookie(name) {
-      let matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([.$?*|{}()[\]\\/+^])/g, '\\$1') + "=([^;]*)"));
-      return matches ? decodeURIComponent(matches[1]) : "";
-    }
+  function getCookie(name) {
+    let matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([.$?*|{}()[\]\\/+^])/g, '\\$1') + "=([^;]*)"));
+    return matches ? decodeURIComponent(matches[1]) : "";
+  }
 
-    if (getCookie("site_access") !== "true") {
-      // Poora body replace kar do aur sab stop kar do
-      document.documentElement.innerHTML = `
-        <head><title>Access Blocked</title></head>
-        <body style="margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px;">
-          <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
-            ⚠️ Direct Access Blocked<br><br>
-            Shortener solve karke hi site open hogi.<br><br>
-            <a href="gate.html" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
-          </div>
-        </body>`;
-      // Sab JS stop kar do
-      while (document.body.firstChild) {
-        document.body.removeChild(document.body.firstChild);
-      }
-      throw ""; // Stop execution
+  if (getCookie("site_access") !== "true") {
+    // Poora body replace kar do aur sab stop kar do
+    document.documentElement.innerHTML = `
+      <head><title>Access Blocked</title></head>
+      <body style="margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px;">
+        <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
+          ⚠️ Direct Access Blocked<br><br>
+          Shortener solve karke hi site open hogi.<br><br>
+          <a href="gate.html" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
+        </div>
+      </body>`;
+    // Sab JS stop kar do
+    while (document.body.firstChild) {
+      document.body.removeChild(document.body.firstChild);
     }
+    throw ""; // Stop execution
+  }
   </script>
+  <h1>Search Comics
+    <span class="search-icon" onclick="window.location.href='search.html'">🔍</span>
+  </h1>
+  <input type="text" id="searchInput" placeholder="Comic name type karo..." onkeyup="searchComic()">
 
-  <header>
-    <h1>Comic Search</h1>
-  </header>
-
-  <div class="search-container">
-    <span class="search-icon">🔍</span>
-    <input type="text" id="searchInput" placeholder="Comic ka naam type karo..." onkeyup="searchComic()">
-  </div>
-
-  <div id="result" onclick="goToComic()">
-    <img id="comic-cover" src="" alt="Comic Cover" loading="lazy">
+  <div id="result" class="result" onclick="goToComic()">
+    <img id="comic-cover" src="" alt="Cover" loading="lazy">
     <h3 id="comic-title"></h3>
   </div>
 
-  <div class="back-link">
+  <div class="back">
     <a href="index.html">← Back to Home</a>
   </div>
 
@@ -171,7 +80,7 @@
           title: "Tute Dilon Ki Mohabbat",
           cover: "https://i.ibb.co/gMHFzhTm/file-000000004a9c71fab00a52d8e6d0d5f9.png",
           link: "pages/tute-dilon-ki-mohabbat.html"
-        },
+         }
         "iit diaries": {
           title: "IIT Diaries",
           cover: "https://i.ibb.co/r2110rRm/file-000000006a347207b62dd11547f3048d.png",
@@ -180,19 +89,19 @@
       };
 
       let found = false;
-      resultDiv.style.display = "none";
-
-      if (query.length < 3) return;
-
       for (const key in comics) {
-        if (key.includes(query)) {
+        if (key.includes(query) && query.length >= 3) { // Minimum 3 letters + exact match
           resultDiv.style.display = "block";
           comicTitle.textContent = comics[key].title;
           comicCover.src = comics[key].cover;
           foundLink = comics[key].link;
           found = true;
-          break; // First match dikhao
+          break;
         }
+      }
+
+      if (!found) {
+        resultDiv.style.display = "none";
       }
     }
 
@@ -202,6 +111,5 @@
       }
     }
   </script>
-
 </body>
 </html>
