@@ -23,7 +23,7 @@
       padding: 15px 30px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: space-between; /* Left logo, center heading, right search */
       background: rgba(10, 0, 31, 0.85);
       backdrop-filter: blur(12px);
       position: sticky;
@@ -31,7 +31,9 @@
       z-index: 100;
       border-bottom: 1px solid rgba(0,212,255,0.25);
     }
-    .logo { display: flex; align-items: center; gap: 12px; }
+    .logo {
+      flex-shrink: 0; /* Logo shrink nahi hoga */
+    }
     .bunny-pfp {
       width: 48px;
       height: 48px;
@@ -40,6 +42,10 @@
       box-shadow: 0 0 20px var(--glow);
       object-fit: cover;
       animation: float 5s ease-in-out infinite;
+    }
+    .heading-container {
+      flex: 1; /* Center mein full space lega */
+      text-align: center;
     }
     .heading-img {
       max-width: 210px;
@@ -160,7 +166,7 @@
       </div>
     </div>
 
-    <!-- Naye comics yahan add karo -->
+    <!-- Naye cards yahan add karo -->
   </section>
 
 </body>
