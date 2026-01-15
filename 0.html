@@ -78,7 +78,7 @@
       animation-play-state: paused;
     }
 
-    /* GRID – 2 columns, uniform gap */
+    /* GRID – only cover images, exact fit, uniform gap */
     .grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -91,7 +91,6 @@
       min-height: calc(100vh - 64px);
     }
 
-    /* CARD – sirf cover image jitna size, koi faltu jagah nahi */
     .card {
       border-radius: 16px;
       overflow: hidden;
@@ -99,7 +98,7 @@
       transition: all 0.3s ease;
       position: relative;
       border: 1px solid rgba(0, 212, 255, 0.15);
-      aspect-ratio: 2 / 3; /* exact 2:3 ratio – card sirf image jitna */
+      aspect-ratio: 2 / 3; /* exact cover ratio – no extra space */
       background: transparent;
     }
 
@@ -187,7 +186,7 @@
   }
   </script>
 
-  <!-- HEADER – logo left, heading center, big floating search right -->
+  <!-- HEADER -->
   <header>
     <div class="logo">
       <img src="assets/heading.png" alt="Comic PUR Logo" class="logo-img">
@@ -223,4 +222,3 @@
 
 </body>
 </html>
-test
