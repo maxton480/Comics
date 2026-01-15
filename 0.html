@@ -3,24 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Comic PUR - Cute Comics Hub</title>
+  <title>Comic Reader</title>
   <style>
-    :root {
-      --primary: #00d4ff;
-      --accent: #ff69b4;
-      --dark: #0a001f;
-      --glow: rgba(0, 212, 255, 0.8);
-    }
-    * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      background: linear-gradient(135deg, var(--dark), #1a003f);
+      margin: 0;
+      background: #111;
       color: white;
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      text-align: center;
     }
+
+    /* NEW HEADER SECTION – same colour theme, slim */
     header {
-      padding: 10px 30px;
+      padding: 12px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -29,170 +24,175 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      border-bottom: 1px solid rgba(0,212,255,0.35);
-      height: 70px; /* Slim header */
+      border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+      height: 70px;
     }
-    .logo {
-      flex-shrink: 0;
-    }
-    .logo img {
-      width: 58px;
-      height: 58px;
-      border-radius: 50%;
-      border: 4px solid var(--primary);
-      box-shadow: 0 0 25px var(--glow);
-      object-fit: cover;
-      animation: float 4.5s ease-in-out infinite;
-    }
+
     .heading-container {
       flex: 1;
       text-align: center;
-      position: relative;
     }
+
     .heading-img {
-      max-width: 340px; /* Bada size – professional look */
+      max-width: 240px;
       height: auto;
       display: block;
       margin: 0 auto;
-      position: relative;
-      top: 10px; /* Thoda niche shift */
-      animation: glowPulse 3s ease-in-out infinite;
     }
-    .search-btn {
-      flex-shrink: 0;
-      height: 100%;
-      display: flex;
-      align-items: center;
-    }
-    .search-btn img {
-      height: 100%; /* Header jitna bada – full fit */
-      width: auto;
-      max-height: 65px; /* Header height ke andar fit rahega */
+
+    .search-icon {
+      width: 36px;
+      height: 36px;
       cursor: pointer;
-      animation: float 5s ease-in-out infinite;
-      transition: all 0.4s;
-    }
-    .search-btn:hover img {
-      transform: scale(1.15);
-      filter: drop-shadow(0 0 20px var(--glow));
-      animation-play-state: paused;
-    }
-    .hero {
-      text-align: center;
-      padding: 90px 20px 40px;
-    }
-    .hero p {
-      font-size: 1.45rem;
-      opacity: 0.9;
-      max-width: 720px;
-      margin: 0 auto 40px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 30px;
-      padding: 0 30px 60px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-    .card {
-      background: rgba(26, 0, 63, 0.65);
-      border-radius: 20px;
-      overflow: hidden;
-      transition: all 0.4s ease;
-      border: 1px solid rgba(0,212,255,0.2);
-      backdrop-filter: blur(10px);
-    }
-    .card:hover {
-      transform: translateY(-15px) scale(1.03);
-      box-shadow: 0 20px 40px rgba(0,212,255,0.3);
-      border-color: var(--primary);
-    }
-    .card img {
-      width: 100%;
-      height: 380px;
-      object-fit: cover;
-      transition: transform 0.5s;
-    }
-    .card:hover img {
-      transform: scale(1.08);
-    }
-    .card-info {
-      padding: 20px;
-      text-align: center;
-    }
-    .card h3 {
-      font-size: 1.7rem;
-      margin-bottom: 10px;
-      color: var(--primary);
-    }
-    .card p {
-      font-size: 1.05rem;
-      opacity: 0.8;
-      margin-bottom: 15px;
-    }
-    .btn {
-      display: inline-block;
-      background: linear-gradient(45deg, var(--primary), var(--accent));
-      color: white;
-      padding: 14px 35px;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: bold;
       transition: all 0.3s;
     }
-    .btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 25px rgba(0,212,255,0.5);
+
+    .search-icon:hover {
+      transform: scale(1.15);
+      filter: drop-shadow(0 0 12px #00d4ff);
     }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-12px); }
+
+    h1 {
+      padding: 0;
+      background: transparent;
+      margin: 0;
+      font-size: 0; /* Hide old h1 text */
+      position: relative;
     }
-    @keyframes glowPulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.9; }
+
+    /* OLD GRID + CARDS – bilkul same rakha */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      padding: 12px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
-    @media (max-width: 768px) {
-      header { padding: 10px 20px; height: 65px; }
-      .grid { grid-template-columns: 1fr; padding: 0 20px; }
-      .heading-img { max-width: 240px; top: 8px; }
-      .logo img { width: 50px; height: 50px; }
-      .search-btn img { max-height: 55px; }
+
+    .card {
+      background: #222;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+      transition: transform 0.2s;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 320px;
+      box-sizing: border-box;
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+    }
+
+    .card img {
+      width: 100%;
+      aspect-ratio: 3 / 4.2;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card h3 {
+      margin: 8px 6px;
+      font-size: 15px;
+      text-align: center;
+      flex-grow: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.25;
+      padding: 0 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    a {
+      text-decoration: none;
+      color: white;
+      display: block;
+      height: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .grid {
+        gap: 20px;
+        padding: 20px;
+      }
+      .card {
+        min-height: 460px;
+      }
+      .card h3 {
+        font-size: 18px;
+      }
+      .heading-img {
+        max-width: 320px;
+      }
+      .search-icon {
+        width: 42px;
+        height: 42px;
+      }
     }
   </style>
 </head>
 <body>
 
+  <script>
+  function getCookie(name) {
+    let matches = document.cookie.match(new RegExp(
+      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : "";
+  }
+
+  if (getCookie("site_access") !== "true") {
+    document.documentElement.innerHTML = `
+      <head><title>Access Blocked</title></head>
+      <body style="margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px;">
+        <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
+          ⚠️ Direct Access Blocked<br><br>
+          Shortener solve karke hi site open hogi.<br><br>
+        </div>
+      </body>`;
+    throw new Error("Access blocked");
+  }
+  </script>
+
+  <!-- NEW HEADER – old h1 ko hata diya, sirf images rakhi -->
   <header>
-    <div class="logo">
-      <img src="assets/heading.png" alt="Comic PUR Logo" class="bunny-pfp">
-    </div>
     <div class="heading-container">
       <img src="assets/logo-circle.png" alt="Comic PUR" class="heading-img">
     </div>
-    <div class="search-btn">
-      <img src="assets/search-icon.png" alt="Search" onclick="window.location.href='search.html'">
-    </div>
+    <img src="assets/search-icon.png" class="search-icon" alt="Search" onclick="window.location.href='search.html'">
   </header>
 
-  <section class="hero">
-    <p>Cute, emotional aur dil se dil tak ki comics ka pura maza yahan! 💙🐰💖</p>
-  </section>
-
-  <section class="grid">
-    <div class="card">
-      <img src="https://i.ibb.co/1YQsb3S1/file-00000000f1807206b0510a520d89fa32.jpg" alt="Ishq Par Jor Nahi">
-      <div class="card-info">
+  <div class="grid">
+    <a href="pages/ishq-par-jor-nahi.html">
+      <div class="card">
+        <img src="https://i.ibb.co/1YQsb3S1/file-00000000f1807206b0510a520d89fa32.jpg" alt="Ishq Par Jor Nahi" loading="lazy">
         <h3>Ishq Par Jor Nahi</h3>
-        <p>Love, drama aur dil se dil tak ka safar 💔❤️</p>
-        <a href="pages/ishq-par-jor-nahi.html" class="btn">Padho Abhi →</a>
       </div>
-    </div>
+    </a>
 
-    <!-- Naye cards yahan add karo -->
-  </section>
+    <a href="pages/tute-dilon-ki-mohabbat.html">
+      <div class="card">
+        <img src="https://i.ibb.co/gMHFzhTm/file-000000004a9c71fab00a52d8e6d0d5f9.png" alt="Tute Dilon Ki Mohabbat" loading="lazy">
+        <h3>Tute Dilon Ki Mohabbat</h3>
+      </div>
+    </a>
+
+    <a href="pages/iit-diaries.html">
+      <div class="card">
+        <img src="https://i.ibb.co/r2110rRm/file-000000006a347207b62dd11547f3048d.png" alt="IIT Diaries" loading="lazy">
+        <h3>IIT DIARIES</h3>
+      </div>
+    </a>
+    <!-- Naya comic add template -->
+  </div>
 
 </body>
 </html>
-test
