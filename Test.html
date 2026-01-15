@@ -9,14 +9,13 @@
       --primary: #00d4ff;
       --accent: #ff69b4;
       --dark: #0a001f;
-      --dark2: #1a003f;
       --glow: rgba(0, 212, 255, 0.6);
     }
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      background: linear-gradient(135deg, var(--dark), var(--dark2));
+      background: linear-gradient(135deg, var(--dark), #1a003f);
       color: white;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Segoe UI', system-ui, sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
     }
@@ -24,7 +23,7 @@
       padding: 15px 30px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: space-between; /* Left logo, center heading, right search */
       background: rgba(10, 0, 31, 0.8);
       backdrop-filter: blur(10px);
       position: sticky;
@@ -155,7 +154,6 @@
   </section>
 
   <section class="grid">
-    <!-- Example Comic Card -->
     <div class="card">
       <img src="https://i.ibb.co/1YQsb3S1/file-00000000f1807206b0510a520d89fa32.jpg" alt="Ishq Par Jor Nahi">
       <div class="card-info">
@@ -165,17 +163,7 @@
       </div>
     </div>
 
-    <!-- Naya comic card add karne ke liye copy karo -->
-    <!--
-    <div class="card">
-      <img src="YOUR_NEW_COVER" alt="New Comic">
-      <div class="card-info">
-        <h3>New Comic Name</h3>
-        <p>Short cute description</p>
-        <a href="pages/new-comic.html" class="btn">Padho Abhi →</a>
-      </div>
-    </div>
-    -->
+    <!-- Naya comic card yahan add karo -->
   </section>
 
 </body>
