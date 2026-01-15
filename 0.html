@@ -78,11 +78,11 @@
       animation-play-state: paused;
     }
 
-    /* Grid + Cards – mobile first */
+    /* GRID – 2 columns har screen pe (mobile + desktop) */
     .grid {
       display: grid;
-      grid-template-columns: 1fr; /* Mobile pe 1 column */
-      gap: 16px;
+      grid-template-columns: repeat(2, 1fr); /* Ek line mein 2 cards */
+      gap: 16px; /* Gap thoda kam rakha taaki mobile pe bhi fit ho */
       padding: 16px;
       max-width: 1200px;
       margin: 0 auto;
@@ -154,10 +154,10 @@
       height: 100%;
     }
 
-    /* Desktop pe 2 columns + adjustments */
+    /* Desktop pe bhi 2 columns hi rahega (ya agar chahe toh 3-4 kar sakte hain) */
     @media (min-width: 768px) {
       .grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr); /* Mobile aur desktop dono pe 2 columns */
         gap: 24px;
         padding: 24px;
       }
