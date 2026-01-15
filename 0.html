@@ -82,7 +82,7 @@
     .grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 16px; /* same gap har taraf */
+      gap: 16px;
       padding: 8px 16px;
       max-width: 1200px;
       margin: 0 auto;
@@ -91,7 +91,7 @@
       min-height: calc(100vh - 64px);
     }
 
-    /* CARD – exact 2:3 ratio, no extra space */
+    /* CARD – sirf cover image jitna size, koi faltu jagah nahi */
     .card {
       border-radius: 16px;
       overflow: hidden;
@@ -99,7 +99,7 @@
       transition: all 0.3s ease;
       position: relative;
       border: 1px solid rgba(0, 212, 255, 0.15);
-      aspect-ratio: 2 / 3; /* 2:3 ratio – width:height exactly cover ke hisaab se */
+      aspect-ratio: 2 / 3; /* exact 2:3 ratio – card sirf image jitna */
       background: transparent;
     }
 
@@ -223,3 +223,4 @@
 
 </body>
 </html>
+test
