@@ -20,7 +20,6 @@
       overflow-x: hidden;
     }
 
-    /* HEADER – same as homepage */
     header {
       padding: 10px 16px;
       display: flex;
@@ -35,10 +34,6 @@
       height: 64px;
     }
 
-    .logo {
-      flex-shrink: 0;
-    }
-
     .logo img {
       width: 52px;
       height: 52px;
@@ -46,12 +41,6 @@
       border: 3px solid var(--primary);
       box-shadow: 0 0 20px var(--glow);
       object-fit: cover;
-      animation: float 5s ease-in-out infinite;
-    }
-
-    .heading-container {
-      flex: 1;
-      text-align: center;
     }
 
     .heading-img {
@@ -65,7 +54,7 @@
       width: 68px;
       height: 68px;
       cursor: pointer;
-      animation: float 4.8s ease-in-out infinite;
+      animation: float 4.8s ease-in-out infinite; /* sirf yahan floating animation */
       transition: all 0.4s;
       filter: drop-shadow(0 0 15px var(--glow));
     }
@@ -76,7 +65,6 @@
       animation-play-state: paused;
     }
 
-    /* Content – clean & modern */
     main {
       padding: 20px 16px;
       max-width: 900px;
@@ -145,7 +133,6 @@
       color: var(--primary);
     }
 
-    /* Animations */
     @keyframes float {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-12px); }
@@ -193,7 +180,7 @@
   }
   </script>
 
-  <!-- HEADER – same as homepage -->
+  <!-- HEADER -->
   <header>
     <div class="logo">
       <img src="../assets/heading.png" alt="Comic PUR Logo" class="logo-img">
@@ -233,7 +220,6 @@
       <a href="../reader/iit-diaries/ch17.html" class="btn">Episode 17</a>
       <a href="../reader/iit-diaries/ch18.html" class="btn">Episode 18</a>
       <a href="../reader/iit-diaries/ch19.html" class="btn">Episode 19</a>
-      <!-- Naye episodes yahan add karo -->
     </div>
 
     <div class="back">
@@ -251,3 +237,4 @@
 
 </body>
 </html>
+test
