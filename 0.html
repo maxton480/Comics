@@ -13,7 +13,7 @@
       min-height: 100vh;
     }
 
-    /* HEADER – same as before */
+    /* HEADER – slim, dark gradient + blur */
     header {
       padding: 10px 16px;
       display: flex;
@@ -78,14 +78,14 @@
       animation-play-state: paused;
     }
 
-    /* GRID – sirf cover images, uniform gap up-down & left-right */
+    /* GRID – only covers, uniform gap, no extra space */
     .grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr); /* 2 cards per row */
-      gap: 16px; /* Up-down aur left-right dono mein same gap */
-      padding: 16px;
-      max-width: 1200px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px; /* same gap up-down & left-right */
+      padding: 8px 16px; /* top padding kam taaki header se close rahe */
       margin: 0 auto;
+      max-width: 1200px;
       background: linear-gradient(135deg, rgba(10, 0, 31, 0.9), rgba(26, 0, 63, 0.8));
       backdrop-filter: blur(8px);
       min-height: calc(100vh - 64px);
@@ -99,7 +99,7 @@
       transition: all 0.3s ease;
       position: relative;
       border: 1px solid rgba(0, 212, 255, 0.15);
-      aspect-ratio: 3 / 4.2; /* Fixed aspect ratio taaki extra space na ho */
+      aspect-ratio: 3 / 4.2; /* fixed ratio taaki sirf image dikhe */
     }
 
     .card:hover {
@@ -137,14 +137,11 @@
       height: 100%;
     }
 
-    /* Desktop pe bhi 2 columns hi rahega */
+    /* Desktop */
     @media (min-width: 768px) {
       .grid {
         gap: 24px;
-        padding: 24px;
-      }
-      .card {
-        aspect-ratio: 3 / 4.2;
+        padding: 12px 24px;
       }
       .heading-img {
         max-width: 280px;
@@ -225,3 +222,4 @@
 
 </body>
 </html>
+test
