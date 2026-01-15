@@ -1,182 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Comic PUR - Cute Comics Hub</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test 0 - Comic PUR</title>
   <style>
-    :root {
-      --primary: #00d4ff;
-      --accent: #ff69b4;
-      --dark: #0a001f;
-      --glow: rgba(0, 212, 255, 0.7);
+    body { 
+      margin:0; padding:0; 
+      background: linear-gradient(#0a001f, #1a003f); 
+      color: #00d4ff; 
+      font-family: Arial; 
+      height: 100vh; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      text-align: center; 
     }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      background: linear-gradient(135deg, var(--dark), #1a003f);
-      color: white;
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-    header {
-      padding: 15px 25px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(10, 0, 31, 0.85);
-      backdrop-filter: blur(12px);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      border-bottom: 1px solid rgba(0,212,255,0.25);
-    }
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-    .bunny-pfp {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      border: 3px solid var(--primary);
-      box-shadow: 0 0 20px var(--glow);
-      object-fit: cover;
-      animation: float 5s ease-in-out infinite;
-    }
-    .heading-img {
-      max-width: 210px;
-      height: auto;
-      display: block;
-      margin: 0 auto;
-      animation: glowPulse 3s ease-in-out infinite;
-    }
-    .search-btn img {
-      width: 26px;
-      height: 26px;
-      cursor: pointer;
-      transition: all 0.4s;
-    }
-    .search-btn:hover img {
-      transform: scale(1.25) rotate(10deg);
-      filter: drop-shadow(0 0 12px var(--glow));
-    }
-    .hero {
-      text-align: center;
-      padding: 50px 20px 40px;
-    }
-    .hero p {
-      font-size: 1.35rem;
-      opacity: 0.9;
-      max-width: 680px;
-      margin: 0 auto 35px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-      gap: 25px;
-      padding: 0 25px 60px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-    .card {
-      background: rgba(26, 0, 63, 0.65);
-      border-radius: 18px;
-      overflow: hidden;
-      transition: all 0.4s ease;
-      border: 1px solid rgba(0,212,255,0.2);
-      backdrop-filter: blur(8px);
-    }
-    .card:hover {
-      transform: translateY(-12px) scale(1.02);
-      box-shadow: 0 15px 35px rgba(0,212,255,0.25);
-      border-color: var(--primary);
-    }
-    .card img {
-      width: 100%;
-      height: 360px;
-      object-fit: cover;
-      transition: transform 0.5s;
-    }
-    .card:hover img {
-      transform: scale(1.07);
-    }
-    .card-info {
-      padding: 18px;
-      text-align: center;
-    }
-    .card h3 {
-      font-size: 1.55rem;
-      margin-bottom: 8px;
-      color: var(--primary);
-    }
-    .card p {
-      font-size: 0.95rem;
-      opacity: 0.85;
-      margin-bottom: 12px;
-    }
-    .btn {
-      background: linear-gradient(45deg, var(--primary), var(--accent));
-      color: white;
-      padding: 10px 28px;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: bold;
-      display: inline-block;
-      transition: all 0.3s;
-    }
-    .btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 18px rgba(0,212,255,0.4);
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-    @keyframes glowPulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.92; }
-    }
-    @media (max-width: 768px) {
-      header { padding: 12px 20px; gap: 15px; }
-      .grid { grid-template-columns: 1fr; padding: 0 20px; }
-      .heading-img { max-width: 180px; }
-      .bunny-pfp { width: 42px; height: 42px; }
-      .search-btn img { width: 24px; height: 24px; }
-    }
+    h1 { font-size: 5rem; text-shadow: 0 0 30px #00d4ff; }
+    p { font-size: 2rem; margin-top: 20px; }
   </style>
 </head>
 <body>
-
-  <header>
-    <div class="logo">
-      <img src="assets/logo-circle.png" alt="Comic PUR Bunny" class="bunny-pfp">
-    </div>
-    <div class="heading-container">
-      <img src="assets/heading.png" alt="Comic PUR" class="heading-img">
-    </div>
-    <div class="search-btn">
-      <img src="assets/search-icon.png" alt="Search" onclick="window.location.href='search.html'">
-    </div>
-  </header>
-
-  <section class="hero">
-    <p>Cute, emotional aur dil se dil tak ki comics ka pura maza yahan! 💙🐰💖</p>
-  </section>
-
-  <section class="grid">
-    <div class="card">
-      <img src="https://i.ibb.co/1YQsb3S1/file-00000000f1807206b0510a520d89fa32.jpg" alt="Ishq Par Jor Nahi">
-      <div class="card-info">
-        <h3>Ishq Par Jor Nahi</h3>
-        <p>Love, drama aur dil se dil tak ka safar 💔❤️</p>
-        <a href="pages/ishq-par-jor-nahi.html" class="btn">Padho Abhi →</a>
-      </div>
-    </div>
-
-    <!-- Naya card yahan add karo -->
-  </section>
-
+  <div>
+    <h1>0.html Working! 🐰💙</h1>
+    <p>Yeh page live hai toh deploy ho raha hai.<br>Ab batao kya dikha raha hai.</p>
+  </div>
 </body>
 </html>
