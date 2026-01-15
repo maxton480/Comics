@@ -13,7 +13,7 @@
       min-height: 100vh;
     }
 
-    /* HEADER – mobile first, slim, logo left, heading center, big search right */
+    /* HEADER – same as before */
     header {
       padding: 10px 16px;
       display: flex;
@@ -25,7 +25,7 @@
       top: 0;
       z-index: 100;
       border-bottom: 1px solid rgba(0, 212, 255, 0.25);
-      height: 64px; /* Mobile ke liye slim */
+      height: 64px;
     }
 
     .logo {
@@ -48,7 +48,7 @@
     }
 
     .heading-img {
-      max-width: 220px; /* Mobile ke liye perfect */
+      max-width: 220px;
       height: auto;
       display: block;
       margin: 0 auto;
@@ -60,7 +60,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-right: -8px; /* Thoda bahar ja raha hai */
+      margin-right: -8px;
     }
 
     .search-icon {
@@ -78,11 +78,11 @@
       animation-play-state: paused;
     }
 
-    /* GRID – 2 columns har screen pe (mobile + desktop) */
+    /* GRID – 2 columns, no extra height from title text */
     .grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr); /* Ek line mein 2 cards */
-      gap: 16px; /* Gap thoda kam rakha taaki mobile pe bhi fit ho */
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
       padding: 16px;
       max-width: 1200px;
       margin: 0 auto;
@@ -99,7 +99,7 @@
       transition: all 0.3s ease;
       position: relative;
       border: 1px solid rgba(0, 212, 255, 0.15);
-      min-height: 340px;
+      min-height: 280px; /* Ab title text nahi hai toh height kam kar di */
     }
 
     .card:hover {
@@ -130,23 +130,6 @@
       display: block;
     }
 
-    .card h3 {
-      margin: 10px 8px;
-      font-size: 15px;
-      text-align: center;
-      flex-grow: 1;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      line-height: 1.3;
-      padding: 0 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
     a {
       text-decoration: none;
       color: white;
@@ -154,29 +137,25 @@
       height: 100%;
     }
 
-    /* Desktop pe bhi 2 columns hi rahega (ya agar chahe toh 3-4 kar sakte hain) */
+    /* Desktop adjustments – 2 columns hi rahega */
     @media (min-width: 768px) {
       .grid {
-        grid-template-columns: repeat(2, 1fr); /* Mobile aur desktop dono pe 2 columns */
         gap: 24px;
         padding: 24px;
       }
       .card {
-        min-height: 480px;
+        min-height: 380px;
       }
-      .card h3 {
-        font-size: 18px;
-      }
-      .header-brand img {
-        max-height: 62px;
+      .heading-img {
+        max-width: 280px;
       }
       .search-icon {
-        width: 88px;
-        height: 88px;
+        width: 80px;
+        height: 80px;
       }
       .logo img {
-        width: 68px;
-        height: 68px;
+        width: 60px;
+        height: 60px;
       }
     }
 
@@ -227,21 +206,18 @@
     <a href="pages/ishq-par-jor-nahi.html">
       <div class="card">
         <img src="https://i.ibb.co/RpV5MWv2/file-0000000071087207b8fdc85d969f22b3.png" alt="Ishq Par Jor Nahi" loading="lazy">
-        <h3>Ishq Par Jor Nahi</h3>
       </div>
     </a>
 
     <a href="pages/tute-dilon-ki-mohabbat.html">
       <div class="card">
         <img src="https://i.ibb.co/5x8pjp9w/file-000000001f94720789c7a2a43382e1e7.png" alt="Tute Dilon Ki Mohabbat" loading="lazy">
-        <h3>Tute Dilon Ki Mohabbat</h3>
       </div>
     </a>
 
     <a href="pages/iit-diaries.html">
       <div class="card">
         <img src="https://i.ibb.co/B5yhXQkf/file-000000008a2c720796589f629980ccab.png" alt="IIT Diaries" loading="lazy">
-        <h3>IIT DIARIES</h3>
       </div>
     </a>
     <!-- Naya comic add template -->
