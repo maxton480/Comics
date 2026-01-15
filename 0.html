@@ -23,7 +23,6 @@
       padding: 15px 30px;
       display: flex;
       align-items: center;
-      justify-content: space-between; /* Left logo, center heading, right search */
       background: rgba(10, 0, 31, 0.85);
       backdrop-filter: blur(12px);
       position: sticky;
@@ -32,7 +31,7 @@
       border-bottom: 1px solid rgba(0,212,255,0.25);
     }
     .logo {
-      flex-shrink: 0; /* Logo shrink nahi hoga */
+      flex-shrink: 0;
     }
     .bunny-pfp {
       width: 48px;
@@ -44,7 +43,7 @@
       animation: float 5s ease-in-out infinite;
     }
     .heading-container {
-      flex: 1; /* Center mein full space lega */
+      flex: 1;
       text-align: center;
     }
     .heading-img {
@@ -53,6 +52,9 @@
       display: block;
       margin: 0 auto;
       animation: glowPulse 3s ease-in-out infinite;
+    }
+    .search-btn {
+      flex-shrink: 0;
     }
     .search-btn img {
       width: 26px;
@@ -165,7 +167,6 @@
         <a href="pages/ishq-par-jor-nahi.html" class="btn">Padho Abhi →</a>
       </div>
     </div>
-
     <!-- Naye cards yahan add karo -->
   </section>
 
