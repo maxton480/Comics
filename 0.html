@@ -78,11 +78,11 @@
       animation-play-state: paused;
     }
 
-    /* GRID – 2 columns, no extra height from title text */
+    /* GRID – sirf cover images, uniform gap up-down & left-right */
     .grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
+      grid-template-columns: repeat(2, 1fr); /* 2 cards per row */
+      gap: 16px; /* Up-down aur left-right dono mein same gap */
       padding: 16px;
       max-width: 1200px;
       margin: 0 auto;
@@ -99,7 +99,7 @@
       transition: all 0.3s ease;
       position: relative;
       border: 1px solid rgba(0, 212, 255, 0.15);
-      min-height: 280px; /* Ab title text nahi hai toh height kam kar di */
+      aspect-ratio: 3 / 4.2; /* Fixed aspect ratio taaki extra space na ho */
     }
 
     .card:hover {
@@ -125,7 +125,7 @@
 
     .card img {
       width: 100%;
-      aspect-ratio: 3 / 4.2;
+      height: 100%;
       object-fit: cover;
       display: block;
     }
@@ -137,14 +137,14 @@
       height: 100%;
     }
 
-    /* Desktop adjustments – 2 columns hi rahega */
+    /* Desktop pe bhi 2 columns hi rahega */
     @media (min-width: 768px) {
       .grid {
         gap: 24px;
         padding: 24px;
       }
       .card {
-        min-height: 380px;
+        aspect-ratio: 3 / 4.2;
       }
       .heading-img {
         max-width: 280px;
@@ -225,4 +225,3 @@
 
 </body>
 </html>
-test
