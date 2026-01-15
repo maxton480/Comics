@@ -13,7 +13,7 @@
       min-height: 100vh;
     }
 
-    /* HEADER – slim, dark gradient + blur */
+    /* HEADER – same as before */
     header {
       padding: 10px 16px;
       display: flex;
@@ -78,28 +78,28 @@
       animation-play-state: paused;
     }
 
-    /* GRID – only covers, uniform gap, no extra space */
+    /* GRID – sirf cover image jitna size, no extra space */
     .grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 16px; /* same gap up-down & left-right */
-      padding: 8px 16px; /* top padding kam taaki header se close rahe */
-      margin: 0 auto;
+      gap: 16px; /* uniform gap har taraf */
+      padding: 8px; /* bahut kam padding taaki header se close rahe */
       max-width: 1200px;
+      margin: 0 auto;
       background: linear-gradient(135deg, rgba(10, 0, 31, 0.9), rgba(26, 0, 63, 0.8));
       backdrop-filter: blur(8px);
       min-height: calc(100vh - 64px);
     }
 
     .card {
-      background: rgba(34, 34, 60, 0.7);
+      background: transparent; /* background hata diya taaki sirf image dikhe */
       border-radius: 16px;
       overflow: hidden;
       box-shadow: 0 8px 25px rgba(0,0,0,0.6);
       transition: all 0.3s ease;
       position: relative;
       border: 1px solid rgba(0, 212, 255, 0.15);
-      aspect-ratio: 3 / 4.2; /* fixed ratio taaki sirf image dikhe */
+      aspect-ratio: 3 / 4.2; /* exact cover image ka ratio – no extra height */
     }
 
     .card:hover {
@@ -222,4 +222,3 @@
 
 </body>
 </html>
-test
