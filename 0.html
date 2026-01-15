@@ -5,15 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Comic Reader</title>
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; } /* sab extra space remove */
+
     body {
       margin: 0;
       background: #0f001f;
       color: #e0e0ff;
       font-family: 'Segoe UI', system-ui, sans-serif;
       min-height: 100vh;
+      overflow-x: hidden;
     }
 
-    /* HEADER – same as before */
+    /* HEADER – slim, no extra space */
     header {
       padding: 10px 16px;
       display: flex;
@@ -28,10 +31,6 @@
       height: 64px;
     }
 
-    .logo {
-      flex-shrink: 0;
-    }
-
     .logo img {
       width: 52px;
       height: 52px;
@@ -39,12 +38,6 @@
       border: 3px solid #00d4ff;
       box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
       object-fit: cover;
-      animation: float 5s ease-in-out infinite;
-    }
-
-    .heading-container {
-      flex: 1;
-      text-align: center;
     }
 
     .heading-img {
@@ -54,22 +47,11 @@
       margin: 0 auto;
     }
 
-    .search-icon-wrapper {
-      width: 70px;
-      height: 70px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: -8px;
-    }
-
     .search-icon {
       width: 68px;
       height: 68px;
       cursor: pointer;
       animation: float 4.8s ease-in-out infinite;
-      transition: all 0.4s;
-      filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.7));
     }
 
     .search-icon:hover {
@@ -78,17 +60,16 @@
       animation-play-state: paused;
     }
 
-    /* GRID – only cover images, exact fit, uniform gap */
+    /* GRID – direct header ke neeche, no extra space */
     .grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 16px;
-      padding: 8px 16px;
+      padding: 0 16px 16px; /* top padding 0 – header se chipak jayega */
       max-width: 1200px;
       margin: 0 auto;
       background: linear-gradient(135deg, rgba(10, 0, 31, 0.9), rgba(26, 0, 63, 0.8));
       backdrop-filter: blur(8px);
-      min-height: calc(100vh - 64px);
     }
 
     .card {
@@ -98,7 +79,7 @@
       transition: all 0.3s ease;
       position: relative;
       border: 1px solid rgba(0, 212, 255, 0.15);
-      aspect-ratio: 2 / 3; /* exact cover ratio – no extra space */
+      aspect-ratio: 2 / 3; /* exact cover ratio – no extra height */
       background: transparent;
     }
 
@@ -106,21 +87,6 @@
       transform: translateY(-8px);
       box-shadow: 0 16px 40px rgba(0, 212, 255, 0.25);
       border-color: rgba(0, 212, 255, 0.5);
-    }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: -2px;
-      border-radius: 18px;
-      background: linear-gradient(45deg, transparent, rgba(0, 212, 255, 0.15), transparent);
-      opacity: 0;
-      transition: opacity 0.5s;
-      pointer-events: none;
-    }
-
-    .card:hover::before {
-      opacity: 1;
     }
 
     .card img {
@@ -141,7 +107,7 @@
     @media (min-width: 768px) {
       .grid {
         gap: 24px;
-        padding: 12px 24px;
+        padding: 0 24px 24px;
       }
       .heading-img {
         max-width: 280px;
@@ -199,6 +165,7 @@
     </div>
   </header>
 
+  <!-- GRID – direct header ke neeche, no extra space -->
   <div class="grid">
     <a href="pages/ishq-par-jor-nahi.html">
       <div class="card">
