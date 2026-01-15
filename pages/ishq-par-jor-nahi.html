@@ -3,101 +3,258 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ishq Par Jor Nahi</title>
+  <title>Ishq Par Jor Nahi - Comic PUR</title>
   <style>
-    body { margin:0; background:#111; color:white; text-align:center; font-family:Arial; }
-    h1 { padding:20px; margin:0; position:relative; }
-    .search-icon { position:absolute; right:20px; top:20px; font-size:28px; cursor:pointer; }
-    .cover { max-width:90%; margin:30px auto; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.8); }
-    .summary { max-width:90%; margin:20px auto; padding:20px; background:#222; border-radius:12px; font-size:18px; line-height:1.6; }
-    .episodes { padding:20px; }
-    .btn { display:block; background:#333; margin:15px auto; padding:20px; max-width:700px; border-radius:12px; text-decoration:none; color:white; font-size:20px; }
-    .btn:hover { background:#555; }
-    .back { margin:50px 0; }
-    .back a { color:#888; text-decoration:none; font-size:18px; }
+    :root {
+      --primary: #00d4ff;
+      --accent: #ff69b4;
+      --dark: #0a001f;
+      --glow: rgba(0, 212, 255, 0.7);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: linear-gradient(135deg, var(--dark), #1a003f);
+      color: white;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    header {
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(10, 0, 31, 0.92);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(0, 212, 255, 0.35);
+      height: 64px;
+    }
+
+    .logo img {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 3px solid var(--primary);
+      box-shadow: 0 0 20px var(--glow);
+      object-fit: cover;
+    }
+
+    .heading-img {
+      max-width: 220px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .search-icon {
+      width: 68px;
+      height: 68px;
+      cursor: pointer;
+      animation: float 4.8s ease-in-out infinite; /* sirf search pe floating */
+      transition: all 0.4s;
+      filter: drop-shadow(0 0 15px var(--glow));
+    }
+
+    .search-icon:hover {
+      transform: scale(1.15);
+      filter: drop-shadow(0 0 25px var(--primary));
+      animation-play-state: paused;
+    }
+
+    main {
+      padding: 20px 16px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .cover {
+      width: 100%;
+      max-width: 380px;
+      border-radius: 16px;
+      box-shadow: 0 12px 40px rgba(0, 212, 255, 0.25);
+      margin: 30px auto 40px;
+      display: block;
+    }
+
+    .summary {
+      background: rgba(34, 34, 60, 0.7);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 40px;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      backdrop-filter: blur(8px);
+    }
+
+    .episodes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .btn {
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      color: white;
+      padding: 18px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1rem;
+      display: block;
+      text-align: center;
+      transition: all 0.3s;
+      box-shadow: 0 6px 20px rgba(0, 212, 255, 0.2);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0, 212, 255, 0.4);
+    }
+
+    .back {
+      text-align: center;
+      margin: 50px 0;
+    }
+
+    .back a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: color 0.3s;
+    }
+
+    .back a:hover {
+      color: var(--primary);
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    @media (max-width: 768px) {
+      .episodes {
+        grid-template-columns: 1fr;
+      }
+      .heading-img {
+        max-width: 180px;
+      }
+      .search-icon {
+        width: 58px;
+        height: 58px;
+      }
+      .logo img {
+        width: 48px;
+        height: 48px;
+      }
+    }
   </style>
 </head>
 <body>
+
   <script>
   function getCookie(name) {
-    let matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([.$?*|{}()[\]\\/+^])/g, '\\$1') + "=([^;]*)"));
+    let matches = document.cookie.match(new RegExp(
+      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
     return matches ? decodeURIComponent(matches[1]) : "";
   }
 
   if (getCookie("site_access") !== "true") {
-    // Poora body replace kar do aur sab stop kar do
     document.documentElement.innerHTML = `
       <head><title>Access Blocked</title></head>
       <body style="margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px;">
         <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
           ⚠️ Direct Access Blocked<br><br>
           Shortener solve karke hi site open hogi.<br><br>
-          <a href="gate.html" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
+          <a href="../gate.html" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
         </div>
       </body>`;
-    // Sab JS stop kar do
-    while (document.body.firstChild) {
-      document.body.removeChild(document.body.firstChild);
-    }
-    throw ""; // Stop execution
+    throw new Error("Access blocked");
   }
   </script>
-  <h1>Ishq Par Jor Nahi
-    <span class="search-icon" onclick="window.location.href='../search.html'">🔍</span>
-  </h1>
-  <img src="https://i.ibb.co/RGBktSpM/IMG-20260107-163030-444.jpg" alt="Cover" class="cover" loading="lazy">
 
-  <div class="summary">
-    <p>माँ के गुज़र जाने के बाद गौरी के चाचा ने उसे मुंबई रवाना कर दिया, जहाँ उसे उसके पिता के पुराने मित्र रमाकांत के घर पर आसरा मिला, भोली-भाली गौरी मुंबई जैसे महानगर में रह कर अपना डिज़ाइनर बनने का सपना पूरा करना चाहती थी पर क्या होगा जब उसकी ज़िन्दगी में होगी इश्क़ की दस्तक ? किसी ने सच ही कहा है किसी का भी "इश्क़ पर जोर नहीं" चलता</p>
-  </div>
+  <!-- HEADER – same as homepage -->
+  <header>
+    <div class="logo">
+      <img src="../assets/heading.png" alt="Comic PUR Logo" class="logo-img">
+    </div>
+    <div class="heading-container">
+      <img src="../assets/logo-circle.png" alt="Comic PUR" class="heading-img">
+    </div>
+    <div class="search-btn">
+      <img src="../assets/search-icon.png" class="search-icon" alt="Search" onclick="window.location.href='../search.html'">
+    </div>
+  </header>
 
-  <div class="episodes">
-    <a href="../reader/ishq-par-jor-nahi/ch1.html" class="btn">Episode 1</a>
-    <a href="../reader/ishq-par-jor-nahi/ch2.html" class="btn">Episode 2</a>
-    <a href="../reader/ishq-par-jor-nahi/ch3.html" class="btn">Episode 3</a>
-    <a href="../reader/ishq-par-jor-nahi/ch4.html" class="btn">Episode 4</a>
-    <a href="../reader/ishq-par-jor-nahi/ch5.html" class="btn">Episode 5</a>
-    <a href="../reader/ishq-par-jor-nahi/ch6.html" class="btn">Episode 6</a>
-    <a href="../reader/ishq-par-jor-nahi/ch7.html" class="btn">Episode 7</a>
-    <a href="../reader/ishq-par-jor-nahi/ch8.html" class="btn">Episode 8</a>
-    <a href="../reader/ishq-par-jor-nahi/ch9.html" class="btn">Episode 9</a>
-    <a href="../reader/ishq-par-jor-nahi/ch10.html" class="btn">Episode 10</a>
-    <a href="../reader/ishq-par-jor-nahi/ch11.html" class="btn">Episode 11</a>
-    <a href="../reader/ishq-par-jor-nahi/ch12.html" class="btn">Episode 12</a>
-    <a href="../reader/ishq-par-jor-nahi/ch13.html" class="btn">Episode 13</a>
-    <a href="../reader/ishq-par-jor-nahi/ch14.html" class="btn">Episode 14</a>
-    <a href="../reader/ishq-par-jor-nahi/ch15.html" class="btn">Episode 15</a>
-    <a href="../reader/ishq-par-jor-nahi/ch16.html" class="btn">Episode 16</a>
-    <a href="../reader/ishq-par-jor-nahi/ch17.html" class="btn">Episode 17</a>
-    <a href="../reader/ishq-par-jor-nahi/ch18.html" class="btn">Episode 18</a>
-    <a href="../reader/ishq-par-jor-nahi/ch19.html" class="btn">Episode 19</a>
-    <a href="../reader/ishq-par-jor-nahi/ch20.html" class="btn">Episode 20</a>
-    <a href="../reader/ishq-par-jor-nahi/ch21.html" class="btn">Episode 21</a>
-    <a href="../reader/ishq-par-jor-nahi/ch22.html" class="btn">Episode 22</a>
-    <a href="../reader/ishq-par-jor-nahi/ch23.html" class="btn">Episode 23</a>
-    <a href="../reader/ishq-par-jor-nahi/ch24.html" class="btn">Episode 24</a>
-    <a href="../reader/ishq-par-jor-nahi/ch25.html" class="btn">Episode 25</a>
-    <a href="../reader/ishq-par-jor-nahi/ch26.html" class="btn">Episode 26</a>
-    <a href="../reader/ishq-par-jor-nahi/ch27.html" class="btn">Episode 27</a>
-    <a href="../reader/ishq-par-jor-nahi/ch28.html" class="btn">Episode 28</a>
-    <a href="../reader/ishq-par-jor-nahi/ch29.html" class="btn">Episode 29</a>
-    <a href="../reader/ishq-par-jor-nahi/ch30.html" class="btn">Episode 30</a>
-    <a href="../reader/ishq-par-jor-nahi/ch31.html" class="btn">Episode 31</a>
-    <a href="../reader/ishq-par-jor-nahi/ch32.html" class="btn">Episode 32</a>
-    <a href="../reader/ishq-par-jor-nahi/ch33.html" class="btn">Episode 33</a>
-    <a href="../reader/ishq-par-jor-nahi/ch34.html" class="btn">Episode 34</a>
-    <a href="../reader/ishq-par-jor-nahi/ch35.html" class="btn">Episode 35</a>
-    <a href="../reader/ishq-par-jor-nahi/ch36.html" class="btn">Episode 36</a>
-    <a href="../reader/ishq-par-jor-nahi/ch37.html" class="btn">Episode 37</a>
-    <a href="../reader/ishq-par-jor-nahi/ch38.html" class="btn">Episode 38</a>
-    <a href="../reader/ishq-par-jor-nahi/ch39.html" class="btn">Episode 39</a>
-    <a href="../reader/ishq-par-jor-nahi/ch40.html" class="btn">Episode 40</a>
-    
-    <!-- Naye episodes yahan add karo -->
-  </div>
+  <main>
+    <img src="https://i.ibb.co/1YQsb3S1/file-00000000f1807206b0510a520d89fa32.jpg" alt="Ishq Par Jor Nahi Cover" class="cover" loading="lazy">
 
-  <div class="back">
-    <a href="../index.html">← Back to Home</a>
-  </div>
+    <div class="summary">
+      <p>माँ के गुज़र जाने के बाद गौरी के चाचा ने उसे मुंबई रवाना कर दिया, जहाँ उसे उसके पिता के पुराने मित्र रमाकांत के घर पर आसरा मिला। भोली-भाली गौरी मुंबई जैसे महानगर में रह कर अपना डिज़ाइनर बनने का सपना पूरा करना चाहती थी पर क्या होगा जब उसकी ज़िन्दगी में होगी इश्क़ की दस्तक? किसी ने सच ही कहा है किसी का भी "इश्क़ पर जोर नहीं" चलता।</p>
+    </div>
+
+    <div class="episodes">
+      <a href="../reader/ishq-par-jor-nahi/ch1.html" class="btn">Episode 1</a>
+      <a href="../reader/ishq-par-jor-nahi/ch2.html" class="btn">Episode 2</a>
+      <a href="../reader/ishq-par-jor-nahi/ch3.html" class="btn">Episode 3</a>
+      <a href="../reader/ishq-par-jor-nahi/ch4.html" class="btn">Episode 4</a>
+      <a href="../reader/ishq-par-jor-nahi/ch5.html" class="btn">Episode 5</a>
+      <a href="../reader/ishq-par-jor-nahi/ch6.html" class="btn">Episode 6</a>
+      <a href="../reader/ishq-par-jor-nahi/ch7.html" class="btn">Episode 7</a>
+      <a href="../reader/ishq-par-jor-nahi/ch8.html" class="btn">Episode 8</a>
+      <a href="../reader/ishq-par-jor-nahi/ch9.html" class="btn">Episode 9</a>
+      <a href="../reader/ishq-par-jor-nahi/ch10.html" class="btn">Episode 10</a>
+      <a href="../reader/ishq-par-jor-nahi/ch11.html" class="btn">Episode 11</a>
+      <a href="../reader/ishq-par-jor-nahi/ch12.html" class="btn">Episode 12</a>
+      <a href="../reader/ishq-par-jor-nahi/ch13.html" class="btn">Episode 13</a>
+      <a href="../reader/ishq-par-jor-nahi/ch14.html" class="btn">Episode 14</a>
+      <a href="../reader/ishq-par-jor-nahi/ch15.html" class="btn">Episode 15</a>
+      <a href="../reader/ishq-par-jor-nahi/ch16.html" class="btn">Episode 16</a>
+      <a href="../reader/ishq-par-jor-nahi/ch17.html" class="btn">Episode 17</a>
+      <a href="../reader/ishq-par-jor-nahi/ch18.html" class="btn">Episode 18</a>
+      <a href="../reader/ishq-par-jor-nahi/ch19.html" class="btn">Episode 19</a>
+      <a href="../reader/ishq-par-jor-nahi/ch20.html" class="btn">Episode 20</a>
+      <a href="../reader/ishq-par-jor-nahi/ch21.html" class="btn">Episode 21</a>
+      <a href="../reader/ishq-par-jor-nahi/ch22.html" class="btn">Episode 22</a>
+      <a href="../reader/ishq-par-jor-nahi/ch23.html" class="btn">Episode 23</a>
+      <a href="../reader/ishq-par-jor-nahi/ch24.html" class="btn">Episode 24</a>
+      <a href="../reader/ishq-par-jor-nahi/ch25.html" class="btn">Episode 25</a>
+      <a href="../reader/ishq-par-jor-nahi/ch26.html" class="btn">Episode 26</a>
+      <a href="../reader/ishq-par-jor-nahi/ch27.html" class="btn">Episode 27</a>
+      <a href="../reader/ishq-par-jor-nahi/ch28.html" class="btn">Episode 28</a>
+      <a href="../reader/ishq-par-jor-nahi/ch29.html" class="btn">Episode 29</a>
+      <a href="../reader/ishq-par-jor-nahi/ch30.html" class="btn">Episode 30</a>
+      <a href="../reader/ishq-par-jor-nahi/ch31.html" class="btn">Episode 31</a>
+      <a href="../reader/ishq-par-jor-nahi/ch32.html" class="btn">Episode 32</a>
+      <a href="../reader/ishq-par-jor-nahi/ch33.html" class="btn">Episode 33</a>
+      <a href="../reader/ishq-par-jor-nahi/ch34.html" class="btn">Episode 34</a>
+      <a href="../reader/ishq-par-jor-nahi/ch35.html" class="btn">Episode 35</a>
+      <a href="../reader/ishq-par-jor-nahi/ch36.html" class="btn">Episode 36</a>
+      <a href="../reader/ishq-par-jor-nahi/ch37.html" class="btn">Episode 37</a>
+      <a href="../reader/ishq-par-jor-nahi/ch38.html" class="btn">Episode 38</a>
+      <a href="../reader/ishq-par-jor-nahi/ch39.html" class="btn">Episode 39</a>
+      <a href="../reader/ishq-par-jor-nahi/ch40.html" class="btn">Episode 40</a>
+    </div>
+
+    <div class="back">
+      <a href="../index.html">← Back to Home</a>
+    </div>
+  </main>
+
+  <!-- Animations -->
+  <style>
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+  </style>
+
 </body>
 </html>
