@@ -30,28 +30,13 @@
       height: 80px;
       position: relative;
     }
-    .logo {
-      position: absolute;
-      left: 30px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-    .bunny-pfp {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      border: 3px solid var(--primary);
-      box-shadow: 0 0 20px var(--glow);
-      object-fit: cover;
-      animation: float 5s ease-in-out infinite;
-    }
     .heading-img {
       max-width: 210px;
       height: auto;
       position: absolute;
-      left: 50%;
+      left: 35%; /* Moved to between top left and center for a cool look */
       top: 50%;
-      transform: translate(-50%, -50%);
+      transform: translateY(-50%);
       animation: glowPulse 3s ease-in-out infinite;
     }
     .search-btn {
@@ -59,16 +44,25 @@
       right: 30px;
       top: 50%;
       transform: translateY(-50%);
+      width: 48px; /* Circle size */
+      height: 48px;
+      border-radius: 50%;
+      border: 3px solid var(--primary);
+      box-shadow: 0 0 20px var(--glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: float 5s ease-in-out infinite; /* Floating animation */
+      cursor: pointer;
+      transition: all 0.4s;
+    }
+    .search-btn:hover {
+      transform: translateY(-50%) scale(1.25) rotate(10deg);
+      filter: drop-shadow(0 0 12px var(--glow));
     }
     .search-btn img {
       width: 26px;
       height: 26px;
-      cursor: pointer;
-      transition: all 0.4s;
-    }
-    .search-btn:hover img {
-      transform: scale(1.25) rotate(10deg);
-      filter: drop-shadow(0 0 12px var(--glow));
     }
     .hero {
       text-align: center;
@@ -138,23 +132,18 @@
     @media (max-width: 768px) {
       header { padding: 12px 20px; }
       .grid { grid-template-columns: 1fr; padding: 0 20px; }
-      .heading-img { max-width: 180px; }
-      .bunny-pfp { width: 42px; height: 42px; }
+      .heading-img { max-width: 180px; left: 30%; } /* Adjusted for mobile */
+      .search-btn { width: 42px; height: 42px; right: 20px; }
       .search-btn img { width: 24px; height: 24px; }
-      .logo { left: 20px; }
-      .search-btn { right: 20px; }
     }
   </style>
 </head>
 <body>
 
   <header>
-    <div class="logo">
-      <img src="assets/logo-circle.png" alt="Comic PUR Bunny" class="bunny-pfp">
-    </div>
     <img src="assets/heading.png" alt="Comic PUR" class="heading-img">
-    <div class="search-btn">
-      <img src="assets/search-icon.png" alt="Search" onclick="window.location.href='search.html'">
+    <div class="search-btn" onclick="window.location.href='search.html'">
+      <img src="assets/search-icon.png" alt="Search">
     </div>
   </header>
 
