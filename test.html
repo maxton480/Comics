@@ -11,24 +11,24 @@
       --dark: #0a001f;
       --glow: rgba(0, 212, 255, 0.6);
     }
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
       background: linear-gradient(135deg, var(--dark), #1a003f);
       color: white;
       font-family: 'Segoe UI', sans-serif;
       min-height: 100vh;
-      margin:0;
+      overflow-x: hidden;
     }
     header {
       padding: 15px 30px;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between; /* left logo, center heading, right search */
       background: rgba(10, 0, 31, 0.8);
       backdrop-filter: blur(10px);
       position: sticky;
       top: 0;
       z-index: 100;
-      gap: 20px;
       border-bottom: 1px solid rgba(0,212,255,0.2);
     }
     .logo {
@@ -42,10 +42,17 @@
       border-radius: 50%;
       border: 2px solid var(--primary);
       box-shadow: 0 0 15px var(--glow);
+      object-fit: cover;
+    }
+    .heading-container {
+      flex: 1;
+      text-align: center; /* Heading center mein */
     }
     .heading-img {
       max-width: 220px;
       height: auto;
+      display: block;
+      margin: 0 auto;
     }
     .search-btn img {
       width: 28px;
@@ -96,6 +103,7 @@
       .heading-img { max-width:180px; }
       .bunny-pfp { width:45px; height:45px; }
       .search-btn img { width:26px; height:26px; }
+      header { padding:10px 20px; }
     }
   </style>
 </head>
@@ -104,8 +112,13 @@
   <header>
     <div class="logo">
       <img src="assets/logo-circle.png" alt="Comic PUR Bunny" class="bunny-pfp">
+    </div>
+    <div class="heading-container">
       <img src="assets/heading.png" alt="Comic PUR" class="heading-img">
+    </div>
+    <div class="search-btn">
       <img src="assets/search-icon.png" alt="Search" onclick="window.location.href='search.html'">
+    </div>
   </header>
 
   <section class="hero">
@@ -121,7 +134,7 @@
         <a href="pages/ishq-par-jor-nahi.html" class="btn">Padho Abhi →</a>
       </div>
     </div>
-    <!-- Add more cards here -->
+    <!-- Naye cards yahan add karo -->
   </section>
 
 </body>
