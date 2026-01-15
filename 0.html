@@ -78,12 +78,12 @@
       animation-play-state: paused;
     }
 
-    /* GRID – sirf cover image jitna size, no extra space */
+    /* GRID – 2 columns, uniform gap */
     .grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 16px; /* uniform gap har taraf */
-      padding: 8px; /* bahut kam padding taaki header se close rahe */
+      gap: 16px; /* same gap har taraf */
+      padding: 8px 16px;
       max-width: 1200px;
       margin: 0 auto;
       background: linear-gradient(135deg, rgba(10, 0, 31, 0.9), rgba(26, 0, 63, 0.8));
@@ -91,15 +91,16 @@
       min-height: calc(100vh - 64px);
     }
 
+    /* CARD – exact 2:3 ratio, no extra space */
     .card {
-      background: transparent; /* background hata diya taaki sirf image dikhe */
       border-radius: 16px;
       overflow: hidden;
       box-shadow: 0 8px 25px rgba(0,0,0,0.6);
       transition: all 0.3s ease;
       position: relative;
       border: 1px solid rgba(0, 212, 255, 0.15);
-      aspect-ratio: 3 / 4.2; /* exact cover image ka ratio – no extra height */
+      aspect-ratio: 2 / 3; /* 2:3 ratio – width:height exactly cover ke hisaab se */
+      background: transparent;
     }
 
     .card:hover {
