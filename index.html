@@ -5,80 +5,97 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Comic Reader</title>
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; } /* sab extra space remove */
+
     body {
       margin: 0;
-      background: #111;
-      color: white;
-      font-family: Arial, Helvetica, sans-serif;
-      text-align: center;
+      background: #0f001f;
+      color: #e0e0ff;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
-    
-    h1 {
-      padding: 15px;
-      background: #000;
-      margin: 0;
-      position: relative;
-      font-size: 24px;
+
+    /* HEADER – slim, no extra space */
+    header {
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(to right, #0a001f, #1a003f);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(0, 212, 255, 0.25);
+      height: 64px;
     }
-    
+
+    .logo img {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 3px solid #00d4ff;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+      object-fit: cover;
+    }
+
+    .heading-img {
+      max-width: 220px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
     .search-icon {
-      position: absolute;
-      right: 15px;
-      top: 15px;
-      font-size: 26px;
+      width: 68px;
+      height: 68px;
       cursor: pointer;
+      animation: float 4.8s ease-in-out infinite;
     }
-    
+
+    .search-icon:hover {
+      transform: scale(1.15);
+      filter: drop-shadow(0 0 25px #00d4ff);
+      animation-play-state: paused;
+    }
+
+    /* GRID – direct header ke neeche, no extra space */
     .grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 12px;                    /* Mobile pe gap kam */
-      padding: 12px;
+      gap: 16px;
+      padding: 0 16px 16px; /* top padding 0 – header se chipak jayega */
       max-width: 1200px;
       margin: 0 auto;
+      background: linear-gradient(135deg, rgba(10, 0, 31, 0.9), rgba(26, 0, 63, 0.8));
+      backdrop-filter: blur(8px);
     }
-    
+
     .card {
-      background: #222;
-      border-radius: 12px;
+      border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.5);
-      transition: transform 0.2s;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      min-height: 320px;            /* Mobile ke liye kam height – adjust 300-340 try kar sakte ho */
-      box-sizing: border-box;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+      transition: all 0.3s ease;
+      position: relative;
+      border: 1px solid rgba(0, 212, 255, 0.15);
+      aspect-ratio: 2 / 3; /* exact cover ratio – no extra height */
+      background: transparent;
     }
-    
+
     .card:hover {
-      transform: scale(1.03);
+      transform: translateY(-8px);
+      box-shadow: 0 16px 40px rgba(0, 212, 255, 0.25);
+      border-color: rgba(0, 212, 255, 0.5);
     }
-    
+
     .card img {
       width: 100%;
-      aspect-ratio: 3 / 4.2;        /* Thoda taller banaya taaki mobile pe compact lage */
+      height: 100%;
       object-fit: cover;
       display: block;
     }
-    
-    .card h3 {
-      margin: 8px 6px;
-      font-size: 15px;              /* Mobile pe chhota font */
-      text-align: center;
-      flex-grow: 1;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      line-height: 1.25;
-      padding: 0 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
+
     a {
       text-decoration: none;
       color: white;
@@ -86,25 +103,29 @@
       height: 100%;
     }
 
-    /* Desktop/large screen pe thoda bada aur comfortable */
+    /* Desktop */
     @media (min-width: 768px) {
       .grid {
-        gap: 20px;
-        padding: 20px;
+        gap: 24px;
+        padding: 0 24px 24px;
       }
-      .card {
-        min-height: 460px;
-      }
-      .card h3 {
-        font-size: 18px;
-      }
-      h1 {
-        font-size: 32px;
-        padding: 20px;
+      .heading-img {
+        max-width: 280px;
       }
       .search-icon {
-        font-size: 32px;
+        width: 80px;
+        height: 80px;
       }
+      .logo img {
+        width: 60px;
+        height: 60px;
+      }
+    }
+
+    /* Animations */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-14px); }
     }
   </style>
 </head>
@@ -131,29 +152,36 @@
   }
   </script>
 
-  <h1>COMIC READER
-    <span class="search-icon" onclick="window.location.href='search.html'">🔍</span>
-  </h1>
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      <img src="assets/heading.png" alt="Comic PUR Logo" class="logo-img">
+    </div>
+    <div class="heading-container">
+      <img src="assets/logo-circle.png" alt="Comic PUR" class="heading-img">
+    </div>
+    <div class="search-btn">
+      <img src="assets/search-icon.png" class="search-icon" alt="Search" onclick="window.location.href='search.html'">
+    </div>
+  </header>
 
+  <!-- GRID – direct header ke neeche, no extra space -->
   <div class="grid">
     <a href="pages/ishq-par-jor-nahi.html">
       <div class="card">
-        <img src="https://i.ibb.co/1YQsb3S1/file-00000000f1807206b0510a520d89fa32.jpg" alt="Ishq Par Jor Nahi" loading="lazy">
-        <h3>Ishq Par Jor Nahi</h3>
+        <img src="https://i.ibb.co/RpV5MWv2/file-0000000071087207b8fdc85d969f22b3.png" alt="Ishq Par Jor Nahi" loading="lazy">
       </div>
     </a>
 
     <a href="pages/tute-dilon-ki-mohabbat.html">
       <div class="card">
-        <img src="https://i.ibb.co/gMHFzhTm/file-000000004a9c71fab00a52d8e6d0d5f9.png" alt="Tute Dilon Ki Mohabbat" loading="lazy">
-        <h3>Tute Dilon Ki Mohabbat</h3>
+        <img src="https://i.ibb.co/5x8pjp9w/file-000000001f94720789c7a2a43382e1e7.png" alt="Tute Dilon Ki Mohabbat" loading="lazy">
       </div>
     </a>
 
     <a href="pages/iit-diaries.html">
       <div class="card">
-        <img src="https://i.ibb.co/r2110rRm/file-000000006a347207b62dd11547f3048d.png" alt="IIT Diaries" loading="lazy">
-        <h3>IIT DIARIES</h3>
+        <img src="https://i.ibb.co/B5yhXQkf/file-000000008a2c720796589f629980ccab.png" alt="IIT Diaries" loading="lazy">
       </div>
     </a>
     <!-- Naya comic add template -->
