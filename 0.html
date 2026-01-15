@@ -3,41 +3,55 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Comic Reader</title>
+  <title>IIT Diaries - Comic PUR</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; } /* sab extra space remove */
-
+    :root {
+      --primary: #00d4ff;
+      --accent: #ff69b4;
+      --dark: #0a001f;
+      --glow: rgba(0, 212, 255, 0.7);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      margin: 0;
-      background: #0f001f;
-      color: #e0e0ff;
+      background: linear-gradient(135deg, var(--dark), #1a003f);
+      color: white;
       font-family: 'Segoe UI', system-ui, sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
     }
 
-    /* HEADER – slim, no extra space */
+    /* HEADER – same as homepage */
     header {
       padding: 10px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: linear-gradient(to right, #0a001f, #1a003f);
-      backdrop-filter: blur(10px);
+      background: rgba(10, 0, 31, 0.92);
+      backdrop-filter: blur(12px);
       position: sticky;
       top: 0;
       z-index: 100;
-      border-bottom: 1px solid rgba(0, 212, 255, 0.25);
+      border-bottom: 1px solid rgba(0, 212, 255, 0.35);
       height: 64px;
+    }
+
+    .logo {
+      flex-shrink: 0;
     }
 
     .logo img {
       width: 52px;
       height: 52px;
       border-radius: 50%;
-      border: 3px solid #00d4ff;
-      box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+      border: 3px solid var(--primary);
+      box-shadow: 0 0 20px var(--glow);
       object-fit: cover;
+      animation: float 5s ease-in-out infinite;
+    }
+
+    .heading-container {
+      flex: 1;
+      text-align: center;
     }
 
     .heading-img {
@@ -52,80 +66,106 @@
       height: 68px;
       cursor: pointer;
       animation: float 4.8s ease-in-out infinite;
+      transition: all 0.4s;
+      filter: drop-shadow(0 0 15px var(--glow));
     }
 
     .search-icon:hover {
       transform: scale(1.15);
-      filter: drop-shadow(0 0 25px #00d4ff);
+      filter: drop-shadow(0 0 25px var(--primary));
       animation-play-state: paused;
     }
 
-    /* GRID – direct header ke neeche, no extra space */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-      padding: 0 16px 16px; /* top padding 0 – header se chipak jayega */
-      max-width: 1200px;
+    /* Content – clean & modern */
+    main {
+      padding: 20px 16px;
+      max-width: 900px;
       margin: 0 auto;
-      background: linear-gradient(135deg, rgba(10, 0, 31, 0.9), rgba(26, 0, 63, 0.8));
+    }
+
+    .cover {
+      width: 100%;
+      max-width: 380px;
+      border-radius: 16px;
+      box-shadow: 0 12px 40px rgba(0, 212, 255, 0.25);
+      margin: 30px auto 40px;
+      display: block;
+    }
+
+    .summary {
+      background: rgba(34, 34, 60, 0.7);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 40px;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      border: 1px solid rgba(0, 212, 255, 0.2);
       backdrop-filter: blur(8px);
     }
 
-    .card {
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-      transition: all 0.3s ease;
-      position: relative;
-      border: 1px solid rgba(0, 212, 255, 0.15);
-      aspect-ratio: 2 / 3; /* exact cover ratio – no extra height */
-      background: transparent;
+    .episodes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
     }
 
-    .card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 16px 40px rgba(0, 212, 255, 0.25);
-      border-color: rgba(0, 212, 255, 0.5);
-    }
-
-    .card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    a {
-      text-decoration: none;
+    .btn {
+      background: linear-gradient(45deg, var(--primary), var(--accent));
       color: white;
+      padding: 18px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1rem;
       display: block;
-      height: 100%;
+      text-align: center;
+      transition: all 0.3s;
+      box-shadow: 0 6px 20px rgba(0, 212, 255, 0.2);
     }
 
-    /* Desktop */
-    @media (min-width: 768px) {
-      .grid {
-        gap: 24px;
-        padding: 0 24px 24px;
-      }
-      .heading-img {
-        max-width: 280px;
-      }
-      .search-icon {
-        width: 80px;
-        height: 80px;
-      }
-      .logo img {
-        width: 60px;
-        height: 60px;
-      }
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0, 212, 255, 0.4);
+    }
+
+    .back {
+      text-align: center;
+      margin: 50px 0;
+    }
+
+    .back a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: color 0.3s;
+    }
+
+    .back a:hover {
+      color: var(--primary);
     }
 
     /* Animations */
     @keyframes float {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-14px); }
+      50% { transform: translateY(-12px); }
+    }
+
+    @media (max-width: 768px) {
+      .episodes {
+        grid-template-columns: 1fr;
+      }
+      .heading-img {
+        max-width: 180px;
+      }
+      .search-icon {
+        width: 58px;
+        height: 58px;
+      }
+      .logo img {
+        width: 48px;
+        height: 48px;
+      }
     }
   </style>
 </head>
@@ -146,47 +186,68 @@
         <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
           ⚠️ Direct Access Blocked<br><br>
           Shortener solve karke hi site open hogi.<br><br>
+          <a href="../gate.html" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
         </div>
       </body>`;
     throw new Error("Access blocked");
   }
   </script>
 
-  <!-- HEADER -->
+  <!-- HEADER – same as homepage -->
   <header>
     <div class="logo">
-      <img src="assets/heading.png" alt="Comic PUR Logo" class="logo-img">
+      <img src="../assets/heading.png" alt="Comic PUR Logo" class="logo-img">
     </div>
     <div class="heading-container">
-      <img src="assets/logo-circle.png" alt="Comic PUR" class="heading-img">
+      <img src="../assets/logo-circle.png" alt="Comic PUR" class="heading-img">
     </div>
     <div class="search-btn">
-      <img src="assets/search-icon.png" class="search-icon" alt="Search" onclick="window.location.href='search.html'">
+      <img src="../assets/search-icon.png" class="search-icon" alt="Search" onclick="window.location.href='../search.html'">
     </div>
   </header>
 
-  <!-- GRID – direct header ke neeche, no extra space -->
-  <div class="grid">
-    <a href="pages/ishq-par-jor-nahi.html">
-      <div class="card">
-        <img src="https://i.ibb.co/RpV5MWv2/file-0000000071087207b8fdc85d969f22b3.png" alt="Ishq Par Jor Nahi" loading="lazy">
-      </div>
-    </a>
+  <main>
+    <img src="https://i.ibb.co/B5yhXQkf/file-000000008a2c720796589f629980ccab.png" alt="IIT Diaries Cover" class="cover" loading="lazy">
 
-    <a href="pages/tute-dilon-ki-mohabbat.html">
-      <div class="card">
-        <img src="https://i.ibb.co/5x8pjp9w/file-000000001f94720789c7a2a43382e1e7.png" alt="Tute Dilon Ki Mohabbat" loading="lazy">
-      </div>
-    </a>
+    <div class="summary">
+      <p>ध्रुवन जो अपने गाँव से बड़े अरमानों के साथ आईआईटी की पढ़ाई के लिए पहुँचा और जा टकराया शोख, चंचल और चुलबुली श्रेया से। उसके दिल के तार डंका उठे। पर उसकी माँ ने उससे वचन लिया था कि वह कभी भी किसी लड़की के प्यार के चक्कर में नहीं पड़ेगा और अपनी पढ़ाई पर ध्यान देगा। क्या ध्रुवन अपनी माँ की कसम निभा पाएगा? जानने के लिए पढ़ें...?</p>
+    </div>
 
-    <a href="pages/iit-diaries.html">
-      <div class="card">
-        <img src="https://i.ibb.co/B5yhXQkf/file-000000008a2c720796589f629980ccab.png" alt="IIT Diaries" loading="lazy">
-      </div>
-    </a>
-    <!-- Naya comic add template -->
-  </div>
+    <div class="episodes">
+      <a href="../reader/iit-diaries/ch1.html" class="btn">Episode 1</a>
+      <a href="../reader/iit-diaries/ch2.html" class="btn">Episode 2</a>
+      <a href="../reader/iit-diaries/ch3.html" class="btn">Episode 3</a>
+      <a href="../reader/iit-diaries/ch4.html" class="btn">Episode 4</a>
+      <a href="../reader/iit-diaries/ch5.html" class="btn">Episode 5</a>
+      <a href="../reader/iit-diaries/ch6.html" class="btn">Episode 6</a>
+      <a href="../reader/iit-diaries/ch7.html" class="btn">Episode 7</a>
+      <a href="../reader/iit-diaries/ch8.html" class="btn">Episode 8</a>
+      <a href="../reader/iit-diaries/ch9.html" class="btn">Episode 9</a>
+      <a href="../reader/iit-diaries/ch10.html" class="btn">Episode 10</a>
+      <a href="../reader/iit-diaries/ch11.html" class="btn">Episode 11</a>
+      <a href="../reader/iit-diaries/ch12.html" class="btn">Episode 12</a>
+      <a href="../reader/iit-diaries/ch13.html" class="btn">Episode 13</a>
+      <a href="../reader/iit-diaries/ch14.html" class="btn">Episode 14</a>
+      <a href="../reader/iit-diaries/ch15.html" class="btn">Episode 15</a>
+      <a href="../reader/iit-diaries/ch16.html" class="btn">Episode 16</a>
+      <a href="../reader/iit-diaries/ch17.html" class="btn">Episode 17</a>
+      <a href="../reader/iit-diaries/ch18.html" class="btn">Episode 18</a>
+      <a href="../reader/iit-diaries/ch19.html" class="btn">Episode 19</a>
+      <!-- Naye episodes yahan add karo -->
+    </div>
+
+    <div class="back">
+      <a href="../index.html">← Back to Home</a>
+    </div>
+  </main>
+
+  <!-- Animations -->
+  <style>
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+  </style>
 
 </body>
 </html>
-test
