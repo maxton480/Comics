@@ -9,7 +9,7 @@
       --primary: #00d4ff;
       --accent: #ff69b4;
       --dark: #0a001f;
-      --glow: rgba(0, 212, 255, 0.8);
+      --glow: rgba(0, 212, 255, 0.7);
     }
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
@@ -20,7 +20,7 @@
       overflow-x: hidden;
     }
     header {
-      padding: 12px 30px; /* Slim header */
+      padding: 12px 30px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -30,13 +30,13 @@
       top: 0;
       z-index: 100;
       border-bottom: 1px solid rgba(0,212,255,0.3);
-      height: 70px; /* Slim height */
+      height: 75px; /* Slim but comfortable */
     }
     .logo {
       flex-shrink: 0;
     }
     .logo img {
-      width: 60px; /* Bada size */
+      width: 60px;
       height: 60px;
       border-radius: 50%;
       border: 4px solid var(--primary);
@@ -44,16 +44,23 @@
       object-fit: cover;
       animation: float 4.5s ease-in-out infinite;
     }
+    .heading-container {
+      flex: 1;
+      text-align: center;
+      position: relative;
+    }
     .heading-img {
-      max-width: 320px; /* Bada size */
+      max-width: 280px; /* Bada size */
       height: auto;
       display: block;
       margin: 0 auto;
+      position: relative;
+      top: 8px; /* Thoda niche shift */
       animation: glowPulse 3s ease-in-out infinite;
     }
     .search-btn img {
-      width: 38px; /* Bada size */
-      height: 38px;
+      width: 40px; /* Bada size – ab header mein fit aur prominent */
+      height: 40px;
       cursor: pointer;
       animation: float 5s ease-in-out infinite;
       transition: all 0.4s;
@@ -65,7 +72,7 @@
     }
     .hero {
       text-align: center;
-      padding: 80px 20px 40px;
+      padding: 90px 20px 40px; /* Header ke baad space */
     }
     .hero p {
       font-size: 1.45rem;
@@ -140,11 +147,11 @@
       50% { opacity: 0.9; }
     }
     @media (max-width: 768px) {
-      header { padding: 10px 20px; }
+      header { padding: 10px 20px; height: 65px; }
       .grid { grid-template-columns: 1fr; padding: 0 20px; }
-      .heading-img { max-width: 200px; }
+      .heading-img { max-width: 220px; top: 5px; }
       .logo img { width: 50px; height: 50px; }
-      .search-btn img { width: 32px; height: 32px; }
+      .search-btn img { width: 34px; height: 34px; }
     }
   </style>
 </head>
@@ -181,3 +188,4 @@
 
 </body>
 </html>
+test
