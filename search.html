@@ -108,6 +108,7 @@
       font-size: 1.3rem;
       opacity: 0.7;
       margin: 40px 0;
+      grid-column: 1 / -1;
     }
 
     @media (min-width: 768px) {
@@ -137,7 +138,7 @@
         <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
           ⚠️ Direct Access Blocked<br><br>
           Shortener solve karke hi site open hogi.<br><br>
-          <a href="../gate.html" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
+          <a href="gate.html" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
         </div>
       </body>`;
     throw new Error("Access blocked");
@@ -145,8 +146,8 @@
   </script>
 
   <main>
-    <!-- Search Banner Image from assets -->
-    <img src="../assets/search-banner.png" alt="Search Comics" class="search-banner" loading="lazy">
+    <!-- Search Banner Image from assets (tum upload kar dena) -->
+    <img src="assets/search-banner.png" alt="Search Comics" class="search-banner" loading="lazy">
 
     <!-- Search Bar -->
     <div class="search-container">
@@ -159,20 +160,20 @@
     </div>
   </main>
 
-  <!-- Search Script -->
+  <!-- Search Script – bug fix + path sahi -->
   <script>
     function searchComics() {
-      const input = document.getElementById('searchInput').value.toLowerCase();
+      const input = document.getElementById('searchInput').value.toLowerCase().trim();
       const grid = document.getElementById('resultsGrid');
       const noResults = document.getElementById('noResults');
-      grid.innerHTML = ''; // clear previous
+      grid.innerHTML = ''; // clear previous results
 
-      // Sample data – apne saare comics yahan add kar dena
+      // All your comics – add more as needed
       const comics = [
-        { name: "Ishq Par Jor Nahi", link: "../pages/ishq-par-jor-nahi.html", cover: "https://i.ibb.co/1YQsb3S1/file-00000000f1807206b0510a520d89fa32.jpg" },
-        { name: "Tute Dilon Ki Mohabbat", link: "../pages/tute-dilon-ki-mohabbat.html", cover: "https://i.ibb.co/5x8pjp9w/file-000000001f94720789c7a2a43382e1e7.png" },
-        { name: "IIT Diaries", link: "../pages/iit-diaries.html", cover: "https://i.ibb.co/B5yhXQkf/file-000000008a2c720796589f629980ccab.png" }
-        // Naye comics yahan add karo { name: "...", link: "...", cover: "..." }
+        { name: "Ishq Par Jor Nahi", link: "pages/ishq-par-jor-nahi.html", cover: "https://i.ibb.co/1YQsb3S1/file-00000000f1807206b0510a520d89fa32.jpg" },
+        { name: "Tute Dilon Ki Mohabbat", link: "pages/tute-dilon-ki-mohabbat.html", cover: "https://i.ibb.co/5x8pjp9w/file-000000001f94720789c7a2a43382e1e7.png" },
+        { name: "IIT Diaries", link: "pages/iit-diaries.html", cover: "https://i.ibb.co/B5yhXQkf/file-000000008a2c720796589f629980ccab.png" }
+        // Naye comics yahan add karo, jaise { name: "New Comic", link: "pages/new.html", cover: "https://..." }
       ];
 
       const filtered = comics.filter(comic => comic.name.toLowerCase().includes(input));
@@ -180,6 +181,7 @@
       if (filtered.length === 0) {
         noResults.style.display = 'block';
         noResults.textContent = input ? "Koi comic nahi mila... 😔" : "Kuch search karo bhai... 😄";
+        grid.appendChild(noResults);
         return;
       }
 
