@@ -1,240 +1,295 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="__className_3a0388">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>IIT Diaries - Comic PUR</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comic Reader</title>
+  <link rel="preload" href="assets/search-icon.png" as="image" />
+  <link rel="preload" href="assets/heading.png" as="image" />
+  <link rel="preload" href="assets/logo-circle.png" as="image" />
   <style>
     :root {
-      --primary: #00d4ff;
-      --accent: #ff69b4;
-      --dark: #0a001f;
-      --glow: rgba(0, 212, 255, 0.7);
+      --primary-bg: #0f001f;
+      --secondary-bg: linear-gradient(135deg, rgba(10, 0, 31, 0.9), rgba(26, 0, 63, 0.8));
+      --accent-color: #00d4ff;
+      --text-color: #e0e0ff;
+      --muted-color: #a0a0c0;
+      --shadow: rgba(0, 212, 255, 0.25);
+      --border-radius: 16px;
+      --sidebar-width: 256px;
     }
-    * { margin:0; padding:0; box-sizing:border-box; }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      background: linear-gradient(135deg, var(--dark), #1a003f);
-      color: white;
+      background: var(--primary-bg);
+      color: var(--text-color);
       font-family: 'Segoe UI', system-ui, sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
+      transition: background 0.3s ease;
     }
 
+    /* Theme Support */
+    .light {
+      --primary-bg: #f0f0f0;
+      --secondary-bg: linear-gradient(135deg, rgba(240, 240, 240, 0.9), rgba(220, 220, 220, 0.8));
+      --text-color: #333;
+      --muted-color: #666;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: var(--secondary-bg);
+      backdrop-filter: blur(10px);
+      border-right: 1px solid var(--shadow);
+      z-index: 100;
+      transition: transform 0.3s ease;
+      transform: translateX(-100%);
+    }
+
+    .sidebar.open {
+      transform: translateX(0);
+    }
+
+    .sidebar-content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      color: var(--muted-color);
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+
+    .sidebar-link:hover {
+      background: rgba(0, 212, 255, 0.1);
+      color: var(--accent-color);
+    }
+
+    .sidebar-toggle {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      color: var(--text-color);
+      cursor: pointer;
+    }
+
+    /* Header */
     header {
-      padding: 10px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(10, 0, 31, 0.92);
-      backdrop-filter: blur(12px);
+      padding: 12px 20px;
+      background: var(--secondary-bg);
+      backdrop-filter: blur(10px);
       position: sticky;
       top: 0;
-      z-index: 100;
-      border-bottom: 1px solid rgba(0, 212, 255, 0.35);
-      height: 64px;
+      z-index: 50;
+      border-bottom: 1px solid var(--shadow);
+      margin-left: var(--sidebar-width); /* Adjust for sidebar */
     }
 
     .logo img {
-      width: 52px;
-      height: 52px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
-      border: 3px solid var(--primary);
-      box-shadow: 0 0 20px var(--glow);
+      border: 3px solid var(--accent-color);
+      box-shadow: 0 0 20px var(--shadow);
       object-fit: cover;
+      transition: transform 0.3s ease;
     }
 
-    .heading-img {
-      max-width: 220px;
-      height: auto;
-      display: block;
-      margin: 0 auto;
+    .logo img:hover {
+      transform: scale(1.1);
+    }
+
+    .search-bar {
+      flex: 1;
+      max-width: 400px;
+      margin: 0 20px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 8px 40px 8px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--shadow);
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-color);
+      font-size: 14px;
+      outline: none;
+    }
+
+    .search-input::placeholder {
+      color: var(--muted-color);
     }
 
     .search-icon {
-      width: 68px;
-      height: 68px;
-      cursor: pointer;
-      animation: float 4.8s ease-in-out infinite; /* sirf yahan floating animation */
-      transition: all 0.4s;
-      filter: drop-shadow(0 0 15px var(--glow));
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      color: var(--muted-color);
     }
 
-    .search-icon:hover {
-      transform: scale(1.15);
-      filter: drop-shadow(0 0 25px var(--primary));
-      animation-play-state: paused;
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--muted-color);
+      animation: pulse 2s infinite;
     }
 
-    main {
-      padding: 20px 16px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .cover {
-      width: 100%;
-      max-width: 380px;
-      border-radius: 16px;
-      box-shadow: 0 12px 40px rgba(0, 212, 255, 0.25);
-      margin: 30px auto 40px;
-      display: block;
-    }
-
-    .summary {
-      background: rgba(34, 34, 60, 0.7);
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 40px;
-      font-size: 1.1rem;
-      line-height: 1.7;
-      border: 1px solid rgba(0, 212, 255, 0.2);
-      backdrop-filter: blur(8px);
-    }
-
-    .episodes {
+    /* Grid */
+    .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-bottom: 40px;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto 20px;
+      margin-left: var(--sidebar-width); /* Adjust for sidebar */
     }
 
-    .btn {
-      background: linear-gradient(45deg, var(--primary), var(--accent));
-      color: white;
-      padding: 18px 24px;
-      border-radius: 12px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 1.1rem;
+    .card {
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+      transition: all 0.3s ease;
+      position: relative;
+      border: 1px solid rgba(0, 212, 255, 0.15);
+      aspect-ratio: 2 / 3;
+      background: transparent;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 40px var(--shadow);
+      border-color: rgba(0, 212, 255, 0.5);
+    }
+
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       display: block;
-      text-align: center;
-      transition: all 0.3s;
-      box-shadow: 0 6px 20px rgba(0, 212, 255, 0.2);
+      transition: filter 0.3s ease;
     }
 
-    .btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 30px rgba(0, 212, 255, 0.4);
+    .card:hover img {
+      filter: brightness(1.1);
     }
 
-    .back {
-      text-align: center;
-      margin: 50px 0;
-    }
-
-    .back a {
-      color: #aaa;
+    a {
       text-decoration: none;
-      font-size: 1.1rem;
-      transition: color 0.3s;
+      color: inherit;
+      display: block;
+      height: 100%;
+      border-radius: var(--border-radius);
+      overflow: hidden;
     }
 
-    .back a:hover {
-      color: var(--primary);
+    a:focus {
+      outline: 2px solid var(--accent-color);
+      outline-offset: 4px;
     }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-12px); }
-    }
-
+    /* Responsive */
     @media (max-width: 768px) {
-      .episodes {
-        grid-template-columns: 1fr;
+      header {
+        margin-left: 0;
       }
-      .heading-img {
-        max-width: 180px;
+      .grid {
+        margin-left: 0;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        padding: 16px;
       }
-      .search-icon {
-        width: 58px;
-        height: 58px;
+      .sidebar {
+        width: 100%;
       }
-      .logo img {
-        width: 48px;
-        height: 48px;
-      }
+    }
+
+    /* Animations */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
     }
   </style>
 </head>
 <body>
-
   <script>
-  function getCookie(name) {
-    let matches = document.cookie.match(new RegExp(
-      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-    ));
-    return matches ? decodeURIComponent(matches[1]) : "";
-  }
+    // Theme support (from snippet)
+    !function(){try{var d=document.documentElement,c=d.classList;c.remove('light','dark');var e=localStorage.getItem('theme');if('system'===e||(!e&&false)){var t='(prefers-color-scheme: dark)',m=window.matchMedia(t);if(m.media!==t||m.matches){c.add('dark')}else{c.add('light')}}else if(e){c.add(e||'')}else{c.add('dark')}}catch(e){}}()
 
-  if (getCookie("site_access") !== "true") {
-    document.documentElement.innerHTML = `
-      <head><title>Access Blocked</title></head>
-      <body style="margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px;">
-        <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
-          ⚠️ Direct Access Blocked<br><br>
-          Shortener solve karke hi site open hogi.<br><br>
-          <a href="../gate.html" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
-        </div>
-      </body>`;
-    throw new Error("Access blocked");
-  }
+    // Access check
+    function getCookie(name) {
+      let matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([\.$?*|{}\$\$\$\$\\\/\+^])/g, '\\$1') + "=([^;]*)"));
+      return matches ? decodeURIComponent(matches[1]) : "";
+    }
+    if (getCookie("site_access") !== "true") {
+      document.documentElement.innerHTML = `
+        <head><title>Access Blocked</title></head>
+        <body style="margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px;">
+          <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
+            ⚠️ Direct Access Blocked<br><br>
+            Shortener solve karke hi site open hogi.<br><br>
+          </div>
+        </body>`;
+      throw new Error("Access blocked");
+    }
+
+    // Sidebar toggle
+    function toggleSidebar() {
+      document.querySelector('.sidebar').classList.toggle('open');
+    }
   </script>
 
-  <!-- HEADER -->
-  <header>
-    <div class="logo">
-      <img src="../assets/heading.png" alt="Comic PUR Logo" class="logo-img">
-    </div>
-    <div class="heading-container">
-      <img src="../assets/logo-circle.png" alt="Comic PUR" class="heading-img">
-    </div>
-    <div class="search-btn">
-      <img src="../assets/search-icon.png" class="search-icon" alt="Search" onclick="window.location.href='../search.html'">
-    </div>
-  </header>
-
-  <main>
-    <img src="https://i.ibb.co/B5yhXQkf/file-000000008a2c720796589f629980ccab.png" alt="IIT Diaries Cover" class="cover" loading="lazy">
-
-    <div class="summary">
-      <p>ध्रुवन जो अपने गाँव से बड़े अरमानों के साथ आईआईटी की पढ़ाई के लिए पहुँचा और जा टकराया शोख, चंचल और चुलबुली श्रेया से। उसके दिल के तार डंका उठे। पर उसकी माँ ने उससे वचन लिया था कि वह कभी भी किसी लड़की के प्यार के चक्कर में नहीं पड़ेगा और अपनी पढ़ाई पर ध्यान देगा। क्या ध्रुवन अपनी माँ की कसम निभा पाएगा? जानने के लिए पढ़ें...?</p>
-    </div>
-
-    <div class="episodes">
-      <a href="../reader/iit-diaries/ch1.html" class="btn">Episode 1</a>
-      <a href="../reader/iit-diaries/ch2.html" class="btn">Episode 2</a>
-      <a href="../reader/iit-diaries/ch3.html" class="btn">Episode 3</a>
-      <a href="../reader/iit-diaries/ch4.html" class="btn">Episode 4</a>
-      <a href="../reader/iit-diaries/ch5.html" class="btn">Episode 5</a>
-      <a href="../reader/iit-diaries/ch6.html" class="btn">Episode 6</a>
-      <a href="../reader/iit-diaries/ch7.html" class="btn">Episode 7</a>
-      <a href="../reader/iit-diaries/ch8.html" class="btn">Episode 8</a>
-      <a href="../reader/iit-diaries/ch9.html" class="btn">Episode 9</a>
-      <a href="../reader/iit-diaries/ch10.html" class="btn">Episode 10</a>
-      <a href="../reader/iit-diaries/ch11.html" class="btn">Episode 11</a>
-      <a href="../reader/iit-diaries/ch12.html" class="btn">Episode 12</a>
-      <a href="../reader/iit-diaries/ch13.html" class="btn">Episode 13</a>
-      <a href="../reader/iit-diaries/ch14.html" class="btn">Episode 14</a>
-      <a href="../reader/iit-diaries/ch15.html" class="btn">Episode 15</a>
-      <a href="../reader/iit-diaries/ch16.html" class="btn">Episode 16</a>
-      <a href="../reader/iit-diaries/ch17.html" class="btn">Episode 17</a>
-      <a href="../reader/iit-diaries/ch18.html" class="btn">Episode 18</a>
-      <a href="../reader/iit-diaries/ch19.html" class="btn">Episode 19</a>
-    </div>
-
-    <div class="back">
-      <a href="../index.html">← Back to Home</a>
-    </div>
-  </main>
-
-  <!-- Animations -->
-  <style>
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-12px); }
-    }
-  </style>
-
-</body>
-</html>
-test
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-content">
+      <button class="sidebar-toggle" onclick="toggleSidebar()">✕</button>
+      <a href="/" class="sidebar-link">
+        <svg width="20" height="20" viewBox="0 0 576 512" fill="currentColor">
+          <path d="M575.8 255.5c0 18-15 32.1-32 32.1l-32 0 .7 160.2c0 2.7-.2 5.4-.5 8.1l0 16.2c0 22.1-17.9 40-40 40l-16 0c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1L416 512l-24 0c-22.1 0-40-17.9-40-40l0-24 0-64c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32 14.3-32 32l0 64 0 24c0 22.1-17.9 40-40 40l-24 0-31.9 0c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2l-16 0c-22.1 0-40-17.9-40-40l0-112c0-.9 0-1.9 .1-2.8l0-69.7-32 0c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/>
+        </svg>
+        Home
+      </a>
+      <a href="/comics" class="sidebar-link">
+        <svg width="20" height="20" viewBox="0 0 512 512" fill="currentColor">
+          <path d="M96 96c0-35.3 28.7-64 64-64l288 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L80 480c-44.2 0-80-35.8-80-80L0 128c0-17.7 14.3-32 32-32s32 14.3 32 32l0 272c0 8.8 7.2 16 16 16s16-7.2 16-16L96 96zm64 24l0 80c0 13.3 10.7 24 24 24l112 0c13.3 0 24-10.7 24-24l0-80c0-13.3-10.7-24-24-24L184 96c-13.3 0-24 10.7-24 24zm208-8c0 8.8 7.2 16 16 16l48 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-48 0c-8.8 0-16 7.2-16 16zm0 96c0 8.8 7.2 16 16 16l48 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-48 0c-8.8 0-16 7.2-16 16zM160 304c0 8.8 7.2 16 16 16l256 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-256 0c-8.8 0-16 7.2-16 16zm0 96c0 8.8 7.2 16 16 16l256 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-256 0c-8.8 0-16 7.2-16 16z"/>
+        </svg>
+        Comics
+      </a>
+      <a href="/novels" class="sidebar-link">
+        <svg width="20" height="20" viewBox="0 0 512 512" fill="currentColor">
+          <path d="M96 96c0-35.3 28.7-64 64-64l288 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L80 480c-44.2 0-80-35.8-80-80L0 128c0-17.7 14.3-32 32-32s32 14.3 32 32l0 272c0 8.8 7.2 16 16 16s16-7.2 16-16L96 96zm64 24l0 80c0 13.3 10.7 24 24 24l112 0c13.3 0 24-10.7 24-24l0-80c0-13.3-10.7-24-24-24L184 96c-13.3 0-24 10.7-24 24zm208-8c0 8.8 7.2 16 16 16l48 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-48 0c-8.8 0-16 7.2-16 16zm0 96c0 8.8 7.2 16 16 16l48 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-48 0c-8.8 0-16 7.2-16 16zM160 304c0 8.8 7.2 16 16 16l256 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-256 0c-8.8 0-16 7.2-16 16zm0 96c0 8.8 7.2 16 16 16l256 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-256 0c-8.8 0-16 7.2-16 16z"/>
+        </svg>
+        Novels
+      </a>
+      <a href="https://discord.gg/example" class="sidebar-link">
+        <svg width="20" height="20" viewBox="0 0 640 512" fill="currentColor">
+          <path d="M524.531,69.836a1.5,1.5,0
