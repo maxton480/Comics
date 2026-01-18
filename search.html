@@ -130,7 +130,7 @@
   <script>
   function getCookie(name) {
     let matches = document.cookie.match(new RegExp(
-      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+      "(?:^|; )" + name.replace(/([\.$?*|{}\$\$\$\$\\\/\+^])/g, '\\$1') + "=([^;]*)"
     ));
     return matches ? decodeURIComponent(matches[1]) : "";
   }
@@ -167,10 +167,8 @@
       const grid = document.getElementById('resultsGrid');
       const noResults = document.getElementById('noResults');
 
-      // Clear previous results (except noResults)
-      while (grid.children.length > 1) {
-        grid.removeChild(grid.children[0]);
-      }
+      // Clear all previous results
+      grid.innerHTML = '';
 
       // All comics – yahan apne saare daal dena
       const comics = [
@@ -181,27 +179,23 @@
       ];
 
       if (!input) {
-        noResults.style.display = 'block';
-        noResults.textContent = "Kuch search karo bhai... 😄";
+        grid.innerHTML = '<div class="no-results" id="noResults">Kuch search karo bhai... 😄</div>';
         return;
       }
 
       const filtered = comics.filter(comic => comic.name.toLowerCase().includes(input));
 
       if (filtered.length === 0) {
-        noResults.style.display = 'block';
-        noResults.textContent = "Koi comic nahi mila... 😔";
+        grid.innerHTML = '<div class="no-results" id="noResults">Koi comic nahi mila... 😔</div>';
         return;
       }
-
-      noResults.style.display = 'none';
 
       filtered.forEach(comic => {
         const card = document.createElement('a');
         card.href = comic.link;
         card.innerHTML = `
           <div class="card">
-            <img src="\( {comic.cover}" alt=" \){comic.name}" loading="lazy">
+            <img src="${comic.cover}" alt="${comic.name}" loading="lazy">
           </div>
         `;
         grid.appendChild(card);
@@ -211,4 +205,3 @@
 
 </body>
 </html>
-test
