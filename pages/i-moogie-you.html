@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>I Moogie You - Comic PUR</title>
+  <style>
+    :root {
+      --primary: #00d4ff;
+      --accent: #ff69b4;
+      --dark: #0a001f;
+      --glow: rgba(0, 212, 255, 0.7);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: linear-gradient(135deg, var(--dark), #1a003f);
+      color: white;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    header {
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(10, 0, 31, 0.92);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(0, 212, 255, 0.35);
+      height: 64px;
+    }
+
+    .logo img {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 3px solid var(--primary);
+      box-shadow: 0 0 20px var(--glow);
+      object-fit: cover;
+    }
+
+    .heading-img {
+      max-width: 220px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .search-icon {
+      width: 68px;
+      height: 68px;
+      cursor: pointer;
+      animation: float 4.8s ease-in-out infinite; /* sirf search pe floating */
+      transition: all 0.4s;
+      filter: drop-shadow(0 0 15px var(--glow));
+    }
+
+    .search-icon:hover {
+      transform: scale(1.15);
+      filter: drop-shadow(0 0 25px var(--primary));
+      animation-play-state: paused;
+    }
+
+    main {
+      padding: 20px 16px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .cover {
+      width: 100%;
+      max-width: 380px;
+      border-radius: 16px;
+      box-shadow: 0 12px 40px rgba(0, 212, 255, 0.25);
+      margin: 30px auto 40px;
+      display: block;
+    }
+
+    .summary {
+      background: rgba(34, 34, 60, 0.7);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 40px;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      backdrop-filter: blur(8px);
+    }
+
+    .episodes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .btn {
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      color: white;
+      padding: 18px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1rem;
+      display: block;
+      text-align: center;
+      transition: all 0.3s;
+      box-shadow: 0 6px 20px rgba(0, 212, 255, 0.2);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0, 212, 255, 0.4);
+    }
+
+    .back {
+      text-align: center;
+      margin: 50px 0;
+    }
+
+    .back a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: color 0.3s;
+    }
+
+    .back a:hover {
+      color: var(--primary);
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    @media (max-width: 768px) {
+      .episodes {
+        grid-template-columns: 1fr;
+      }
+      .heading-img {
+        max-width: 220px;
+      }
+      .search-icon {
+        width: 70px;
+        height: 70px;
+      }
+      .logo img {
+        width:  50px;
+        height:  50px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <script>
+  function getCookie(name) {
+    let matches = document.cookie.match(new RegExp(
+      "(?:^|; )" + name.replace(/([\.$?*|{}\$\$\$\$\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : "";
+  }
+
+  if (getCookie("site_access") !== "true") {
+    document.documentElement.innerHTML = `
+      <head><title>Access Blocked</title></head>
+      <body style="margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px;">
+        <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
+          ⚠️ Direct Access Blocked<br><br>
+          Shortener solve karke hi site open hogi.<br><br>
+          <a href="../gate.html" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
+        </div>
+      </body>`;
+    throw new Error("Access blocked");
+  }
+  </script>
+
+  <!-- HEADER – same as homepage -->
+  <header>
+    <div class="logo">
+      <img src="../assets/heading.png" alt="Comic PUR Logo" class="logo-img">
+    </div>
+    <div class="heading-container">
+      <img src="../assets/logo-circle.png" alt="Comic PUR" class="heading-img">
+    </div>
+    <div class="search-btn">
+      <img src="../assets/search-icon.png" class="search-icon" alt="Search" onclick="window.location.href='../search.html'">
+    </div>
+  </header>
+
+  <main>
+    <img src="https://i.ibb.co/4nN5qpNm/file-0000000049c87207b0b1e2b84d663b23.png" alt="I Moogie You Cover" class="cover" loading="lazy">
+
+    <div class="summary">
+      <p>सिया को अपनी दादी की डायरी मिलती है और वो चाय की पत्तियों में रहस्यमयी शक्ति और 'उस इंसान' के बारे में पढ़ती है। ये अजीब कहानी सिया को इतना उत्सुक कर देती है कि वो उस इंसान के घर जाती है, जिसे भूतिया कहा जाता है। क्या सिया ड्रैगन का राज़ खोज पाएगी? अब इमूगी को सिया के पास मौजूद ड्रैगन बॉल की शक्ति वापस पाने के लिए बाहर आना होगा!</p>
+    </div>
+
+    <div class="episodes">
+      <a href="../reader/i-moogie-you/ch01.html" class="btn">Episode 1</a>
+      <a href="../reader/i-moogie-you/ch2.html" class="btn">Episode 2</a>
+      <a href="../reader/i-moogie-you/ch3.html" class="btn">Episode 3</a>
+      <a href="../reader/i-moogie-you/ch4.html" class="btn">Episode 4</a>
+      <a href="../reader/i-moogie-you/ch5.html" class="btn">Episode 6</a>
+      <a href="../reader/i-moogie-you/ch7.html" class="btn">Episode 6</a>
+    </div>
+
+    <div class="back">
+      <a href="../index.html">← Back to Home</a>
+    </div>
+  </main>
+
+  <!-- Animations -->
+  <style>
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+  </style>
+
+</body>
+</html>
