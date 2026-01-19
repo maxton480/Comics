@@ -165,12 +165,11 @@
     function searchComics() {
       const input = document.getElementById('searchInput').value.toLowerCase().trim();
       const grid = document.getElementById('resultsGrid');
-      const noResults = document.getElementById('noResults');
 
       // Clear all previous results
       grid.innerHTML = '';
 
-      // All comics – yahan apne saare daal dena
+      // All comics – yahan apne saare daal dena (har object ke baad comma lagao, last wale ke alawa)
       const comics = [
         { name: "Ishq Par Jor Nahi", link: "pages/ishq-par-jor-nahi.html", cover: "https://i.ibb.co/RpV5MWv2/file-0000000071087207b8fdc85d969f22b3.png" },
         { name: "Tute Dilon Ki Mohabbat", link: "pages/tute-dilon-ki-mohabbat.html", cover: "https://i.ibb.co/5x8pjp9w/file-000000001f94720789c7a2a43382e1e7.png" },
