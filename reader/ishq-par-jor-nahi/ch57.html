@@ -35,6 +35,45 @@
     throw ""; // Stop execution
   }
 </script>
+
+<!-- Referrer Protection: Only allow access from the 3 types of info pages -->
+<script>
+  const referrer = document.referrer || '';
+  const currentOrigin = window.location.origin;
+
+  // Adjust these to your actual info page paths (for this comic)
+  // 1. Free info page
+  // 2. Monthly subscription info page (e.g., ishq-par-jor-nahi-monthly.html)
+  // 3. Single comic buy info page (e.g., ishq-par-jor-nahi-single.html)
+  const allowedReferrers = [
+    currentOrigin + '../pages/ishq-par-jor-nahi.html',                // Free info page
+    currentOrigin + '../pages/ishq-par-jor-nahi-monthly.html',       // Monthly VIP info page
+    currentOrigin + '../pages/ishq-par-jor-nahi-single.html',        // Single comic VIP info page
+    // Add without .html if needed, or full URLs if hosted elsewhere
+    // e.g., currentOrigin + '/vip/monthly/ishq-par-jor-nahi.html'
+  ];
+
+  const isAllowed = allowedReferrers.some(allowed => 
+    referrer === allowed || referrer.startsWith(allowed)
+  );
+
+  if (!isAllowed) {
+    document.documentElement.innerHTML = `
+      <head><title>Access Denied</title></head>
+      <body style="margin:0; background:#0a001f; color:#e0e0ff; font-family:'Segoe UI',sans-serif; min-height:100vh; display:flex; align-items:center; justify-content:center; text-align:center; padding:20px;">
+        <div style="max-width:90%; background:rgba(10,0,31,0.92); padding:40px 30px; border-radius:20px; border:1px solid rgba(0,212,255,0.3); box-shadow:0 0 40px rgba(0,212,255,0.25);">
+          <h2 style="color:#00d4ff; margin-bottom:20px; font-size:2rem;">⚠️ Under Maintenance</h2>
+          <p style="font-size:1.2rem; line-height:1.6; margin-bottom:30px;">
+            This episode Will be upload soon, we are working on it.
+          </p>
+          </a>
+          <!-- Add links to VIP info pages if needed, but keep it simple -->
+        </div>
+      </body>`;
+    throw new Error("Unauthorized access blocked");
+  }
+</script>
+
   <div id="comic"></div>
 
   <script>
@@ -42,10 +81,10 @@
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('dragstart', e => e.preventDefault());
 
-    // Episode 1 images load (ch1 folder se)
-    const basePath = "https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch57/";
+    // Episode images load (chXX folder se – adjust basePath to match the current chapter, e.g., for ch60.html)
+    const basePath = "https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch57/"; // Change 'ch60' for each file
     const container = document.getElementById('comic');
-    for (let i = 1; i <= 100; i++) {  // Max 100 pages (zyada ho toh number badhao)
+    for (let i = 1; i <= 100; i++) {  // Max 100 pages
       const num = i.toString().padStart(3, '0'); // 001, 002...
       const src = basePath + num + '.webp';
 
@@ -55,7 +94,7 @@
       const img = document.createElement('img');
       img.src = src;
       img.loading = "lazy";
-      img.onerror = () => div.remove(); // Agar image nahi hai toh last page detect aur skip
+      img.onerror = () => div.remove(); // Remove if image doesn't exist
 
       const overlay = document.createElement('div');
       overlay.className = 'overlay';
