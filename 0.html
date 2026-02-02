@@ -3,195 +3,110 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Comic Reader</title>
+  <title>Ishq Par Jor Nahi</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; } /* sab extra space remove */
-
-    body {
-      margin: 0;
-      background: #0f001f;
-      color: #e0e0ff;
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* HEADER – slim, no extra space */
-    header {
-      padding: 10px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: linear-gradient(to right, #0a001f, #1a003f);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      border-bottom: 1px solid rgba(0, 212, 255, 0.25);
-      height: 64px;
-    }
-
-    .logo img {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      border: 3px solid #00d4ff;
-      box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
-      object-fit: cover;
-    }
-
-    .heading-img {
-      max-width: 220px;
-      height: auto;
-      display: block;
-      margin: 0 auto;
-    }
-
-    .search-icon {
-      width: 68px;
-      height: 68px;
-      cursor: pointer;
-      animation: float 4.8s ease-in-out infinite;
-    }
-
-    .search-icon:hover {
-      transform: scale(1.15);
-      filter: drop-shadow(0 0 25px #00d4ff);
-      animation-play-state: paused;
-    }
-
-    /* GRID – direct header ke neeche, no extra space */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-      padding: 0 16px 16px; /* top padding 0 – header se chipak jayega */
-      max-width: 1200px;
-      margin: 0 auto;
-      background: linear-gradient(135deg, rgba(10, 0, 31, 0.9), rgba(26, 0, 63, 0.8));
-      backdrop-filter: blur(8px);
-    }
-
-    .card {
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-      transition: all 0.3s ease;
-      position: relative;
-      border: 1px solid rgba(0, 212, 255, 0.15);
-      aspect-ratio: 2 / 3; /* exact cover ratio – no extra height */
-      background: transparent;
-    }
-
-    .card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 16px 40px rgba(0, 212, 255, 0.25);
-      border-color: rgba(0, 212, 255, 0.5);
-    }
-
-    .card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    a {
-      text-decoration: none;
-      color: white;
-      display: block;
-      height: 100%;
-    }
-
-    /* Desktop */
-    @media (min-width: 768px) {
-      .grid {
-        gap: 24px;
-        padding: 0 24px 24px;
-      }
-      .heading-img {
-        max-width: 280px;
-      }
-      .search-icon {
-        width: 80px;
-        height: 80px;
-      }
-      .logo img {
-        width: 60px;
-        height: 60px;
-      }
-    }
-
-    /* Animations */
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-14px); }
-    }
+    body, html { margin:0; padding:0; background:#000; overflow-x:hidden; height:100vh; }
+    img { display:block; width:100%; height:auto; margin:0; padding:0; pointer-events:none; -webkit-touch-callout:none; -webkit-user-drag:none; }
+    .overlay { position:absolute; top:0; left:0; width:100%; height:100%; background:transparent; pointer-events:auto; }
   </style>
 </head>
 <body>
-
-  <script>
+<script>
   function getCookie(name) {
-    let matches = document.cookie.match(new RegExp(
-      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-    ));
+    let matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([.$?*|{}()[\]\\/+^])/g, '\\$1') + "=([^;]*)"));
     return matches ? decodeURIComponent(matches[1]) : "";
   }
 
   if (getCookie("site_access") !== "true") {
+    // Poora body replace kar do aur sab stop kar do
     document.documentElement.innerHTML = `
       <head><title>Access Blocked</title></head>
       <body style="margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px;">
         <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
           ⚠️ Direct Access Blocked<br><br>
           Shortener solve karke hi site open hogi.<br><br>
+          <a href="gate.html" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
         </div>
       </body>`;
-    throw new Error("Access blocked");
+    // Sab JS stop kar do
+    while (document.body.firstChild) {
+      document.body.removeChild(document.body.firstChild);
+    }
+    throw ""; // Stop execution
   }
+</script>
+
+<!-- Referrer Protection: Only allow access from the 3 types of info pages -->
+<script>
+  const referrer = document.referrer || '';
+  const currentOrigin = window.location.origin;
+
+  // Adjust these to your actual info page paths (for this comic)
+  // 1. Free info page
+  // 2. Monthly subscription info page (e.g., ishq-par-jor-nahi-monthly.html)
+  // 3. Single comic buy info page (e.g., ishq-par-jor-nahi-single.html)
+  const allowedReferrers = [
+    currentOrigin + '/pages/ishq-par-jor-nahi.html',                // Free info page
+    currentOrigin + '/pages/ishq-par-jor-nahi-monthly.html',       // Monthly VIP info page
+    currentOrigin + '/pages/ishq-par-jor-nahi-single.html',        // Single comic VIP info page
+    // Add without .html if needed, or full URLs if hosted elsewhere
+    // e.g., currentOrigin + '/vip/monthly/ishq-par-jor-nahi.html'
+  ];
+
+  const isAllowed = allowedReferrers.some(allowed => 
+    referrer === allowed || referrer.startsWith(allowed)
+  );
+
+  if (!isAllowed) {
+    document.documentElement.innerHTML = `
+      <head><title>Access Denied</title></head>
+      <body style="margin:0; background:#0a001f; color:#e0e0ff; font-family:'Segoe UI',sans-serif; min-height:100vh; display:flex; align-items:center; justify-content:center; text-align:center; padding:20px;">
+        <div style="max-width:90%; background:rgba(10,0,31,0.92); padding:40px 30px; border-radius:20px; border:1px solid rgba(0,212,255,0.3); box-shadow:0 0 40px rgba(0,212,255,0.25);">
+          <h2 style="color:#00d4ff; margin-bottom:20px; font-size:2rem;">⚠️ Unauthorized Access</h2>
+          <p style="font-size:1.2rem; line-height:1.6; margin-bottom:30px;">
+            This episode can only be accessed from the official info pages (Free, Monthly VIP, or Single Comic VIP).<br>
+            Direct URL editing or access is blocked. Please select the episode from the info page.
+          </p>
+          <a href="../../pages/ishq-par-jor-nahi.html" 
+             style="display:inline-block; background:linear-gradient(45deg, #00d4ff, #ff69b4); color:white; padding:16px 40px; border-radius:12px; text-decoration:none; font-weight:bold; font-size:1.2rem; box-shadow:0 8px 25px rgba(0,212,255,0.4); transition:all 0.3s;">
+            Go to Free Info Page →
+          </a>
+          <!-- Add links to VIP info pages if needed, but keep it simple -->
+        </div>
+      </body>`;
+    throw new Error("Unauthorized access blocked");
+  }
+</script>
+
+  <div id="comic"></div>
+
+  <script>
+    // Basic protection
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('dragstart', e => e.preventDefault());
+
+    // Episode images load (chXX folder se – adjust basePath to match the current chapter, e.g., for ch60.html)
+    const basePath = "https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch60/"; // Change 'ch60' for each file
+    const container = document.getElementById('comic');
+    for (let i = 1; i <= 100; i++) {  // Max 100 pages
+      const num = i.toString().padStart(3, '0'); // 001, 002...
+      const src = basePath + num + '.webp';
+
+      const div = document.createElement('div');
+      div.style.position = 'relative';
+
+      const img = document.createElement('img');
+      img.src = src;
+      img.loading = "lazy";
+      img.onerror = () => div.remove(); // Remove if image doesn't exist
+
+      const overlay = document.createElement('div');
+      overlay.className = 'overlay';
+
+      div.appendChild(img);
+      div.appendChild(overlay);
+      container.appendChild(div);
+    }
   </script>
-
-  <!-- HEADER -->
-  <header>
-    <div class="logo">
-      <img src="assets/heading.png" alt="Comic PUR Logo" class="logo-img">
-    </div>
-    <div class="heading-container">
-      <img src="assets/logo-circle.png" alt="Comic PUR" class="heading-img">
-    </div>
-    <div class="search-btn">
-      <img src="assets/search-icon.png" class="search-icon" alt="Search" onclick="window.location.href='search.html'">
-    </div>
-  </header>
-
-  <!-- GRID – direct header ke neeche, no extra space -->
-  <div class="grid">
-    <a href="pages/ishq-par-jor-nahi.html">
-      <div class="card">
-        <img src="https://i.ibb.co/RpV5MWv2/file-0000000071087207b8fdc85d969f22b3.png" alt="Ishq Par Jor Nahi" loading="lazy">
-      </div>
-    </a>
-
-    <a href="pages/dil-dishkiyaoon.html">
-      <div class="card">
-        <img src="https://i.ibb.co/spzf05r7/file-0000000053c07207a7b2385eb2603ef2.png" alt="Tute Dilon Ki Mohabbat" loading="lazy">
-      </div>
-    </a>
-
-    <a href="pages/tute-dilon-ki-mohabbat.html">
-      <div class="card">
-        <img src="https://i.ibb.co/5x8pjp9w/file-000000001f94720789c7a2a43382e1e7.png" alt="Tute Dilon Ki Mohabbat" loading="lazy">
-      </div>
-    </a>
-
-    <a href="pages/iit-diaries.html">
-      <div class="card">
-        <img src="https://i.ibb.co/B5yhXQkf/file-000000008a2c720796589f629980ccab.png" alt="IIT Diaries" loading="lazy">
-      </div>
-    </a>
-    <!-- Naya comic add template -->
-  </div>
-
 </body>
 </html>
