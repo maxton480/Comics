@@ -22,6 +22,7 @@
       color: white;
       font-family: 'Segoe UI', sans-serif;
       min-height: 100vh;
+      user-select: none; /* Prevent text selection */
     }
 
     #header {
@@ -96,14 +97,15 @@
 
     .page {
       width: 100%;
-      margin: 0;  /* Changed from margin: 0 0 30px; to remove gap between images */
-      background: var(--gray);
-      border-radius: 0;  /* Removed border-radius for seamless join */
+      margin: 0; /* No gap between images */
+      background: transparent; /* Removed gray background for seamless look */
+      border-radius: 0;
       overflow: hidden;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.7);
+      box-shadow: none; /* Removed shadow to blend images */
       opacity: 0;
       transform: translateY(30px);
       transition: all 0.6s ease;
+      position: relative;
     }
 
     .page.loaded {
@@ -115,6 +117,9 @@
       width: 100%;
       height: auto;
       display: block;
+      pointer-events: none; /* Prevent interactions like drag or click */
+      -webkit-user-drag: none; /* Prevent dragging in webkit browsers */
+      user-drag: none;
     }
 
     #pageCounter {
@@ -131,6 +136,17 @@
     }
 
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    /* Overlay to prevent right-click and other interactions */
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1001;
+      pointer-events: none; /* Allow scrolling but block interactions */
+    }
   </style>
 </head>
 <body>
@@ -152,104 +168,128 @@
   <div id="comic"></div>
   <div id="pageCounter">Page 1 / ?</div>
 
+  <!-- Invisible overlay to block right-click and downloads -->
+  <div id="overlay"></div>
+
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     const episode = parseInt(urlParams.get('ep')) || 1;
+    const accessToken = urlParams.get('token'); // Check for access token
     const comicSlug = 'ishq-par-jor-nahi';
     const basePath = `https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/${comicSlug}/ch${episode}/`;
 
-    document.getElementById('title').textContent += ` - Episode ${episode}`;
-
-    const comicContainer = document.getElementById('comic');
-    const loading = document.getElementById('loading');
-    const pageCounter = document.getElementById('pageCounter');
-
-    let loadedPages = 0;
-    let totalPages = 0;
-    const maxPages = 200;
-    let currentPage = 1; // Track current page for loading
-    let isLoading = false; // Prevent multiple loads
-
-    function updateCounter() {
-      pageCounter.textContent = `Page ${loadedPages} / ${totalPages || '?'}`;
+    // Simple access control: Require a valid token (e.g., from link shortener)
+    // Assume token is a timestamp-based expiring token (valid for 24 hours)
+    function isValidToken(token) {
+      if (!token) return false;
+      const now = Date.now();
+      const tokenTime = parseInt(token, 10);
+      const expiry = 24 * 60 * 60 * 1000; // 24 hours in ms
+      return (now - tokenTime) < expiry;
     }
 
-    function loadPage(i) {
-      if (isLoading || i > maxPages) return;
-      isLoading = true;
+    if (!isValidToken(accessToken)) {
+      document.body.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; height:100vh; font-size:1.5rem; color:red;">Access Denied. Use the link shortener to get valid access. 😔</div>';
+    } else {
+      document.getElementById('title').textContent += ` - Episode ${episode}`;
 
-      const num = i.toString().padStart(3, '0');
-      const src = basePath + num + '.webp';
+      const comicContainer = document.getElementById('comic');
+      const loading = document.getElementById('loading');
+      const pageCounter = document.getElementById('pageCounter');
 
-      const img = new Image();
-      img.src = src;
-      img.decoding = "async";
+      let loadedPages = 0;
+      let totalPages = 0;
+      const maxPages = 200;
+      let currentPage = 1;
+      let isLoading = false;
 
-      img.onload = () => {
-        loadedPages++;
-        totalPages = Math.max(totalPages, i);
-        updateCounter();
+      function updateCounter() {
+        pageCounter.textContent = `Page ${loadedPages} / ${totalPages || '?'}`;
+      }
 
-        const div = document.createElement('div');
-        div.className = 'page';
-        div.appendChild(img);
-        comicContainer.appendChild(div);
+      function loadPage(i) {
+        if (isLoading || i > maxPages) return;
+        isLoading = true;
 
-        setTimeout(() => div.classList.add('loaded'), 100);
+        const num = i.toString().padStart(3, '0');
+        const src = basePath + num + '.webp';
 
-        if (loadedPages >= 3) loading.classList.add('hidden');
+        const img = new Image();
+        img.src = src;
+        img.decoding = "async";
 
-        currentPage = i + 1;
-        isLoading = false;
+        img.onload = () => {
+          loadedPages++;
+          totalPages = Math.max(totalPages, i);
+          updateCounter();
 
-        // Load next page if near the end
-        if (comicContainer.children.length < 10) {
-          loadPage(currentPage);
-        }
-      };
+          const div = document.createElement('div');
+          div.className = 'page';
+          div.appendChild(img);
+          comicContainer.appendChild(div);
 
-      img.onerror = () => {
-        if (loadedPages === 0) {
-          loading.classList.add('hidden');
-          comicContainer.innerHTML = '<p style="text-align:center; padding:100px; font-size:1.5rem;">Episode load nahi ho raha 😔<br>Check internet ya GitHub folder</p>';
-        } else {
-          // Stop loading if error after some pages
+          setTimeout(() => div.classList.add('loaded'), 100);
+
+          if (loadedPages >= 3) loading.classList.add('hidden');
+
+          currentPage = i + 1;
           isLoading = false;
-        }
-      };
-    }
 
-    // Intersection Observer for lazy loading
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !isLoading) {
-          loadPage(currentPage);
+          if (comicContainer.children.length < 10) {
+            loadPage(currentPage);
+          }
+        };
+
+        img.onerror = () => {
+          if (loadedPages === 0) {
+            loading.classList.add('hidden');
+            comicContainer.innerHTML = '<p style="text-align:center; padding:100px; font-size:1.5rem;">Episode load nahi ho raha 😔<br>Check internet ya GitHub folder</p>';
+          } else {
+            isLoading = false;
+          }
+        };
+      }
+
+      // Intersection Observer for lazy loading
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !isLoading) {
+            loadPage(currentPage);
+          }
+        });
+      }, { rootMargin: '100px' });
+
+      // Start with first 5 preloaded
+      for (let i = 1; i <= 5; i++) {
+        loadPage(i);
+      }
+
+      function observeLastPage() {
+        const pages = document.querySelectorAll('.page');
+        if (pages.length > 0) {
+          observer.observe(pages[pages.length - 1]);
+        }
+      }
+
+      setInterval(observeLastPage, 500);
+
+      function prevEpisode() {
+        if (episode > 1) window.location.href = `ishq-par-jor-nahi.html?ep=${episode - 1}&token=${accessToken}`;
+      }
+
+      function nextEpisode() {
+        window.location.href = `ishq-par-jor-nahi.html?ep=${episode + 1}&token=${accessToken}`;
+      }
+
+      // Block right-click, drag, and other download attempts
+      document.addEventListener('contextmenu', (e) => e.preventDefault());
+      document.addEventListener('dragstart', (e) => e.preventDefault());
+      document.addEventListener('selectstart', (e) => e.preventDefault());
+      document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && (e.key === 's' || e.key === 'u' || e.key === 'p')) {
+          e.preventDefault(); // Block Ctrl+S, Ctrl+U, Ctrl+P
         }
       });
-    }, { rootMargin: '100px' }); // Load when 100px from viewport
-
-    // Start with first 5 preloaded
-    for (let i = 1; i <= 5; i++) {
-      loadPage(i);
-    }
-
-    // Observe the last loaded page to trigger next loads
-    function observeLastPage() {
-      const pages = document.querySelectorAll('.page');
-      if (pages.length > 0) {
-        observer.observe(pages[pages.length - 1]);
-      }
-    }
-
-    // Call after each load
-    setInterval(observeLastPage, 500); // Check periodically
-
-    function prevEpisode() {
-      if (episode > 1) window.location.href = `ishq-par-jor-nahi.html?ep=${episode - 1}`;
-    }
-
-    function nextEpisode() {
-      window.location.href = `ishq-par-jor-nahi.html?ep=${episode + 1}`;
     }
   </script>
 </body>
