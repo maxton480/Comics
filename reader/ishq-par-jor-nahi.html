@@ -156,7 +156,7 @@
     const urlParams = new URLSearchParams(window.location.search);
     const episode = parseInt(urlParams.get('ep')) || 1;
     const comicSlug = 'ishq-par-jor-nahi';
-    const basePath = `https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/\( {comicSlug}/ch \){episode}/`;
+    const basePath = `https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/${comicSlug}/ch${episode}/`;
 
     document.getElementById('title').textContent += ` - Episode ${episode}`;
 
@@ -167,18 +167,22 @@
     let loadedPages = 0;
     let totalPages = 0;
     const maxPages = 200;
+    let currentPage = 1; // Track current page for loading
+    let isLoading = false; // Prevent multiple loads
 
     function updateCounter() {
       pageCounter.textContent = `Page ${loadedPages} / ${totalPages || '?'}`;
     }
 
     function loadPage(i) {
+      if (isLoading || i > maxPages) return;
+      isLoading = true;
+
       const num = i.toString().padStart(3, '0');
       const src = basePath + num + '.webp';
 
       const img = new Image();
       img.src = src;
-      img.loading = "lazy";
       img.decoding = "async";
 
       img.onload = () => {
@@ -194,20 +198,51 @@
         setTimeout(() => div.classList.add('loaded'), 100);
 
         if (loadedPages >= 3) loading.classList.add('hidden');
+
+        currentPage = i + 1;
+        isLoading = false;
+
+        // Load next page if near the end
+        if (comicContainer.children.length < 10) {
+          loadPage(currentPage);
+        }
       };
 
       img.onerror = () => {
         if (loadedPages === 0) {
           loading.classList.add('hidden');
           comicContainer.innerHTML = '<p style="text-align:center; padding:100px; font-size:1.5rem;">Episode load nahi ho raha 😔<br>Check internet ya GitHub folder</p>';
+        } else {
+          // Stop loading if error after some pages
+          isLoading = false;
         }
       };
     }
 
-    // Start loading
-    for (let i = 1; i <= maxPages; i++) {
+    // Intersection Observer for lazy loading
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !isLoading) {
+          loadPage(currentPage);
+        }
+      });
+    }, { rootMargin: '100px' }); // Load when 100px from viewport
+
+    // Start with first 5 preloaded
+    for (let i = 1; i <= 5; i++) {
       loadPage(i);
     }
+
+    // Observe the last loaded page to trigger next loads
+    function observeLastPage() {
+      const pages = document.querySelectorAll('.page');
+      if (pages.length > 0) {
+        observer.observe(pages[pages.length - 1]);
+      }
+    }
+
+    // Call after each load
+    setInterval(observeLastPage, 500); // Check periodically
 
     function prevEpisode() {
       if (episode > 1) window.location.href = `ishq-par-jor-nahi.html?ep=${episode - 1}`;
