@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Comic PUR Reader</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      color: white;
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      overflow-x: hidden;
+    }
+
+    #header {
+      position: sticky;
+      top: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(8px);
+      padding: 12px 16px;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #333;
+    }
+
+    #title {
+      font-size: 1.3rem;
+      margin: 0;
+    }
+
+    #nav {
+      display: flex;
+      gap: 16px;
+    }
+
+    #nav button, #nav a {
+      background: rgba(0, 212, 255, 0.2);
+      color: #00d4ff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+
+    #nav button:hover, #nav a:hover {
+      background: rgba(0, 212, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    #comic {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px 0;
+    }
+
+    .page {
+      width: 100%;
+      margin: 0 0 20px;
+      background: #111;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.8);
+    }
+
+    .page img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    #loading {
+      text-align: center;
+      padding: 100px 20px;
+      font-size: 1.5rem;
+    }
+
+    #no-pages {
+      text-align: center;
+      padding: 100px 20px;
+      font-size: 1.5rem;
+      color: #ff4444;
+    }
+  </style>
+</head>
+<body>
+
+  <script>
+  // Protection cookie check
+  function getCookie(name) {
+    let matches = document.cookie.match(new RegExp(
+      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : "";
+  }
+
+  if (getCookie("site_access") !== "true") {
+    document.documentElement.innerHTML = `
+      <head><title>Access Blocked</title></head>
+      <body style="margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px;">
+        <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
+          ⚠️ Direct Access Blocked<br><br>
+          Shortener solve karke hi site open hogi.<br><br>
+          <a href="../gate.html" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
+        </div>
+      </body>`;
+    throw new Error("Access blocked");
+  }
+  </script>
+
+  <div id="header">
+    <h1 id="title">Loading Comic...</h1>
+    <div id="nav">
+      <button onclick="prevEpisode()">Previous</button>
+      <button onclick="nextEpisode()">Next</button>
+      <a href="javascript:history.back()">Back</a>
+    </div>
+  </div>
+
+  <div id="loading">Loading pages... Please wait 🐰</div>
+  <div id="comic"></div>
+  <div id="no-pages" style="display:none;">No pages found for this episode 😔</div>
+
+  <script>
+    // Get URL params
+    const urlParams = new URLSearchParams(window.location.search);
+    const comic = urlParams.get('comic') || 'ishq-par-jor-nahi'; // default comic
+    const episode = parseInt(urlParams.get('ep')) || 1;
+    const basePath = `https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/\( {comic}/ch \){episode}/`;
+
+    const titleElement = document.getElementById('title');
+    const comicContainer = document.getElementById('comic');
+    const loading = document.getElementById('loading');
+    const noPages = document.getElementById('no-pages');
+
+    titleElement.textContent = `${comic.replace(/-/g, ' ').toUpperCase()} - Episode ${episode}`;
+
+    // Load pages dynamically
+    let pageCount = 0;
+    const maxPages = 200; // max try karne ke liye (adjust kar sakte ho)
+
+    function loadPage(i) {
+      const num = i.toString().padStart(3, '0'); // 001, 002...
+      const src = basePath + num + '.webp'; // ya .png/.jpg jo bhi hai
+
+      const img = new Image();
+      img.src = src;
+      img.loading = "lazy";
+      img.onerror = () => {
+        // Image nahi mili toh stop
+        if (pageCount === 0) {
+          loading.style.display = 'none';
+          noPages.style.display = 'block';
+        }
+      };
+      img.onload = () => {
+        pageCount++;
+        const div = document.createElement('div');
+        div.className = 'page';
+        div.appendChild(img);
+        comicContainer.appendChild(div);
+
+        // Loading hide kar do jab pehli image load ho jaye
+        if (pageCount === 1) {
+          loading.style.display = 'none';
+        }
+      };
+    }
+
+    // Load all possible pages (up to maxPages)
+    for (let i = 1; i <= maxPages; i++) {
+      loadPage(i);
+    }
+
+    // Navigation functions
+    function prevEpisode() {
+      if (episode > 1) {
+        window.location.href = `reader.html?comic=\( {comic}&ep= \){episode - 1}`;
+      }
+    }
+
+    function nextEpisode() {
+      window.location.href = `reader.html?comic=\( {comic}&ep= \){episode + 1}`;
+    }
+  </script>
+</body>
+</html>
