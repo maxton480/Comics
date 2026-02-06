@@ -3,97 +3,162 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Comic PUR Reader</title>
+  <title>Ishq Par Jor Nahi - Comic PUR</title>
   <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      background: #000;
+    :root {
+      --primary: #00d4ff;
+      --accent: #ff69b4;
+      --dark: #0a001f;
+      --glow: rgba(0, 212, 255, 0.7);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: linear-gradient(135deg, var(--dark), #1a003f);
       color: white;
-      font-family: Arial, sans-serif;
-      height: 100vh;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
       overflow-x: hidden;
     }
 
-    #header {
+    header {
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(10, 0, 31, 0.92);
+      backdrop-filter: blur(12px);
       position: sticky;
       top: 0;
-      background: rgba(0,0,0,0.8);
-      backdrop-filter: blur(8px);
-      padding: 12px 16px;
       z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #333;
+      border-bottom: 1px solid rgba(0, 212, 255, 0.35);
+      height: 64px;
     }
 
-    #title {
-      font-size: 1.3rem;
-      margin: 0;
+    .logo img {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 3px solid var(--primary);
+      box-shadow: 0 0 20px var(--glow);
+      object-fit: cover;
     }
 
-    #nav {
-      display: flex;
-      gap: 16px;
-    }
-
-    #nav button, #nav a {
-      background: rgba(0, 212, 255, 0.2);
-      color: #00d4ff;
-      border: none;
-      padding: 10px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: all 0.3s;
-      text-decoration: none;
-    }
-
-    #nav button:hover, #nav a:hover {
-      background: rgba(0, 212, 255, 0.4);
-      transform: translateY(-2px);
-    }
-
-    #comic {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 20px 0;
-    }
-
-    .page {
-      width: 100%;
-      margin: 0 0 20px;
-      background: #111;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.8);
-    }
-
-    .page img {
-      width: 100%;
+    .heading-img {
+      max-width: 220px;
       height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .search-icon {
+      width: 68px;
+      height: 68px;
+      cursor: pointer;
+      animation: float 4.8s ease-in-out infinite;
+      transition: all 0.4s;
+      filter: drop-shadow(0 0 15px var(--glow));
+    }
+
+    .search-icon:hover {
+      transform: scale(1.15);
+      filter: drop-shadow(0 0 25px var(--primary));
+      animation-play-state: paused;
+    }
+
+    main {
+      padding: 20px 16px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .cover {
+      width: 100%;
+      max-width: 380px;
+      border-radius: 16px;
+      box-shadow: 0 12px 40px rgba(0, 212, 255, 0.25);
+      margin: 30px auto 40px;
       display: block;
     }
 
-    #loading {
-      text-align: center;
-      padding: 100px 20px;
-      font-size: 1.5rem;
+    .summary {
+      background: rgba(34, 34, 60, 0.7);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 40px;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      backdrop-filter: blur(8px);
     }
 
-    #no-pages {
+    .episodes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .btn {
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      color: white;
+      padding: 18px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1rem;
+      display: block;
       text-align: center;
-      padding: 100px 20px;
-      font-size: 1.5rem;
-      color: #ff4444;
+      transition: all 0.3s;
+      box-shadow: 0 6px 20px rgba(0, 212, 255, 0.2);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0, 212, 255, 0.4);
+    }
+
+    .back {
+      text-align: center;
+      margin: 50px 0;
+    }
+
+    .back a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: color 0.3s;
+    }
+
+    .back a:hover {
+      color: var(--primary);
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    @media (max-width: 768px) {
+      .episodes {
+        grid-template-columns: 1fr;
+      }
+      .heading-img {
+        max-width: 180px;
+      }
+      .search-icon {
+        width: 58px;
+        height: 58px;
+      }
+      .logo img {
+        width: 48px;
+        height: 48px;
+      }
     }
   </style>
 </head>
 <body>
 
   <script>
-  // Protection cookie check
   function getCookie(name) {
     let matches = document.cookie.match(new RegExp(
       "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
@@ -108,87 +173,45 @@
         <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
           ⚠️ Direct Access Blocked<br><br>
           Shortener solve karke hi site open hogi.<br><br>
-          <a href="../gate.html" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
+          <a href="https://gplinks.co/BFmfakvr" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
         </div>
       </body>`;
     throw new Error("Access blocked");
   }
   </script>
 
-  <div id="header">
-    <h1 id="title">Loading Comic...</h1>
-    <div id="nav">
-      <button onclick="prevEpisode()">Previous</button>
-      <button onclick="nextEpisode()">Next</button>
-      <a href="javascript:history.back()">Back</a>
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      <img src="../assets/heading.png" alt="Comic PUR Logo" class="logo-img">
     </div>
-  </div>
+    <div class="heading-container">
+      <img src="../assets/logo-circle.png" alt="Comic PUR" class="heading-img">
+    </div>
+    <div class="search-btn">
+      <img src="../assets/search-icon.png" class="search-icon" alt="Search" onclick="window.location.href='../search.html'">
+    </div>
+  </header>
 
-  <div id="loading">Loading pages... Please wait 🐰</div>
-  <div id="comic"></div>
-  <div id="no-pages" style="display:none;">No pages found for this episode 😔</div>
+  <main>
+    <img src="https://i.ibb.co/1YQsb3S1/file-00000000f1807206b0510a520d89fa32.jpg" alt="Ishq Par Jor Nahi Cover" class="cover" loading="lazy">
 
-  <script>
-    // Get URL params
-    const urlParams = new URLSearchParams(window.location.search);
-    const comic = urlParams.get('comic') || 'ishq-par-jor-nahi'; // default comic
-    const episode = parseInt(urlParams.get('ep')) || 1;
-    const basePath = `https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/\( {comic}/ch \){episode}/`;
+    <div class="summary">
+      <p>माँ के गुज़र जाने के बाद गौरी के चाचा ने उसे मुंबई रवाना कर दिया, जहाँ उसे उसके पिता के पुराने मित्र रमाकांत के घर पर आसरा मिला। भोली-भाली गौरी मुंबई जैसे महानगर में रह कर अपना डिज़ाइनर बनने का सपना पूरा करना चाहती थी पर क्या होगा जब उसकी ज़िन्दगी में होगी इश्क़ की दस्तक? किसी ने सच ही कहा है किसी का भी "इश्क़ पर जोर नहीं" चलता।</p>
+    </div>
 
-    const titleElement = document.getElementById('title');
-    const comicContainer = document.getElementById('comic');
-    const loading = document.getElementById('loading');
-    const noPages = document.getElementById('no-pages');
-
-    titleElement.textContent = `${comic.replace(/-/g, ' ').toUpperCase()} - Episode ${episode}`;
-
-    // Load pages dynamically
-    let pageCount = 0;
-    const maxPages = 200; // max try karne ke liye (adjust kar sakte ho)
-
-    function loadPage(i) {
-      const num = i.toString().padStart(3, '0'); // 001, 002...
-      const src = basePath + num + '.webp'; // ya .png/.jpg jo bhi hai
-
-      const img = new Image();
-      img.src = src;
-      img.loading = "lazy";
-      img.onerror = () => {
-        // Image nahi mili toh stop
-        if (pageCount === 0) {
-          loading.style.display = 'none';
-          noPages.style.display = 'block';
-        }
-      };
-      img.onload = () => {
-        pageCount++;
-        const div = document.createElement('div');
-        div.className = 'page';
-        div.appendChild(img);
-        comicContainer.appendChild(div);
-
-        // Loading hide kar do jab pehli image load ho jaye
-        if (pageCount === 1) {
-          loading.style.display = 'none';
-        }
-      };
-    }
-
-    // Load all possible pages (up to maxPages)
-    for (let i = 1; i <= maxPages; i++) {
-      loadPage(i);
-    }
-
-    // Navigation functions
-    function prevEpisode() {
-      if (episode > 1) {
-        window.location.href = `reader.html?comic=\( {comic}&ep= \){episode - 1}`;
-      }
-    }
-
-    function nextEpisode() {
-      window.location.href = `reader.html?comic=\( {comic}&ep= \){episode + 1}`;
-    }
-  </script>
-</body>
-</html>
+    <div class="episodes">
+      <a href="../reader.html?comic=ishq-par-jor-nahi&ep=1" class="btn">Episode 1</a>
+      <a href="../reader.html?comic=ishq-par-jor-nahi&ep=2" class="btn">Episode 2</a>
+      <a href="../reader.html?comic=ishq-par-jor-nahi&ep=3" class="btn">Episode 3</a>
+      <a href="../reader.html?comic=ishq-par-jor-nahi&ep=4" class="btn">Episode 4</a>
+      <a href="../reader.html?comic=ishq-par-jor-nahi&ep=5" class="btn">Episode 5</a>
+      <a href="../reader.html?comic=ishq-par-jor-nahi&ep=6" class="btn">Episode 6</a>
+      <a href="../reader.html?comic=ishq-par-jor-nahi&ep=7" class="btn">Episode 7</a>
+      <a href="../reader.html?comic=ishq-par-jor-nahi&ep=8" class="btn">Episode 8</a>
+      <a href="../reader.html?comic=ishq-par-jor-nahi&ep=9" class="btn">Episode 9</a>
+      <a href="../reader.html?comic=ishq-par-jor-nahi&ep=10" class="btn">Episode 10</a>
+      <a href="../reader.html?comic=ishq-par-jor-nahi&ep=11" class="btn">Episode 11</a>
+      <a href="../reader.html?comic=ishq-par-jor-nahi&ep=12" class="btn">Episode 12</a>
+      <a href="../reader.html?comic=ishq-par-jor-nahi&ep=13" class="btn">Episode 13</a>
+      <a href="../reader.html?comic=ishq-par-jor-nahi
