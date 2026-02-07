@@ -148,7 +148,7 @@
 <body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
 
   <div id="header">
-    <h1 id="title">Ishq Par Jor Nahi</h1>
+    <h1 id="title">EPISODE-<span id="epNum"></span></h1>
     <div id="nav">
       <button onclick="prevEpisode()">Previous</button>
       <button onclick="nextEpisode()">Next</button>
@@ -168,7 +168,7 @@
   <script>
     function getCookie(name) {
       let matches = document.cookie.match(new RegExp(
-        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        "(?:^|; )" + name.replace(/([\.$?*|{}\$\$\$\$\\\/\+^])/g, '\\$1') + "=([^;]*)"
       ));
       return matches ? decodeURIComponent(matches[1]) : "";
     }
@@ -189,7 +189,7 @@
     const urlParams = new URLSearchParams(window.location.search);
     const episode = parseInt(urlParams.get('ep')) || 1;
     const comicSlug = 'ishq-par-jor-nahi';
-    const basePath = `https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/\( {comicSlug}/ch \){episode}/`;
+    const basePath = `https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/${comicSlug}/ch${episode}/`;
 
     document.getElementById('epNum').textContent = episode;
 
