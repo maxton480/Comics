@@ -4,12 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ishq Par Jor Nahi - Episode <span id="epNum"></span></title>
-  <!-- Preload first 10 pages for faster initial load -->
-  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/001.webp" as="image">
-  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/002.webp" as="image">
-  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/003.webp" as="image">
-  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/004.webp" as="image">
-  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/005.webp" as="image">
+  <!-- Preload first 10 pages for faster initial load (dynamic based on episode) -->
+  <script>
+    // Dynamic preload setup
+    const urlParams = new URLSearchParams(window.location.search);
+    const episode = parseInt(urlParams.get('ep')) || 1;
+    const paddedEpisode = episode.toString().padStart(2, '0');
+    const comicSlug = 'ishq-par-jor-nahi';
+    for (let i = 1; i <= 10; i++) {
+      const num = i.toString().padStart(3, '0');
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.href = `https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/${comicSlug}/ch${paddedEpisode}/${num}.webp`;
+      link.as = 'image';
+      document.head.appendChild(link);
+    }
+  </script>
   <style>
     :root {
       --primary: #00d4ff;
@@ -189,7 +199,8 @@
     const urlParams = new URLSearchParams(window.location.search);
     const episode = parseInt(urlParams.get('ep')) || 1;
     const comicSlug = 'ishq-par-jor-nahi';
-    const basePath = `https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/${comicSlug}/ch${episode}/`;
+    const paddedEpisode = episode.toString().padStart(2, '0');
+    const basePath = `https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/${comicSlug}/ch${paddedEpisode}/`;
 
     document.getElementById('epNum').textContent = episode;
 
@@ -284,3 +295,5 @@
 
 </body>
 </html>
+
+test 01
