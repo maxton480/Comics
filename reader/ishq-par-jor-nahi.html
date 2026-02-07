@@ -4,22 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ishq Par Jor Nahi - Episode <span id="epNum"></span></title>
-  <!-- Preload first 10 pages for faster initial load (dynamic based on episode) -->
-  <script>
-    // Dynamic preload setup
-    const urlParams = new URLSearchParams(window.location.search);
-    const episode = parseInt(urlParams.get('ep')) || 1;
-    const paddedEpisode = episode.toString().padStart(2, '0');
-    const comicSlug = 'ishq-par-jor-nahi';
-    for (let i = 1; i <= 10; i++) {
-      const num = i.toString().padStart(3, '0');
-      const link = document.createElement('link');
-      link.rel = 'preload';
-      link.href = `https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/${comicSlug}/ch${paddedEpisode}/${num}.webp`;
-      link.as = 'image';
-      document.head.appendChild(link);
-    }
-  </script>
   <style>
     :root {
       --primary: #00d4ff;
@@ -176,13 +160,15 @@
   <div id="next-episode-notice">Next episode will be uploaded on next Monday</div>
 
   <script>
+    // Function to get cookie value
     function getCookie(name) {
-      let matches = document.cookie.match(new RegExp(
-        "(?:^|; )" + name.replace(/([\.$?*|{}\$\$\$\$\\\/\+^])/g, '\\$1') + "=([^;]*)"
-      ));
-      return matches ? decodeURIComponent(matches[1]) : "";
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+      return "";
     }
 
+    // Check access cookie
     if (getCookie("site_access") !== "true") {
       document.documentElement.innerHTML = `
         <head><title>Access Blocked</title></head>
@@ -196,38 +182,42 @@
       throw new Error("Access blocked");
     }
 
+    // Get episode from URL
     const urlParams = new URLSearchParams(window.location.search);
     const episode = parseInt(urlParams.get('ep')) || 1;
     const comicSlug = 'ishq-par-jor-nahi';
     const paddedEpisode = episode.toString().padStart(2, '0');
     const basePath = `https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/${comicSlug}/ch${paddedEpisode}/`;
 
+    // Set episode number in title
     document.getElementById('epNum').textContent = episode;
 
+    // Elements
     const comicContainer = document.getElementById('comic');
     const loading = document.getElementById('loading');
     const pageCounter = document.getElementById('pageCounter');
     const nextNotice = document.getElementById('next-episode-notice');
 
+    // Variables
     let loadedPages = 0;
     let totalPages = 0;
     const maxPages = 200;
+    const maxAllowed = 62; // Episode limit
 
-    /*** Episode Limit Set (sirf free ke liye – VIP nahi hai ab) ***/
-    const maxAllowed = 30; // Yeh number badal sakte ho (jaise 40 ya 50)
-
+    // Check episode limit
     if (episode > maxAllowed) {
       loading.classList.add('hidden');
       comicContainer.innerHTML = '<p style="text-align:center; padding:100px; font-size:1.5rem; color:#ff4444;">Episode limit exceeded</p>';
       nextNotice.style.display = 'none';
       return;
     }
-    /*** Limit khatam ***/
 
+    // Update page counter
     function updateCounter() {
       pageCounter.textContent = `Page ${loadedPages} / ${totalPages || '?'}`;
     }
 
+    // Load a page
     function loadPage(i) {
       if (i > maxPages) return;
 
@@ -249,10 +239,13 @@
         div.appendChild(img);
         comicContainer.appendChild(div);
 
+        // Animate in
         setTimeout(() => div.classList.add('loaded'), 100);
 
+        // Hide loading after first few pages
         if (loadedPages >= 5) loading.classList.add('hidden');
 
+        // Load next page
         loadPage(i + 1);
       };
 
@@ -264,36 +257,47 @@
       };
     }
 
-    // Start loading
+    // Preload first 10 pages
+    for (let i = 1; i <= 10; i++) {
+      const num = i.toString().padStart(3, '0');
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.href = basePath + num + '.webp';
+      link.as = 'image';
+      document.head.appendChild(link);
+    }
+
+    // Start loading pages
     loadPage(1);
 
+    // Navigation functions
     function prevEpisode() {
-      if (episode > 1) window.location.href = `ishq-par-jor-nahi.html?ep=${episode - 1}`;
+      if (episode > 1) {
+        window.location.href = `ishq-par-jor-nahi.html?ep=${episode - 1}`;
+      }
     }
 
     function nextEpisode() {
       window.location.href = `ishq-par-jor-nahi.html?ep=${episode + 1}`;
     }
 
-    // Block download/copy
-    document.addEventListener('contextmenu', e => e.preventDefault());
-    document.addEventListener('dragstart', e => e.preventDefault());
-    document.addEventListener('touchstart', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
-    document.addEventListener('touchmove', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
-    document.addEventListener('selectstart', e => e.preventDefault());
-    document.addEventListener('keydown', e => {
-      if (e.ctrlKey && (e.key === 's' || e.key === 'u' || e.key === 'p' || e.key === 'c')) {
-        e.preventDefault();
-      }
-    });
-
     // Hide next notice if not last episode
     if (episode !== maxAllowed) {
       nextNotice.style.display = 'none';
     }
+
+    // Block downloads and selections
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('dragstart', e => e.preventDefault());
+    document.addEventListener('selectstart', e => e.preventDefault());
+    document.addEventListener('keydown', e => {
+      if (e.ctrlKey && (e.key === 's' || e.key === 'u' || e.key === 'p' || e.key === 'c' || e.key === 'a')) {
+        e.preventDefault();
+      }
+    });
+    document.addEventListener('touchstart', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+    document.addEventListener('touchmove', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
   </script>
 
 </body>
 </html>
-
-test 01
