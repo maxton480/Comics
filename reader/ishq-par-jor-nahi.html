@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ishq Par Jor Nahi - Episode <span id="epNum"></span></title>
+  <title>Ishq Par Jor Nahi - Episode <span id="epNumTitle"></span></title>
   <style>
     :root {
       --primary: #00d4ff;
@@ -23,6 +23,7 @@
       touch-action: pan-y;
     }
 
+    /* Header & Nav */
     #header {
       position: sticky;
       top: 0;
@@ -36,11 +37,6 @@
       border-bottom: 1px solid rgba(0, 212, 255, 0.2);
     }
 
-    #title {
-      font-size: 1.4rem;
-      font-weight: 600;
-    }
-
     #nav button, #nav a {
       background: rgba(0, 212, 255, 0.15);
       color: var(--primary);
@@ -50,6 +46,7 @@
       cursor: pointer;
       transition: all 0.3s;
       text-decoration: none;
+      font-size: 0.9rem;
     }
 
     #nav button:hover, #nav a:hover {
@@ -57,94 +54,82 @@
       transform: translateY(-1px);
     }
 
+    /* Fast Loading Spinner */
     #loading {
       position: fixed;
       inset: 0;
-      background: rgba(10, 0, 31, 0.95);
+      background: var(--dark);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       z-index: 999;
-      transition: opacity 0.5s;
+      transition: opacity 0.4s;
     }
 
-    #loading.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
+    #loading.hidden { opacity: 0; pointer-events: none; }
 
     .spinner {
-      width: 50px;
-      height: 50px;
-      border: 5px solid rgba(0, 212, 255, 0.2);
-      border-top: 5px solid var(--primary);
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(0, 212, 255, 0.1);
+      border-top: 4px solid var(--primary);
       border-radius: 50%;
-      animation: spin 1s linear infinite;
+      animation: spin 0.8s linear infinite;
     }
 
+    /* Comic Container Optimization */
     #comic {
-      max-width: 1100px;
+      max-width: 900px; /* Reading ke liye best width */
       margin: 0 auto;
-      padding: 0;
+      display: flex;
+      flex-direction: column;
     }
 
     .page {
       width: 100%;
-      margin: 0;
-      background: transparent;
-      overflow: hidden;
+      min-height: 300px; /* Placeholder height */
+      background: rgba(255,255,255,0.02);
+      margin-bottom: 0; /* Webtoon style gapless */
       opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.6s ease;
+      transition: opacity 0.5s ease;
     }
 
-    .page.loaded {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .page.loaded { opacity: 1; }
 
     .page img {
       width: 100%;
       height: auto;
       display: block;
-      pointer-events: none;
-      -webkit-touch-callout: none;
-      -webkit-user-drag: none;
-      user-drag: none;
-      margin: 0;
     }
 
     #pageCounter {
       position: fixed;
       bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,0.7);
-      padding: 8px 16px;
-      border-radius: 30px;
-      font-size: 0.95rem;
-      backdrop-filter: blur(8px);
-      z-index: 999;
+      right: 20px;
+      background: rgba(0,0,0,0.8);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      border: 1px solid rgba(0,212,255,0.2);
+      z-index: 998;
     }
 
     #next-episode-notice {
       text-align: center;
-      padding: 40px 20px;
-      font-size: 1.3rem;
-      color: #aaa;
-      margin-top: 0;
+      padding: 50px 20px;
+      color: #777;
     }
 
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
   </style>
 </head>
-<body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
+<body oncontextmenu="return false;">
 
   <div id="header">
-    <h1 id="title">EPISODE-<span id="epNum"></span></h1>
+    <h1 id="title" style="font-size: 1.2rem;">EPISODE-<span id="epNumDisplay"></span></h1>
     <div id="nav">
-      <button onclick="prevEpisode()">Previous</button>
+      <button onclick="prevEpisode()">Prev</button>
       <button onclick="nextEpisode()">Next</button>
       <a href="../pages/ishq-par-jor-nahi.html">Back</a>
     </div>
@@ -152,15 +137,17 @@
 
   <div id="loading">
     <div class="spinner"></div>
-    <p>Pages load ho rahi hain... थोड़ा इंतज़ार 🐰</p>
+    <p style="margin-top:15px; font-size:0.9rem; color:var(--primary);">Palkein na jhapkayein... 🐰</p>
   </div>
 
   <div id="comic"></div>
-  <div id="pageCounter">Page 1 / ?</div>
-  <div id="next-episode-notice">Next episode will be uploaded on next Monday</div>
+  
+  <div id="pageCounter">Loading...</div>
+  
+  <div id="next-episode-notice">Next episode will be uploaded on Monday</div>
 
   <script>
-    // Function to get cookie value
+    // 1. Security Check
     function getCookie(name) {
       const value = `; ${document.cookie}`;
       const parts = value.split(`; ${name}=`);
@@ -168,136 +155,95 @@
       return "";
     }
 
-    // Check access cookie
     if (getCookie("site_access") !== "true") {
-      document.documentElement.innerHTML = `
-        <head><title>Access Blocked</title></head>
-        <body style="margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px;">
-          <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
-            ⚠️ Direct Access Blocked<br><br>
-            Shortener solve karke hi site open hogi.<br><br>
-            <a href="https://gplinks.co/BFmfakvr" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
-          </div>
-        </body>`;
-      throw new Error("Access blocked");
+      document.body.innerHTML = `<div style="padding:50px; text-align:center; background:#900; color:#fff;">⚠️ Direct Access Blocked. Solve shortener first. <br><br> <a href="https://gplinks.co/BFmfakvr" style="color:yellow;">Unlock Here</a></div>`;
+      throw new Error("Access Blocked");
     }
 
-    // Get episode from URL
+    // 2. Config
     const urlParams = new URLSearchParams(window.location.search);
     const episode = parseInt(urlParams.get('ep')) || 1;
     const comicSlug = 'ishq-par-jor-nahi';
-    const paddedEpisode = episode.toString().padStart(2, '0');
-    const basePath = `https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/${comicSlug}/ch${paddedEpisode}/`;
+    const paddedEp = episode.toString().padStart(2, '0');
+    const basePath = `https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/${comicSlug}/ch${paddedEp}/`;
+    
+    document.getElementById('epNumDisplay').textContent = episode;
+    document.getElementById('epNumTitle').textContent = episode;
 
-    // Set episode number in title
-    document.getElementById('epNum').textContent = episode;
-
-    // Elements
     const comicContainer = document.getElementById('comic');
     const loading = document.getElementById('loading');
     const pageCounter = document.getElementById('pageCounter');
-    const nextNotice = document.getElementById('next-episode-notice');
-
-    // Variables
-    let loadedPages = 0;
-    let totalPages = 0;
+    
+    let loadedCount = 0;
     const maxPages = 200;
-    const maxAllowed = 62; // Episode limit
+    const maxAllowed = 30;
 
-    // Check episode limit
-    if (episode > maxAllowed) {
-      loading.classList.add('hidden');
-      comicContainer.innerHTML = '<p style="text-align:center; padding:100px; font-size:1.5rem; color:#ff4444;">Episode limit exceeded</p>';
-      nextNotice.style.display = 'none';
-      return;
+    // 3. Batch Loading Logic (The Speed Booster)
+    async function startReading() {
+      if (episode > maxAllowed) {
+        loading.classList.add('hidden');
+        comicContainer.innerHTML = '<p style="padding:100px; text-align:center;">Episode Not Released Yet.</p>';
+        return;
+      }
+
+      let i = 1;
+      let active = true;
+      const batchSize = 6; // 6 images ek saath load karega
+
+      while (active && i <= maxPages) {
+        const batch = [];
+        for (let j = 0; j < batchSize; j++) {
+          if (i + j <= maxPages) batch.push(loadSinglePage(i + j));
+        }
+
+        const results = await Promise.all(batch);
+        if (results.includes(false)) active = false; // Stop if image not found
+        i += batchSize;
+        
+        // Pehli 2-3 images load hote hi screen dikha do
+        if (loadedCount >= 1) loading.classList.add('hidden');
+      }
     }
 
-    // Update page counter
-    function updateCounter() {
-      pageCounter.textContent = `Page ${loadedPages} / ${totalPages || '?'}`;
-    }
-
-    // Load a page
-    function loadPage(i) {
-      if (i > maxPages) return;
-
-      const num = i.toString().padStart(3, '0');
-      const src = basePath + num + '.webp';
-
-      const img = new Image();
-      img.src = src;
-      img.loading = i <= 10 ? "eager" : "lazy";
-      img.decoding = "async";
-
-      img.onload = () => {
-        loadedPages++;
-        totalPages = Math.max(totalPages, i);
-        updateCounter();
-
+    function loadSinglePage(index) {
+      return new Promise((resolve) => {
+        const num = index.toString().padStart(3, '0');
+        const img = new Image();
+        img.src = `${basePath}${num}.webp`;
+        
         const div = document.createElement('div');
         div.className = 'page';
-        div.appendChild(img);
-        comicContainer.appendChild(div);
 
-        // Animate in
-        setTimeout(() => div.classList.add('loaded'), 100);
+        img.onload = () => {
+          loadedCount++;
+          pageCounter.textContent = `Pages: ${loadedCount}`;
+          div.appendChild(img);
+          comicContainer.appendChild(div);
+          setTimeout(() => div.classList.add('loaded'), 50);
+          resolve(true);
+        };
 
-        // Hide loading after first few pages
-        if (loadedPages >= 5) loading.classList.add('hidden');
-
-        // Load next page
-        loadPage(i + 1);
-      };
-
-      img.onerror = () => {
-        if (loadedPages === 0) {
-          loading.classList.add('hidden');
-          comicContainer.innerHTML = '<p style="text-align:center; padding:100px; font-size:1.5rem;">Episode load nahi ho raha 😔</p>';
-        }
-      };
+        img.onerror = () => {
+          resolve(false);
+        };
+      });
     }
 
-    // Preload first 10 pages
-    for (let i = 1; i <= 10; i++) {
-      const num = i.toString().padStart(3, '0');
-      const link = document.createElement('link');
-      link.rel = 'preload';
-      link.href = basePath + num + '.webp';
-      link.as = 'image';
-      document.head.appendChild(link);
-    }
+    // Start
+    startReading();
 
-    // Start loading pages
-    loadPage(1);
+    // 4. Nav & Anti-Theft
+    function prevEpisode() { if(episode > 1) window.location.href = `?ep=${episode - 1}`; }
+    function nextEpisode() { if(episode < maxAllowed) window.location.href = `?ep=${episode + 1}`; }
 
-    // Navigation functions
-    function prevEpisode() {
-      if (episode > 1) {
-        window.location.href = `ishq-par-jor-nahi.html?ep=${episode - 1}`;
-      }
-    }
+    if (episode === maxAllowed) document.getElementById('next-episode-notice').style.display = 'block';
+    else document.getElementById('next-episode-notice').style.display = 'none';
 
-    function nextEpisode() {
-      window.location.href = `ishq-par-jor-nahi.html?ep=${episode + 1}`;
-    }
-
-    // Hide next notice if not last episode
-    if (episode !== maxAllowed) {
-      nextNotice.style.display = 'none';
-    }
-
-    // Block downloads and selections
+    // Anti-Download
     document.addEventListener('contextmenu', e => e.preventDefault());
-    document.addEventListener('dragstart', e => e.preventDefault());
-    document.addEventListener('selectstart', e => e.preventDefault());
     document.addEventListener('keydown', e => {
-      if (e.ctrlKey && (e.key === 's' || e.key === 'u' || e.key === 'p' || e.key === 'c' || e.key === 'a')) {
-        e.preventDefault();
-      }
+      if (e.ctrlKey && ['s','u','p','c','a','i'].includes(e.key.toLowerCase())) e.preventDefault();
     });
-    document.addEventListener('touchstart', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
-    document.addEventListener('touchmove', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
   </script>
-
 </body>
 </html>
