@@ -22,6 +22,7 @@
       color: white;
       font-family: 'Segoe UI', sans-serif;
       min-height: 100vh;
+      overflow: hidden; /* Prevent scroll for single page view */
     }
 
     /* Header, loading spinner, page counter, page style same as your current one */
@@ -32,12 +33,16 @@
     #loading { position: fixed; inset: 0; background: rgba(10, 0, 31, 0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; transition: opacity 0.5s; }
     #loading.hidden { opacity: 0; pointer-events: none; }
     .spinner { width: 50px; height: 50px; border: 5px solid rgba(0, 212, 255, 0.2); border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
-    #comic { max-width: 1100px; margin: 0 auto; padding: 20px 10px; }
-    .page { width: 100%; margin: 0; /* Changed to 0 for no gap */ background: var(--gray); border-radius: 12px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.7); opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
-    .page.loaded { opacity: 1; transform: translateY(0); } /* Added this to make pages visible after loading */
-    .page img { width: 100%; height: auto; display: block; }
+    #comic { max-width: 1100px; margin: 0 auto; padding: 20px 10px; display: flex; justify-content: center; align-items: center; min-height: calc(100vh - 100px); }
+    .page { width: 100%; max-width: 800px; margin: 0; background: var(--gray); border-radius: 12px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.7); opacity: 0; transform: translateY(30px); transition: all 0.6s ease; display: none; }
+    .page.active { display: block; opacity: 1; transform: translateY(0); }
+    .page img { width: 100%; height: auto; display: block; pointer-events: none; user-select: none; -webkit-user-drag: none; -khtml-user-drag: none; -moz-user-drag: none; -o-user-drag: none; }
     #pageCounter { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); padding: 8px 16px; border-radius: 30px; font-size: 0.95rem; backdrop-filter: blur(8px); z-index: 999; }
-    #next-episode-notice { text-align: center; padding: 40px 20px; font-size: 1.3rem; color: #aaa; margin-top: 40px; }
+    #pageNav { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 999; }
+    #pageNav button { background: rgba(0, 212, 255, 0.15); color: var(--primary); border: 1px solid rgba(0, 212, 255, 0.3); padding: 8px 14px; border-radius: 8px; cursor: pointer; transition: all 0.3s; }
+    #pageNav button:hover { background: rgba(0, 212, 255, 0.35); transform: translateY(-1px); }
+    #pageNav button:disabled { opacity: 0.5; cursor: not-allowed; }
+    #next-episode-notice { text-align: center; padding: 40px 20px; font-size: 1.3rem; color: #aaa; margin-top: 40px; display: none; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   </style>
 </head>
@@ -59,6 +64,10 @@
 
   <div id="comic"></div>
   <div id="pageCounter">Page 1 / ?</div>
+  <div id="pageNav">
+    <button id="prevPage" onclick="prevPage()" disabled>Previous Page</button>
+    <button id="nextPage" onclick="nextPage()">Next Page</button>
+  </div>
   <div id="next-episode-notice">Next episode will be uploaded on next Monday</div>
 
   <script>
@@ -91,9 +100,13 @@
     const comicContainer = document.getElementById('comic');
     const loading = document.getElementById('loading');
     const pageCounter = document.getElementById('pageCounter');
+    const prevPageBtn = document.getElementById('prevPage');
+    const nextPageBtn = document.getElementById('nextPage');
+    const nextEpisodeNotice = document.getElementById('next-episode-notice');
 
-    let loadedPages = 0;
+    let loadedPages = [];
     let totalPages = 0;
+    let currentPage = 1;
     const maxPages = 200;
 
     /*** EPISODE LIMIT YAHAN SET HAI ***/
@@ -109,7 +122,24 @@
     /*** LIMIT KHATAM ***/
 
     function updateCounter() {
-      pageCounter.textContent = `Page ${loadedPages} / ${totalPages || '?'}`;
+      pageCounter.textContent = `Page ${currentPage} / ${totalPages || '?'}`;
+    }
+
+    function showPage(pageNum) {
+      loadedPages.forEach((div, index) => {
+        if (index + 1 === pageNum) {
+          div.classList.add('active');
+        } else {
+          div.classList.remove('active');
+        }
+      });
+      prevPageBtn.disabled = pageNum === 1;
+      nextPageBtn.disabled = pageNum === totalPages;
+      if (pageNum === totalPages) {
+        nextEpisodeNotice.style.display = 'block';
+      } else {
+        nextEpisodeNotice.style.display = 'none';
+      }
     }
 
     function loadPage(i) {
@@ -122,9 +152,12 @@
       img.src = src;
       img.loading = i <= 30 ? "eager" : "lazy";  // Eager load first 30 pages for faster show
       img.decoding = "async";
+      img.oncontextmenu = () => false; // Disable right-click
+      img.ondragstart = () => false; // Disable drag
+      img.onmousedown = () => false; // Disable hold/click for download
 
       img.onload = () => {
-        loadedPages++;
+        loadedPages.push(img);
         totalPages = Math.max(totalPages, i);
         updateCounter();
 
@@ -133,18 +166,24 @@
         div.appendChild(img);
         comicContainer.appendChild(div);
 
-        setTimeout(() => div.classList.add('loaded'), 100);
+        if (i === 1) {
+          showPage(1);
+          loading.classList.add('hidden');
+        }
 
         // Load next page sequentially
         loadPage(i + 1);
       };
 
       img.onerror = () => {
-        if (loadedPages === 0) {
+        if (loadedPages.length === 0) {
           loading.classList.add('hidden');
           comicContainer.innerHTML = '<p style="text-align:center; padding:100px; font-size:1.5rem;">Episode load nahi ho raha 😔<br>Check internet</p>';
         } else {
-          // No more pages, hide loading
+          // No more pages, set totalPages
+          totalPages = loadedPages.length;
+          updateCounter();
+          showPage(currentPage);
           loading.classList.add('hidden');
         }
       };
@@ -153,6 +192,22 @@
     // Start loading from page 1
     loadPage(1);
 
+    function prevPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        showPage(currentPage);
+        updateCounter();
+      }
+    }
+
+    function nextPage() {
+      if (currentPage < totalPages) {
+        currentPage++;
+        showPage(currentPage);
+        updateCounter();
+      }
+    }
+
     function prevEpisode() {
       if (episode > 1) window.location.href = `ishq-par-jor-nahi.html?ep=${episode - 1}`;
     }
@@ -160,6 +215,12 @@
     function nextEpisode() {
       window.location.href = `ishq-par-jor-nahi.html?ep=${episode + 1}`;
     }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') prevPage();
+      if (e.key === 'ArrowRight') nextPage();
+    });
   </script>
 
 </body>
