@@ -178,7 +178,7 @@
     const maxPages = 200;
     const maxAllowed = 30;
 
-    // 3. Batch Loading Logic (The Speed Booster)
+    // 3. Optimized Loading Logic (Faster Image Loading)
     async function startReading() {
       if (episode > maxAllowed) {
         loading.classList.add('hidden');
@@ -186,23 +186,17 @@
         return;
       }
 
-      let i = 1;
-      let active = true;
-      const batchSize = 6; // 6 images ek saath load karega
-
-      while (active && i <= maxPages) {
-        const batch = [];
-        for (let j = 0; j < batchSize; j++) {
-          if (i + j <= maxPages) batch.push(loadSinglePage(i + j));
-        }
-
-        const results = await Promise.all(batch);
-        if (results.includes(false)) active = false; // Stop if image not found
-        i += batchSize;
-        
-        // Pehli 2-3 images load hote hi screen dikha do
-        if (loadedCount >= 1) loading.classList.add('hidden');
+      let pageIndex = 1;
+      function loadNextPage() {
+        if (pageIndex > maxPages) return;
+        loadSinglePage(pageIndex).then(success => {
+          if (success) {
+            pageIndex++;
+            loadNextPage(); // Load next page immediately without waiting
+          }
+        });
       }
+      loadNextPage(); // Start loading the first page
     }
 
     function loadSinglePage(index) {
@@ -210,6 +204,7 @@
         const num = index.toString().padStart(3, '0');
         const img = new Image();
         img.src = `${basePath}${num}.webp`;
+        img.loading = 'lazy'; // Enable browser lazy loading for faster perceived performance
         
         const div = document.createElement('div');
         div.className = 'page';
