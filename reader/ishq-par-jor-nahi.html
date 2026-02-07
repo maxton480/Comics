@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ishq Par Jor Nahi - Episode <span id="epNum"></span></title>
-  <!-- Preload first 10 pages for instant feel -->
+  <!-- Preload first 10 pages for faster initial load -->
   <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/001.webp" as="image">
   <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/002.webp" as="image">
   <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/003.webp" as="image">
@@ -26,7 +26,7 @@
       overflow-x: hidden;
       user-select: none;
       -webkit-user-select: none;
-      touch-action: pan-y; /* Allow vertical scroll only */
+      touch-action: pan-y;
     }
 
     #header {
@@ -147,122 +147,139 @@
 </head>
 <body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
 
+  <div id="header">
+    <h1 id="title">Ishq Par Jor Nahi</h1>
+    <div id="nav">
+      <button onclick="prevEpisode()">Previous</button>
+      <button onclick="nextEpisode()">Next</button>
+      <a href="../pages/ishq-par-jor-nahi.html">Back</a>
+    </div>
+  </div>
+
+  <div id="loading">
+    <div class="spinner"></div>
+    <p>Pages load ho rahi hain... थोड़ा इंतज़ार 🐰</p>
+  </div>
+
+  <div id="comic"></div>
+  <div id="pageCounter">Page 1 / ?</div>
+  <div id="next-episode-notice">Next episode will be uploaded on next Monday</div>
+
   <script>
-  function getCookie(name) {
-    let matches = document.cookie.match(new RegExp(
-      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-    ));
-    return matches ? decodeURIComponent(matches[1]) : "";
-  }
-
-  if (getCookie("site_access") !== "true") {
-    document.documentElement.innerHTML = `
-      <head><title>Access Blocked</title></head>
-      <body style="margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px;">
-        <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
-          ⚠️ Direct Access Blocked<br><br>
-          Shortener solve karke hi site open hogi.<br><br>
-          <a href="https://gplinks.co/BFmfakvr" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
-        </div>
-      </body>`;
-    throw new Error("Access blocked");
-  }
-
-  const urlParams = new URLSearchParams(window.location.search);
-  const episode = parseInt(urlParams.get('ep')) || 1;
-  const comicSlug = 'ishq-par-jor-nahi';
-  const basePath = `https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/\( {comicSlug}/ch \){episode}/`;
-
-  document.getElementById('epNum').textContent = episode;
-
-  const comicContainer = document.getElementById('comic');
-  const loading = document.getElementById('loading');
-  const pageCounter = document.getElementById('pageCounter');
-  const nextNotice = document.getElementById('next-episode-notice');
-
-  let loadedPages = 0;
-  let totalPages = 0;
-  const maxPages = 200;
-
-  // Episode limit (FREE: 30, VIP: 60)
-  let maxAllowed = 62; // Change to 60 for VIP reader
-  }
-
-  if (episode > maxAllowed) {
-    loading.classList.add('hidden');
-    comicContainer.innerHTML = '<p style="text-align:center; padding:100px; font-size:1.5rem; color:#ff4444;">Episode limit exceeded</p>';
-    nextNotice.style.display = 'none';
-    return;
-  }
-
-  function updateCounter() {
-    pageCounter.textContent = `Page ${loadedPages} / ${totalPages || '?'}`;
-  }
-
-  function loadPage(i) {
-    if (i > maxPages) return;
-
-    const num = i.toString().padStart(3, '0');
-    const src = basePath + num + '.webp';
-
-    const img = new Image();
-    img.src = src;
-    img.loading = i <= 10 ? "eager" : "lazy"; // First 10 eager load
-    img.decoding = "async";
-
-    img.onload = () => {
-      loadedPages++;
-      totalPages = Math.max(totalPages, i);
-      updateCounter();
-
-      const div = document.createElement('div');
-      div.className = 'page';
-      div.appendChild(img);
-      comicContainer.appendChild(div);
-
-      setTimeout(() => div.classList.add('loaded'), 100);
-
-      if (loadedPages >= 5) loading.classList.add('hidden');
-
-      // Auto load next page
-      loadPage(i + 1);
-    };
-
-    img.onerror = () => {
-      if (loadedPages === 0) {
-        loading.classList.add('hidden');
-        comicContainer.innerHTML = '<p style="text-align:center; padding:100px; font-size:1.5rem;">Episode load nahi ho raha 😔</p>';
-      }
-    };
-  }
-
-  // Start loading
-  loadPage(1);
-
-  function prevEpisode() {
-    if (episode > 1) window.location.href = `ishq-par-jor-nahi.html?ep=${episode - 1}`;
-  }
-
-  function nextEpisode() {
-    window.location.href = `ishq-par-jor-nahi.html?ep=${episode + 1}`;
-  }
-
-  // Block all download/copy attempts
-  document.addEventListener('contextmenu', e => e.preventDefault());
-  document.addEventListener('dragstart', e => e.preventDefault());
-  document.addEventListener('touchstart', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
-  document.addEventListener('touchmove', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
-  document.addEventListener('selectstart', e => e.preventDefault());
-  document.addEventListener('keydown', e => {
-    if (e.ctrlKey && (e.key === 's' || e.key === 'u' || e.key === 'p' || e.key === 'c')) {
-      e.preventDefault();
+    function getCookie(name) {
+      let matches = document.cookie.match(new RegExp(
+        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+      ));
+      return matches ? decodeURIComponent(matches[1]) : "";
     }
-  });
 
-  // Hide next notice if not last episode
-  if (episode !== maxAllowed) {
-    nextNotice.style.display = 'none';
-  }
+    if (getCookie("site_access") !== "true") {
+      document.documentElement.innerHTML = `
+        <head><title>Access Blocked</title></head>
+        <body style="margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px;">
+          <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
+            ⚠️ Direct Access Blocked<br><br>
+            Shortener solve karke hi site open hogi.<br><br>
+            <a href="https://gplinks.co/BFmfakvr" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
+          </div>
+        </body>`;
+      throw new Error("Access blocked");
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const episode = parseInt(urlParams.get('ep')) || 1;
+    const comicSlug = 'ishq-par-jor-nahi';
+    const basePath = `https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/\( {comicSlug}/ch \){episode}/`;
+
+    document.getElementById('epNum').textContent = episode;
+
+    const comicContainer = document.getElementById('comic');
+    const loading = document.getElementById('loading');
+    const pageCounter = document.getElementById('pageCounter');
+    const nextNotice = document.getElementById('next-episode-notice');
+
+    let loadedPages = 0;
+    let totalPages = 0;
+    const maxPages = 200;
+
+    /*** Episode Limit Set (sirf free ke liye – VIP nahi hai ab) ***/
+    const maxAllowed = 30; // Yeh number badal sakte ho (jaise 40 ya 50)
+
+    if (episode > maxAllowed) {
+      loading.classList.add('hidden');
+      comicContainer.innerHTML = '<p style="text-align:center; padding:100px; font-size:1.5rem; color:#ff4444;">Episode limit exceeded</p>';
+      nextNotice.style.display = 'none';
+      return;
+    }
+    /*** Limit khatam ***/
+
+    function updateCounter() {
+      pageCounter.textContent = `Page ${loadedPages} / ${totalPages || '?'}`;
+    }
+
+    function loadPage(i) {
+      if (i > maxPages) return;
+
+      const num = i.toString().padStart(3, '0');
+      const src = basePath + num + '.webp';
+
+      const img = new Image();
+      img.src = src;
+      img.loading = i <= 10 ? "eager" : "lazy";
+      img.decoding = "async";
+
+      img.onload = () => {
+        loadedPages++;
+        totalPages = Math.max(totalPages, i);
+        updateCounter();
+
+        const div = document.createElement('div');
+        div.className = 'page';
+        div.appendChild(img);
+        comicContainer.appendChild(div);
+
+        setTimeout(() => div.classList.add('loaded'), 100);
+
+        if (loadedPages >= 5) loading.classList.add('hidden');
+
+        loadPage(i + 1);
+      };
+
+      img.onerror = () => {
+        if (loadedPages === 0) {
+          loading.classList.add('hidden');
+          comicContainer.innerHTML = '<p style="text-align:center; padding:100px; font-size:1.5rem;">Episode load nahi ho raha 😔</p>';
+        }
+      };
+    }
+
+    // Start loading
+    loadPage(1);
+
+    function prevEpisode() {
+      if (episode > 1) window.location.href = `ishq-par-jor-nahi.html?ep=${episode - 1}`;
+    }
+
+    function nextEpisode() {
+      window.location.href = `ishq-par-jor-nahi.html?ep=${episode + 1}`;
+    }
+
+    // Block download/copy
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('dragstart', e => e.preventDefault());
+    document.addEventListener('touchstart', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+    document.addEventListener('touchmove', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+    document.addEventListener('selectstart', e => e.preventDefault());
+    document.addEventListener('keydown', e => {
+      if (e.ctrlKey && (e.key === 's' || e.key === 'u' || e.key === 'p' || e.key === 'c')) {
+        e.preventDefault();
+      }
+    });
+
+    // Hide next notice if not last episode
+    if (episode !== maxAllowed) {
+      nextNotice.style.display = 'none';
+    }
   </script>
 
 </body>
