@@ -34,6 +34,7 @@
     .spinner { width: 50px; height: 50px; border: 5px solid rgba(0, 212, 255, 0.2); border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
     #comic { max-width: 1100px; margin: 0 auto; padding: 20px 10px; }
     .page { width: 100%; margin: 0; /* Changed to 0 for no gap */ background: var(--gray); border-radius: 12px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.7); opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+    .page.loaded { opacity: 1; transform: translateY(0); } /* Added this to make pages visible after loading */
     .page img { width: 100%; height: auto; display: block; }
     #pageCounter { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); padding: 8px 16px; border-radius: 30px; font-size: 0.95rem; backdrop-filter: blur(8px); z-index: 999; }
     #next-episode-notice { text-align: center; padding: 40px 20px; font-size: 1.3rem; color: #aaa; margin-top: 40px; }
