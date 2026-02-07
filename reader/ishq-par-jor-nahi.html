@@ -4,9 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ishq Par Jor Nahi - Episode <span id="epNum"></span></title>
-  <!-- Preload first 5 pages -->
+  <!-- Preload first 20 pages for faster initial load -->
   <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/001.webp" as="image">
   <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/002.webp" as="image">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/003.webp" as="image">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/004.webp" as="image">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/005.webp" as="image">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/006.webp" as="image">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/007.webp" as="image">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/008.webp" as="image">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/009.webp" as="image">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/010.webp" as="image">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/011.webp" as="image">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/012.webp" as="image">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/013.webp" as="image">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/014.webp" as="image">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/015.webp" as="image">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/016.webp" as="image">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/017.webp" as="image">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/018.webp" as="image">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/019.webp" as="image">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/020.webp" as="image">
   <style>
     :root {
       --primary: #00d4ff;
@@ -59,10 +77,29 @@
   <div id="next-episode-notice">Next episode will be uploaded on next Monday</div>
 
   <script>
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    if (getCookie("site_access") !== "true") {
+      document.documentElement.innerHTML = `
+        <head><title>Access Blocked</title></head>
+        <body style="margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px;">
+          <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
+            ⚠️ Direct Access Blocked<br><br>
+            Shortener solve karke hi site open hogi.<br><br>
+            <a href="https://gplinks.co/BFmfakvr" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
+          </div>
+        </body>`;
+      throw new Error("Access blocked");
+    }
+
     const urlParams = new URLSearchParams(window.location.search);
     const episode = parseInt(urlParams.get('ep')) || 1;
     const comicSlug = 'ishq-par-jor-nahi';
-    const basePath = `https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/\( {comicSlug}/ch \){episode}/`;
+    const basePath = `https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/${comicSlug}/ch${episode}/`;
 
     document.getElementById('title').textContent += ` - Episode ${episode}`;
 
@@ -96,7 +133,7 @@
 
       const img = new Image();
       img.src = src;
-      img.loading = "lazy";
+      img.loading = i <= 20 ? "eager" : "lazy";  // Eager load first 20 pages for faster show
       img.decoding = "async";
 
       img.onload = () => {
@@ -111,7 +148,7 @@
 
         setTimeout(() => div.classList.add('loaded'), 100);
 
-        if (loadedPages >= 3) loading.classList.add('hidden');
+        if (loadedPages >= 10) loading.classList.add('hidden');  // Hide loading after 10 pages loaded
       };
 
       img.onerror = () => {
