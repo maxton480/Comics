@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ishq Par Jor Nahi - Episode <span id="epNum"></span></title>
+  <!-- Preload first 5 pages for instant start -->
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/001.webp" as="image">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/002.webp" as="image">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/003.webp" as="image">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/004.webp" as="image">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/005.webp" as="image">
+  <style>
+    :root {
+      --primary: #00d4ff;
+      --dark: #0a001f;
+      --gray: #1a1a2e;
+    }
+    body {
+      margin: 0;
+      background: var(--dark);
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      user-select: none; /* Prevent text selection */
+    }
+
+    #header {
+      position: sticky;
+      top: 0;
+      background: rgba(10, 0, 31, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 12px 20px;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+    }
+
+    #title {
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    #pageInfo {
+      font-size: 0.95rem;
+      opacity: 0.8;
+    }
+
+    #nav button {
+      background: rgba(0, 212, 255, 0.15);
+      color: var(--primary);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    #nav button:hover {
+      background: rgba(0, 212, 255, 0.35);
+      transform: translateY(-1px);
+    }
+
+    #loading {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 0, 31, 0.95);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      transition: opacity 0.5s;
+    }
+
+    #loading.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(0, 212, 255, 0.2);
+      border-top: 5px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    #comic {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px 10px;
+    }
+
+    .page {
+      width: 100%;
+      margin: 0; /* No gap between images */
+      background: transparent; /* Removed gray background for seamless look */
+      border-radius: 0;
+      overflow: hidden;
+      box-shadow: none; /* Removed shadow to blend images */
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+      position: relative;
+    }
+
+    .page.loaded {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .page img {
+      width: 100%;
+      height: auto;
+      display: block;
+      pointer-events: none; /* Prevent interactions like drag or click */
+      -webkit-user-drag: none; /* Prevent dragging in webkit browsers */
+      user-drag: none;
+    }
+
+    #pageCounter {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.7);
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 0.95rem;
+      backdrop-filter: blur(8px);
+      z-index: 999;
+    }
+
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    /* Overlay to prevent right-click and other interactions */
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1001;
+      pointer-events: none; /* Allow scrolling but block interactions */
+    }
+  </style>
+</head>
+<body>
+
+  <script>
+    function getCookie(name) {
+      let matches = document.cookie.match(new RegExp(
+        "(?:^|; )" + name.replace(/([\.$?*|{}\$\$\$\$\\\/\+^])/g, '\\$1') + "=([^;]*)"
+      ));
+      return matches ? decodeURIComponent(matches[1]) : "";
+    }
+
+    if (getCookie("vip_access") !== "true") {
+      document.documentElement.innerHTML = `
+        <head><title>VIP Access Required</title></head>
+        <body style="margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px;">
+          <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
+            ⚠️ VIP Access Required<br><br>
+            Yeh page sirf VIP members ke liye hai.<br><br>
+            <a href="gate-ishq.html" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Get VIP Access</a>
+          </div>
+        </body>`;
+      throw new Error("VIP access required");
+    }
+  </script>
+
+  <div id="header">
+    <h1 id="title">Ishq Par Jor Nahi</h1>
+    <div id="nav">
+      <button onclick="prevEpisode()">Previous</button>
+      <button onclick="nextEpisode()">Next</button>
+      <a href="info.html">Back</a>
+    </div>
+  </div>
+
+  <div id="loading">
+    <div class="spinner"></div>
+    <p>Pages load ho rahi hain... थोड़ा इंतज़ार 🐰</p>
+  </div>
+
+  <div id="comic"></div>
+  <div id="pageCounter">Page 1 / ?</div>
+
+  <!-- Invisible overlay to block right-click and downloads -->
+  <div id="overlay"></div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const episode = parseInt(urlParams.get('ep')) || 1;
+    const comicSlug = 'ishq-par-jor-nahi';
+    const basePath = `https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/${comicSlug}/ch${episode}/`;
+
+    document.getElementById('title').textContent += ` - Episode ${episode}`;
+
+    const comicContainer = document.getElementById('comic');
+    const loading = document.getElementById('loading');
+    const pageCounter = document.getElementById('pageCounter');
+
+    let loadedPages = 0;
+    let totalPages = 0;
+    const maxPages = 200;
+    let currentPage = 1;
+    let isLoading = false;
+
+    function updateCounter() {
+      pageCounter.textContent = `Page ${loadedPages} / ${totalPages || '?'}`;
+    }
+
+    function loadPage(i) {
+      if (isLoading || i > maxPages) return;
+      isLoading = true;
+
+      const num = i.toString().padStart(3, '0');
+      const src = basePath + num + '.webp';
+
+      const img = new Image();
+      img.src = src;
+      img.decoding = "async";
+
+      img.onload = () => {
+        loadedPages++;
+        totalPages = Math.max(totalPages, i);
+        updateCounter();
+
+        const div = document.createElement('div');
+        div.className = 'page';
+        div.appendChild(img);
+        comicContainer.appendChild(div);
+
+        setTimeout(() => div.classList.add('loaded'), 100);
+
+        if (loadedPages >= 3) loading.classList.add('hidden');
+
+        currentPage = i + 1;
+        isLoading = false;
+
+        if (comicContainer.children.length < 10) {
+          loadPage(currentPage);
+        }
+      };
+
+      img.onerror = () => {
+        if (loadedPages === 0) {
+          loading.classList.add('hidden');
+          comicContainer.innerHTML = '<p style="text-align:center; padding:100px; font-size:1.5rem;">Episode load nahi ho raha 😔<br>Check internet ya GitHub folder</p>';
+        } else {
+          isLoading = false;
+        }
+      };
+    }
+
+    // Intersection Observer for lazy loading
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !isLoading) {
+          loadPage(currentPage);
+        }
+      });
+    }, { rootMargin: '100px' });
+
+    // Start with first 5 preloaded
+    for (let i = 1; i <= 5; i++) {
+      loadPage(i);
+    }
+
+    function observeLastPage() {
+      const pages = document.querySelectorAll('.page');
+      if (pages.length > 0) {
+        observer.observe(pages[pages.length - 1]);
+      }
+    }
+
+    setInterval(observeLastPage, 500);
+
+    function prevEpisode() {
+      if (episode > 1) window.location.href = `reader.html?ep=${episode - 1}`;
+    }
+
+    function nextEpisode() {
+      window.location.href = `reader.html?ep=${episode + 1}`;
+    }
+
+    // Block right-click, drag, and other download attempts
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
+    document.addEventListener('dragstart', (e) => e.preventDefault());
+    document.addEventListener('selectstart', (e) => e.preventDefault());
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && (e.key === 's' || e.key === 'u' || e.key === 'p')) {
+        e.preventDefault(); // Block Ctrl+S, Ctrl+U, Ctrl+P
+      }
+    });
+  </script>
+</body>
+</html>
