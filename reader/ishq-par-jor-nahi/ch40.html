@@ -15,11 +15,11 @@
 
 <script>
   function getCookie(name) {
-    let matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([.$?*|{}()[\\]\\/+^])/g, '\\$1') + "=([^;]*)"));
+    let matches = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/([.$?*|{}()[\\$\\/+^])/g, '\\$1') + "=([^;]*)"));
     return matches ? decodeURIComponent(matches[1]) : "";
   }
 
-  if (getCookie("site_access") !== "true") {
+  if (getCookie('site_access') !== 'true') {
     document.documentElement.innerHTML = `
       <head><title>Access Blocked</title></head>
       <body style="margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px;">
@@ -37,29 +37,28 @@
 </script>
 
   <div id="comic"></div>
-
   <script>
-    document.addEventListener("contextmenu", e => e.preventDefault());
-    document.addEventListener("dragstart", e => e.preventDefault());
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('dragstart', e => e.preventDefault());
 
     // Chapter 1 images load
     const basePath = "https://cdn.jsdelivr.net/gh/maxton480/Comics@main/comics/ishq-par-jor-nahi/ch1/";
 
-    const container = document.getElementById("comic");
+    const container = document.getElementById('comic');
     for (let i = 1; i <= 100; i++) {
-      const num = i.toString().padStart(3, "0");
-      const src = basePath + num + ".webp";
+      const num = i.toString().padStart(3, '0');
+      const src = basePath + num + '.webp';
 
-      const div = document.createElement("div");
-      div.style.position = "relative";
+      const div = document.createElement('div');
+      div.style.position = 'relative';
 
-      const img = document.createElement("img");
+      const img = document.createElement('img');
       img.src = src;
       img.loading = "lazy";
       img.onerror = () => div.remove();
 
-      const overlay = document.createElement("div");
-      overlay.className = "overlay";
+      const overlay = document.createElement('div');
+      overlay.className = 'overlay';
 
       div.appendChild(img);
       div.appendChild(overlay);
