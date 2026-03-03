@@ -34,42 +34,12 @@
       height: 64px;
     }
 
-    .logo img {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      border: 3px solid var(--primary);
-      box-shadow: 0 0 20px var(--glow);
-      object-fit: cover;
-    }
+    .logo img { width: 52px; height: 52px; border-radius: 50%; border: 3px solid var(--primary); box-shadow: 0 0 20px var(--glow); object-fit: cover; }
+    .heading-img { max-width: 220px; height: auto; display: block; margin: 0 auto; }
+    .search-icon { width: 68px; height: 68px; cursor: pointer; animation: float 4.8s ease-in-out infinite; transition: all 0.4s; filter: drop-shadow(0 0 15px var(--glow)); }
+    .search-icon:hover { transform: scale(1.15); filter: drop-shadow(0 0 25px var(--primary)); animation-play-state: paused; }
 
-    .heading-img {
-      max-width: 220px;
-      height: auto;
-      display: block;
-      margin: 0 auto;
-    }
-
-    .search-icon {
-      width: 68px;
-      height: 68px;
-      cursor: pointer;
-      animation: float 4.8s ease-in-out infinite; /* sirf search pe floating */
-      transition: all 0.4s;
-      filter: drop-shadow(0 0 15px var(--glow));
-    }
-
-    .search-icon:hover {
-      transform: scale(1.15);
-      filter: drop-shadow(0 0 25px var(--primary));
-      animation-play-state: paused;
-    }
-
-    main {
-      padding: 20px 16px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
+    main { padding: 20px 16px; max-width: 900px; margin: 0 auto; }
 
     .cover {
       width: 100%;
@@ -91,30 +61,68 @@
       backdrop-filter: blur(8px);
     }
 
-    .episodes {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
+    /* New Episode Finder */
+    .episode-finder {
       margin-bottom: 40px;
+    }
+
+    .search-bar {
+      width: 100%;
+      padding: 16px 20px;
+      font-size: 1.1rem;
+      background: rgba(34, 34, 60, 0.8);
+      border: 2px solid rgba(0, 212, 255, 0.4);
+      border-radius: 50px;
+      color: white;
+      outline: none;
+      margin-bottom: 20px;
+    }
+
+    .pagination {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+
+    .page-btn {
+      padding: 8px 16px;
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 8px;
+      color: var(--primary);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .page-btn.active, .page-btn:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .episodes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
     }
 
     .btn {
       background: linear-gradient(45deg, var(--primary), var(--accent));
       color: white;
-      padding: 18px 24px;
+      padding: 14px 20px;
       border-radius: 12px;
       text-decoration: none;
       font-weight: bold;
-      font-size: 1.1rem;
-      display: block;
       text-align: center;
       transition: all 0.3s;
-      box-shadow: 0 6px 20px rgba(0, 212, 255, 0.2);
+      box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
     }
 
     .btn:hover {
       transform: translateY(-3px);
-      box-shadow: 0 12px 30px rgba(0, 212, 255, 0.4);
+      box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
     }
 
     .back {
@@ -126,12 +134,9 @@
       color: #aaa;
       text-decoration: none;
       font-size: 1.1rem;
-      transition: color 0.3s;
     }
 
-    .back a:hover {
-      color: var(--primary);
-    }
+    .back a:hover { color: var(--primary); }
 
     @keyframes float {
       0%, 100% { transform: translateY(0); }
@@ -139,20 +144,10 @@
     }
 
     @media (max-width: 768px) {
-      .episodes {
-        grid-template-columns: 1fr;
-      }
-      .heading-img {
-        max-width: 220px;
-      }
-      .search-icon {
-        width: 70px;
-        height: 70px;
-      }
-      .logo img {
-        width:  50px;
-        height:  50px;
-      }
+      .episodes-grid { grid-template-columns: repeat(2, 1fr); }
+      .heading-img { max-width: 180px; }
+      .search-icon { width: 58px; height: 58px; }
+      .logo img { width: 48px; height: 48px; }
     }
   </style>
 </head>
@@ -196,162 +191,21 @@
   <main>
     <img src="https://i.ibb.co/RpV5MWv2/file-0000000071087207b8fdc85d969f22b3.png" alt="Ishq Par Jor Nahi Cover" class="cover" loading="lazy">
 
-
     <div class="summary">
       <p>माँ के गुज़र जाने के बाद गौरी के चाचा ने उसे मुंबई रवाना कर दिया, जहाँ उसे उसके पिता के पुराने मित्र रमाकांत के घर पर आसरा मिला। भोली-भाली गौरी मुंबई जैसे महानगर में रह कर अपना डिज़ाइनर बनने का सपना पूरा करना चाहती थी पर क्या होगा जब उसकी ज़िन्दगी में होगी इश्क़ की दस्तक? किसी ने सच ही कहा है किसी का भी "इश्क़ पर जोर नहीं" चलता।</p>
     </div>
 
-    <div class="episodes">
-      <a href="../reader/ishq-par-jor-nahi/ch1.html" class="btn">Episode 1</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch2.html" class="btn">Episode 2</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch3.html" class="btn">Episode 3</a>
-      <a href="../reader/ishq-par-jor-nahi/ch4.html" class="btn">Episode 4</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch5.html" class="btn">Episode 5</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch6.html" class="btn">Episode 6</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch7.html" class="btn">Episode 7</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch8.html" class="btn">Episode 8</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch9.html" class="btn">Episode 9</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch10.html" class="btn">Episode 10</a>
-      <a href="../reader/ishq-par-jor-nahi/ch11.html" class="btn">Episode 11</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch12.html" class="btn">Episode 12</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch13.html" class="btn">Episode 13</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch14.html" class="btn">Episode 14</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch15.html" class="btn">Episode 15</a>
-      <a href="../reader/ishq-par-jor-nahi/ch16.html" class="btn">Episode 16</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch17.html" class="btn">Episode 17</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch18.html" class="btn">Episode 18</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch19.html" class="btn">Episode 19</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch20.html" class="btn">Episode 20</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch21.html" class="btn">Episode 21</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch22.html" class="btn">Episode 22</a>
-      <a href="../reader/ishq-par-jor-nahi/ch23.html" class="btn">Episode 23</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch24.html" class="btn">Episode 24</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch25.html" class="btn">Episode 25</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch26.html" class="btn">Episode 26</a>
-      <a href="../reader/ishq-par-jor-nahi/ch27.html" class="btn">Episode 27</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch28.html" class="btn">Episode 28</a>
-      <a href="../reader/ishq-par-jor-nahi/ch29.html" class="btn">Episode 29</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch30.html" class="btn">Episode 30</a>
-      <a href="../reader/ishq-par-jor-nahi/ch31.html" class="btn">Episode 31</a>
-      <a href="../reader/ishq-par-jor-nahi/ch32.html" class="btn">Episode 32</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch33.html" class="btn">Episode 33</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch34.html" class="btn">Episode 34</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch35.html" class="btn">Episode 35</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch36.html" class="btn">Episode 36</a>
-      <a href="../reader/ishq-par-jor-nahi/ch37.html" class="btn">Episode 37</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch38.html" class="btn">Episode 38</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch39.html" class="btn">Episode 39</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch40.html" class="btn">Episode 40</a>
-      <a href="../reader/ishq-par-jor-nahi/ch41.html" class="btn">Episode 41</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch42.html" class="btn">Episode 42</a>
-      <a href="../reader/ishq-par-jor-nahi/ch43.html" class="btn">Episode 43</a>
-      <a href="../reader/ishq-par-jor-nahi/ch44.html" class="btn">Episode 44</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch45.html" class="btn">Episode 45</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch46.html" class="btn">Episode 46</a>
-      <a href="../reader/ishq-par-jor-nahi/ch47.html" class="btn">Episode 47</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch48.html" class="btn">Episode 48</a>
-      <a href="../reader/ishq-par-jor-nahi/ch49.html" class="btn">Episode 49</a>
-      <a href="../reader/ishq-par-jor-nahi/ch50.html" class="btn">Episode 50</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch51.html" class="btn">Episode 51</a>
-      <a href="../reader/ishq-par-jor-nahi/ch52.html" class="btn">Episode 52</a>
-      <a href="../reader/ishq-par-jor-nahi/ch53.html" class="btn">Episode 53</a>
-      <a href="../reader/ishq-par-jor-nahi/ch54.html" class="btn">Episode 54</a>
-      <a href="../reader/ishq-par-jor-nahi/ch55.html" class="btn">Episode 55</a>
-      <a href="../reader/ishq-par-jor-nahi/ch56.html" class="btn">Episode 56</a>
-      <a href="../reader/ishq-par-jor-nahi/ch57.html" class="btn">Episode 57</a>
-      <a href="../reader/ishq-par-jor-nahi/ch58.html" class="btn">Episode 58</a>
-      <a href="../reader/ishq-par-jor-nahi/ch59.html" class="btn">Episode 59</a>
-      <a href="../reader/ishq-par-jor-nahi/ch60.html" class="btn">Episode 60</a>
-      <a href="../reader/ishq-par-jor-nahi/ch61.html" class="btn">Episode 61</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch62.html" class="btn">Episode 62</a>
-      <a href="../reader/ishq-par-jor-nahi/ch63.html" class="btn">Episode 63</a>
-      <a href="../reader/ishq-par-jor-nahi/ch64.html" class="btn">Episode 64</a>
-      <a href="../reader/ishq-par-jor-nahi/ch65.html" class="btn">Episode 65</a>  
-      <a href="../reader/ishq-par-jor-nahi/ch66.html" class="btn">Episode 66</a>
-      <a href="../reader/ishq-par-jor-nahi/ch67.html" class="btn">Episode 67</a>
-      <a href="../reader/ishq-par-jor-nahi/ch68.html" class="btn">Episode 68</a>
-      <a href="../reader/ishq-par-jor-nahi/ch69.html" class="btn">Episode 69</a>
-      <a href="../reader/ishq-par-jor-nahi/ch70.html" class="btn">Episode 70</a>
-      <a href="../reader/ishq-par-jor-nahi/ch71.html" class="btn">Episode 71</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch72.html" class="btn">Episode 72</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch73.html" class="btn">Episode 73</a>
-      <a href="../reader/ishq-par-jor-nahi/ch74.html" class="btn">Episode 74</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch75.html" class="btn">Episode 75</a>
-      <a href="../reader/ishq-par-jor-nahi/ch76.html" class="btn">Episode 76</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch77.html" class="btn">Episode 77</a>
-      <a href="../reader/ishq-par-jor-nahi/ch78.html" class="btn">Episode 78</a>
-      <a href="../reader/ishq-par-jor-nahi/ch79.html" class="btn">Episode 79</a>
-      <a href="../reader/ishq-par-jor-nahi/ch80.html" class="btn">Episode 80</a>
-      <a href="../reader/ishq-par-jor-nahi/ch81.html" class="btn">Episode 81</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch82.html" class="btn">Episode 82</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch83.html" class="btn">Episode 83</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch84.html" class="btn">Episode 84</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch85.html" class="btn">Episode 85</a>
-      <a href="../reader/ishq-par-jor-nahi/ch86.html" class="btn">Episode 86</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch87.html" class="btn">Episode 87</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch88.html" class="btn">Episode 88</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch89.html" class="btn">Episode 89</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch90.html" class="btn">Episode 90</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch91.html" class="btn">Episode 91</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch92.html" class="btn">Episode 92</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch93.html" class="btn">Episode 93</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch94.html" class="btn">Episode 94</a>
-      <a href="../reader/ishq-par-jor-nahi/ch95.html" class="btn">Episode 95</a>
-      <a href="../reader/ishq-par-jor-nahi/ch96.html" class="btn">Episode 96</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch97.html" class="btn">Episode 97</a>
-      <a href="../reader/ishq-par-jor-nahi/ch98.html" class="btn">Episode 98</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch99.html" class="btn">Episode 99</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch100.html" class="btn">Episode 100</a>
-      <a href="../reader/ishq-par-jor-nahi/ch101.html" class="btn">Episode 101</a>
-      <a href="../reader/ishq-par-jor-nahi/ch102.html" class="btn">Episode 102</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch103.html" class="btn">Episode 103</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch104.html" class="btn">Episode 104</a>
-      <a href="../reader/ishq-par-jor-nahi/ch105.html" class="btn">Episode 105</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch106.html" class="btn">Episode 106</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch107.html" class="btn">Episode 107</a>
-      <a href="../reader/ishq-par-jor-nahi/ch108.html" class="btn">Episode 108</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch109.html" class="btn">Episode 109</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch110.html" class="btn">Episode 110</a>
-      <a href="../reader/ishq-par-jor-nahi/ch111.html" class="btn">Episode 111</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch112.html" class="btn">Episode 112</a>
-      <a href="../reader/ishq-par-jor-nahi/ch113.html" class="btn">Episode 113</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch114.html" class="btn">Episode 114</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch115.html" class="btn">Episode 115</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch116.html" class="btn">Episode 116</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch117.html" class="btn">Episode 117</a>
-      <a href="../reader/ishq-par-jor-nahi/ch118.html" class="btn">Episode 118</a>
-      <a href="../reader/ishq-par-jor-nahi/ch119.html" class="btn">Episode 119</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch120.html" class="btn">Episode 120</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch121.html" class="btn">Episode 121</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch122.html" class="btn">Episode 122</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch123.html" class="btn">Episode 123</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch124.html" class="btn">Episode 124</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch125.html" class="btn">Episode 125</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch126.html" class="btn">Episode 126</a>
-      <a href="../reader/ishq-par-jor-nahi/ch127.html" class="btn">Episode 127</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch128.html" class="btn">Episode 128</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch129.html" class="btn">Episode 129</a>
-      <a href="../reader/ishq-par-jor-nahi/ch130.html" class="btn">Episode 130</a>
-      <a href="../reader/ishq-par-jor-nahi/ch131.html" class="btn">Episode 131</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch132.html" class="btn">Episode 132</a>
-      <a href="../reader/ishq-par-jor-nahi/ch133.html" class="btn">Episode 133</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch134.html" class="btn">Episode 134</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch135.html" class="btn">Episode 135</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch136.html" class="btn">Episode 136</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch137.html" class="btn">Episode 137</a>
-      <a href="../reader/ishq-par-jor-nahi/ch138.html" class="btn">Episode 138</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch139.html" class="btn">Episode 139</a>
-      <a href="../reader/ishq-par-jor-nahi/ch140.html" class="btn">Episode 140</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch141.html" class="btn">Episode 141</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch142.html" class="btn">Episode 142</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch143.html" class="btn">Episode 143</a>
-      <a href="../reader/ishq-par-jor-nahi/ch144.html" class="btn">Episode 144</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch145.html" class="btn">Episode 145</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch146.html" class="btn">Episode 146</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch147.html" class="btn">Episode 147</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch148.html" class="btn">Episode 148</a> 
-      <a href="../reader/ishq-par-jor-nahi/ch149.html" class="btn">Episode 149</a>
-      <a href="../reader/ishq-par-jor-nahi/ch150.html" class="btn">Episode 150</a>
+    <!-- New Episode Finder -->
+    <div class="episode-finder">
+      <h2 style="text-align:center; margin-bottom:20px; color:var(--primary);">Episode Finder</h2>
+      
+      <input type="text" id="episodeSearch" class="search-bar" placeholder="Episode number search karo (e.g. 45)" onkeyup="filterEpisodes()">
+
+      <div class="pagination" id="pagination"></div>
+
+      <div class="episodes-grid" id="episodesGrid">
+        <!-- Episodes dynamically load honge -->
+      </div>
     </div>
 
     <div class="back">
@@ -359,7 +213,74 @@
     </div>
   </main>
 
-  <!-- Animations -->
+  <script>
+    const totalEpisodes = 150; // Total episodes
+    const episodesPerPage = 20;
+    let currentPage = 1;
+
+    function createPagination() {
+      const pagination = document.getElementById('pagination');
+      pagination.innerHTML = '';
+
+      const totalPages = Math.ceil(totalEpisodes / episodesPerPage);
+
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+        btn.textContent = `${(i-1)*episodesPerPage + 1} - ${Math.min(i*episodesPerPage, totalEpisodes)}`;
+        btn.onclick = () => {
+          currentPage = i;
+          renderEpisodes();
+          createPagination();
+        };
+        pagination.appendChild(btn);
+      }
+    }
+
+    function renderEpisodes() {
+      const grid = document.getElementById('episodesGrid');
+      grid.innerHTML = '';
+
+      const start = (currentPage - 1) * episodesPerPage + 1;
+      const end = Math.min(start + episodesPerPage - 1, totalEpisodes);
+
+      for (let i = start; i <= end; i++) {
+        const a = document.createElement('a');
+        a.href = `../reader/ishq-par-jor-nahi/ch${i}.html`;
+        a.className = 'btn';
+        a.textContent = `Episode ${i}`;
+        grid.appendChild(a);
+      }
+    }
+
+    function filterEpisodes() {
+      const search = document.getElementById('episodeSearch').value.trim();
+      const grid = document.getElementById('episodesGrid');
+      grid.innerHTML = '';
+
+      if (!search) {
+        renderEpisodes();
+        return;
+      }
+
+      const num = parseInt(search);
+      if (isNaN(num) || num < 1 || num > totalEpisodes) {
+        grid.innerHTML = '<p style="grid-column:1/-1; text-align:center; padding:40px; color:#aaa;">Koi episode nahi mila</p>';
+        return;
+      }
+
+      const a = document.createElement('a');
+      a.href = `../reader/ishq-par-jor-nahi/ch${num}.html`;
+      a.className = 'btn';
+      a.textContent = `Episode ${num} →`;
+      grid.appendChild(a);
+    }
+
+    // Initialize
+    createPagination();
+    renderEpisodes();
+  </script>
+
   <style>
     @keyframes float {
       0%, 100% { transform: translateY(0); }
