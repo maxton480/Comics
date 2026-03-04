@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Moh Moh Ke Dhaage  - Comic PUR</title>
+  <title>Moh Moh Ke Dhaage - Comic PUR</title>
   <style>
     :root {
       --primary: #00d4ff;
@@ -34,42 +34,12 @@
       height: 64px;
     }
 
-    .logo img {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      border: 3px solid var(--primary);
-      box-shadow: 0 0 20px var(--glow);
-      object-fit: cover;
-    }
+    .logo img { width: 52px; height: 52px; border-radius: 50%; border: 3px solid var(--primary); box-shadow: 0 0 20px var(--glow); object-fit: cover; }
+    .heading-img { max-width: 220px; height: auto; display: block; margin: 0 auto; }
+    .search-icon { width: 68px; height: 68px; cursor: pointer; animation: float 4.8s ease-in-out infinite; transition: all 0.4s; filter: drop-shadow(0 0 15px var(--glow)); }
+    .search-icon:hover { transform: scale(1.15); filter: drop-shadow(0 0 25px var(--primary)); animation-play-state: paused; }
 
-    .heading-img {
-      max-width: 220px;
-      height: auto;
-      display: block;
-      margin: 0 auto;
-    }
-
-    .search-icon {
-      width: 68px;
-      height: 68px;
-      cursor: pointer;
-      animation: float 4.8s ease-in-out infinite; /* sirf search pe floating */
-      transition: all 0.4s;
-      filter: drop-shadow(0 0 15px var(--glow));
-    }
-
-    .search-icon:hover {
-      transform: scale(1.15);
-      filter: drop-shadow(0 0 25px var(--primary));
-      animation-play-state: paused;
-    }
-
-    main {
-      padding: 20px 16px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
+    main { padding: 20px 16px; max-width: 900px; margin: 0 auto; }
 
     .cover {
       width: 100%;
@@ -91,30 +61,68 @@
       backdrop-filter: blur(8px);
     }
 
-    .episodes {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
+    /* New Episode Finder */
+    .episode-finder {
       margin-bottom: 40px;
+    }
+
+    .search-bar {
+      width: 100%;
+      padding: 16px 20px;
+      font-size: 1.1rem;
+      background: rgba(34, 34, 60, 0.8);
+      border: 2px solid rgba(0, 212, 255, 0.4);
+      border-radius: 50px;
+      color: white;
+      outline: none;
+      margin-bottom: 20px;
+    }
+
+    .pagination {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+
+    .page-btn {
+      padding: 8px 16px;
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 8px;
+      color: var(--primary);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .page-btn.active, .page-btn:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .episodes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
     }
 
     .btn {
       background: linear-gradient(45deg, var(--primary), var(--accent));
       color: white;
-      padding: 18px 24px;
+      padding: 14px 20px;
       border-radius: 12px;
       text-decoration: none;
       font-weight: bold;
-      font-size: 1.1rem;
-      display: block;
       text-align: center;
       transition: all 0.3s;
-      box-shadow: 0 6px 20px rgba(0, 212, 255, 0.2);
+      box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
     }
 
     .btn:hover {
       transform: translateY(-3px);
-      box-shadow: 0 12px 30px rgba(0, 212, 255, 0.4);
+      box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
     }
 
     .back {
@@ -126,12 +134,9 @@
       color: #aaa;
       text-decoration: none;
       font-size: 1.1rem;
-      transition: color 0.3s;
     }
 
-    .back a:hover {
-      color: var(--primary);
-    }
+    .back a:hover { color: var(--primary); }
 
     @keyframes float {
       0%, 100% { transform: translateY(0); }
@@ -139,20 +144,10 @@
     }
 
     @media (max-width: 768px) {
-      .episodes {
-        grid-template-columns: 1fr;
-      }
-      .heading-img {
-        max-width: 220px;
-      }
-      .search-icon {
-        width: 70px;
-        height: 70px;
-      }
-      .logo img {
-        width:  50px;
-        height:  50px;
-      }
+      .episodes-grid { grid-template-columns: repeat(2, 1fr); }
+      .heading-img { max-width: 180px; }
+      .search-icon { width: 58px; height: 58px; }
+      .logo img { width: 48px; height: 48px; }
     }
   </style>
 </head>
@@ -161,7 +156,7 @@
   <script>
   function getCookie(name) {
     let matches = document.cookie.match(new RegExp(
-      "(?:^|; )" + name.replace(/([\.$?*|{}\$\$\$\$\\\/\+^])/g, '\\$1') + "=([^;]*)"
+      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
     ));
     return matches ? decodeURIComponent(matches[1]) : "";
   }
@@ -180,7 +175,7 @@
   }
   </script>
 
-  <!-- HEADER – same as homepage -->
+  <!-- HEADER -->
   <header>
     <div class="logo">
       <img src="../assets/heading.png" alt="Comic PUR Logo" class="logo-img">
@@ -200,21 +195,92 @@
       <p>बेइंतहा मोहब्बत या बेशूमार दौलत, क्या चनेंगे आप? कनफ्यूजिया गए न? हमारी भोली भाली जान्हवी भी फंस चुकी है ठीक ऐसी ही एक उलझन में.. क्या होगा जब जान्हवी के प्यार की डोर उलझ जाए 2 लोगों के बीच, जहाँ एक सिरा है जान्हवी के डैशिंग खडस बॉस, बिजनस टाइकून करणवीर ओबेरॉय के हाँथ तो वहीं दसरा सिरा है छोटे जेबों में बडे सपने लिए स्ट्रगलिंग सिंगर अभिषेक के हाँथ। एक तरफ शौहरत, पैसा और ज़िंदगी के सभी ऐश-ओ-आराम तो द्रसरी तरफ प्यार, और ढेर सारा प्यारा। डस प्यारी सी कश्मकश में चखिए जान्हवी के खदे मीठे सफर को, और बनिए हिस्सा जान्हवी की इस जादूई दूनिया का।</p>
     </div>
 
-    <div class="episodes">
-      <a href="../reader/moh-moh-ke-dhaage/ch1.html" class="btn">Episode 1</a>
-      <a href="../reader/moh-moh-ke-dhaage/ch2.html" class="btn">Episode 2</a>
-      <a href="../reader/moh-moh-ke-dhaage/ch3.html" class="btn">Episode 3</a>
-      <a href="../reader/moh-moh-ke-dhaage/ch4.html" class="btn">Episode 4</a>
-      <a href="../reader/moh-moh-ke-dhaage/ch5.html" class="btn">Episode 5</a>
-      <a href="../reader/moh-moh-ke-dhaage/ch6.html" class="btn">Episode 6</a>
+    <!-- New Episode Finder -->
+    <div class="episode-finder">
+      <h2 style="text-align:center; margin-bottom:20px; color:var(--primary);">Episode Finder</h2>
+      
+      <input type="text" id="episodeSearch" class="search-bar" placeholder="Episode number search karo" onkeyup="filterEpisodes()">
+
+      <div class="pagination" id="pagination"></div>
+
+      <div class="episodes-grid" id="episodesGrid">
+        <!-- Episodes dynamically load honge -->
       </div>
+    </div>
 
     <div class="back">
       <a href="../index.html">← Back to Home</a>
     </div>
   </main>
 
-  <!-- Animations -->
+  <script>
+    const totalEpisodes = 6; // Total episodes
+    const episodesPerPage = 20;
+    let currentPage = 1;
+
+    function createPagination() {
+      const pagination = document.getElementById('pagination');
+      pagination.innerHTML = '';
+
+      const totalPages = Math.ceil(totalEpisodes / episodesPerPage);
+
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+        btn.textContent = `${(i-1)*episodesPerPage + 1} - ${Math.min(i*episodesPerPage, totalEpisodes)}`;
+        btn.onclick = () => {
+          currentPage = i;
+          renderEpisodes();
+          createPagination();
+        };
+        pagination.appendChild(btn);
+      }
+    }
+
+    function renderEpisodes() {
+      const grid = document.getElementById('episodesGrid');
+      grid.innerHTML = '';
+
+      const start = (currentPage - 1) * episodesPerPage + 1;
+      const end = Math.min(start + episodesPerPage - 1, totalEpisodes);
+
+      for (let i = start; i <= end; i++) {
+        const a = document.createElement('a');
+        a.href = `../reader/moh-moh-ke-dhaage/ch${i}.html`;
+        a.className = 'btn';
+        a.textContent = `Episode ${i}`;
+        grid.appendChild(a);
+      }
+    }
+
+    function filterEpisodes() {
+      const search = document.getElementById('episodeSearch').value.trim();
+      const grid = document.getElementById('episodesGrid');
+      grid.innerHTML = '';
+
+      if (!search) {
+        renderEpisodes();
+        return;
+      }
+
+      const num = parseInt(search);
+      if (isNaN(num) || num < 1 || num > totalEpisodes) {
+        grid.innerHTML = '<p style="grid-column:1/-1; text-align:center; padding:40px; color:#aaa;">Koi episode nahi mila</p>';
+        return;
+      }
+
+      const a = document.createElement('a');
+      a.href = `../reader/ishq-par-jor-nahi/ch${num}.html`;
+      a.className = 'btn';
+      a.textContent = `Episode ${num} →`;
+      grid.appendChild(a);
+    }
+
+    // Initialize
+    createPagination();
+    renderEpisodes();
+  </script>
+
   <style>
     @keyframes float {
       0%, 100% { transform: translateY(0); }
