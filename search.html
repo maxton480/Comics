@@ -1,212 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Search - Comic PUR</title>
-  <style>
-    :root {
-      --primary: #00d4ff;
-      --accent: #ff69b4;
-      --dark: #0a001f;
-      --glow: rgba(0, 212, 255, 0.7);
-    }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      background: linear-gradient(135deg, var(--dark), #1a003f);
-      color: white;
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Search - Comic PUR</title>
 
-    main {
-      padding: 60px 16px 40px;
-      max-width: 900px;
-      margin: 0 auto;
-      text-align: center;
-    }
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
 
-    .search-title {
-      font-size: 2.8rem;
-      margin-bottom: 40px;
-      text-shadow: 0 0 20px var(--glow);
-      animation: glowPulse 3s infinite alternate;
-    }
+<style>
+:root{
+--primary:#00d4ff;
+--dark:#0a001f;
+}
 
-    .search-container {
-      position: relative;
-      max-width: 600px;
-      margin: 0 auto 50px;
-    }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
 
-    .search-input {
-      width: 100%;
-      padding: 18px 24px;
-      font-size: 1.2rem;
-      background: rgba(34, 34, 60, 0.8);
-      border: 2px solid rgba(0, 212, 255, 0.4);
-      border-radius: 50px;
-      color: white;
-      outline: none;
-      transition: all 0.3s;
-      backdrop-filter: blur(8px);
-    }
+body{
+background:linear-gradient(135deg,#0a001f,#1a003f);
+color:white;
+font-family:'Segoe UI',system-ui,sans-serif;
+min-height:100vh;
+overflow-x:hidden;
+}
 
-    .search-input:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 25px rgba(0, 212, 255, 0.5);
-    }
+main{
+padding:60px 16px 40px;
+max-width:900px;
+margin:0 auto;
+text-align:center;
+}
 
-    .search-input::placeholder {
-      color: #aaa;
-    }
+.search-title{
+font-family:'Orbitron',sans-serif;
+font-size:3rem;
+margin-bottom:40px;
+color:#0a5cff;
+text-shadow:0 0 15px rgba(0,90,255,0.6);
+letter-spacing:2px;
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-      padding: 0;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+.search-container{
+position:relative;
+max-width:600px;
+margin:0 auto 50px;
+}
 
-    .card {
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-      transition: all 0.3s ease;
-      position: relative;
-      border: 1px solid rgba(0, 212, 255, 0.15);
-      aspect-ratio: 2 / 3;
-      background: transparent;
-    }
+.search-input{
+width:100%;
+padding:18px 24px;
+font-size:1.2rem;
+background:rgba(34,34,60,0.8);
+border:2px solid rgba(0,212,255,0.4);
+border-radius:50px;
+color:white;
+outline:none;
+transition:.3s;
+backdrop-filter:blur(8px);
+}
 
-    .card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 20px 50px rgba(0, 212, 255, 0.3);
-      border-color: var(--primary);
-    }
+.search-input:focus{
+border-color:var(--primary);
+box-shadow:0 0 25px rgba(0,212,255,0.5);
+}
 
-    .card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:20px;
+max-width:1200px;
+margin:0 auto;
+}
 
-    a {
-      text-decoration: none;
-      color: white;
-      display: block;
-      height: 100%;
-    }
+.card{
+border-radius:16px;
+overflow:hidden;
+box-shadow:0 8px 25px rgba(0,0,0,0.6);
+transition:.3s;
+position:relative;
+border:1px solid rgba(0,212,255,0.15);
+aspect-ratio:2/3;
+}
 
-    .no-results {
-      grid-column: 1 / -1;
-      text-align: center;
-      font-size: 1.4rem;
-      opacity: 0.7;
-      margin: 60px 0;
-    }
+.card:hover{
+transform:translateY(-10px);
+box-shadow:0 20px 50px rgba(0,212,255,0.3);
+border-color:var(--primary);
+}
 
-    @keyframes glowPulse {
-      from { text-shadow: 0 0 10px var(--glow); }
-      to { text-shadow: 0 0 30px var(--glow); }
-    }
+.card img{
+width:100%;
+height:100%;
+object-fit:cover;
+display:block;
+}
 
-    @media (min-width: 768px) {
-      .grid {
-        gap: 30px;
-      }
-      .search-title {
-        font-size: 3.5rem;
-      }
-    }
-  </style>
+a{
+text-decoration:none;
+color:white;
+display:block;
+height:100%;
+}
+
+.no-results{
+grid-column:1/-1;
+text-align:center;
+font-size:1.4rem;
+opacity:.7;
+margin:60px 0;
+}
+
+@media(min-width:768px){
+.grid{
+gap:30px;
+}
+
+.search-title{
+font-size:3.6rem;
+}
+}
+</style>
 </head>
+
 <body>
 
-  <script>
-  function getCookie(name) {
-    let matches = document.cookie.match(new RegExp(
-      "(?:^|; )" + name.replace(/([\.$?*|{}\$\$\$\$\\\/\+^])/g, '\\$1') + "=([^;]*)"
-    ));
-    return matches ? decodeURIComponent(matches[1]) : "";
-  }
+<main>
 
-  if (getCookie("site_access") !== "true") {
-    document.documentElement.innerHTML = `
-      <head><title>Access Blocked</title></head>
-      <body style="margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px;">
-        <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
-          ⚠️ Direct Access Blocked<br><br>
-          Shortener solve karke hi site open hogi.<br><br>
-          <a href="https://gplinks.co/BFmfakvr" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
-        </div>
-      </body>`;
-    throw new Error("Access blocked");
-  }
-  </script>
+<h1 class="search-title">Search Comic</h1>
 
-  <main>
-    <h1 class="search-title">Search Comic</h1>
+<div class="search-container">
+<input type="text"
+id="searchInput"
+class="search-input"
+placeholder="Comic ka naam daalo..."
+onkeyup="searchComics()">
+</div>
 
-    <div class="search-container">
-      <input type="text" id="searchInput" class="search-input" placeholder="Comic ka naam daalo..." onkeyup="searchComics()">
-    </div>
+<div class="grid" id="resultsGrid">
+<div class="no-results">Kuch search karo bhai... 😄</div>
+</div>
 
-    <div class="grid" id="resultsGrid">
-      <div class="no-results" id="noResults">Kuch search karo bhai... 😄</div>
-    </div>
-  </main>
+</main>
 
-  <script>
-    function searchComics() {
-      const input = document.getElementById('searchInput').value.toLowerCase().trim();
-      const grid = document.getElementById('resultsGrid');
+<script>
 
-      // Clear all previous results
-      grid.innerHTML = '';
+let comics=[];
 
-      // All comics – yahan apne saare daal dena (har object ke baad comma lagao, last wale ke alawa)
-      const comics = [
-        { name: "Ishq Par Jor Nahi", link: "pages/ishq-par-jor-nahi.html", cover: "https://i.ibb.co/RpV5MWv2/file-0000000071087207b8fdc85d969f22b3.png" },
-        { name: "Tute Dilon Ki Mohabbat", link: "pages/tute-dilon-ki-mohabbat.html", cover: "https://i.ibb.co/5x8pjp9w/file-000000001f94720789c7a2a43382e1e7.png" },
-        { name: "IIT Diaries", link: "pages/iit-diaries.html", cover: "https://i.ibb.co/B5yhXQkf/file-000000008a2c720796589f629980ccab.png" },
-        { name: "Dil Dhishkyaoon", link: "pages/dil-dishkiyaoon.html", cover: "https://i.ibb.co/spzf05r7/file-0000000053c07207a7b2385eb2603ef2.png" },
-        { name: "I Moogie You", link: "pages/i-moogie-you.html", cover: "https://i.ibb.co/4nN5qpNm/file-0000000049c87207b0b1e2b84d663b23.png" },
-        { name: "Bepanah Ishq", link: "pages/bepanah-ishq.html", cover: "https://i.ibb.co/Q7HN7z02/file-00000000068071fa864f9ef6edef8793.png" },
-        { name: "Mera Saya", link: "pages/mera-saya.html", cover: "https://i.ibb.co/fVK3G04c/file-00000000ba2c7208a669f0210cdabb70.png" }
-        { name: "Anguthi Ka Bhoot", link: "pages/anguthi-ka-bhoot.html", cover: "https://i.ibb.co/HDRJgPXj/file-00000000edf07209be446a70ab82ac9c.png" }
-        { name: "Moh Moh Ke Dhaage", link: "pages/moh-moh-ke-dhaage.html", cover: "https://i.ibb.co/XqX7fkQ/file-000000003c0c71fdb8d5d564439c4e4d.png" }
-        // Aur naye comics yahan add kar dena (comma add karna mat bhoolna!)
-      ];
+fetch("comic.json")
+.then(res=>res.json())
+.then(data=>{
+comics=data;
+});
 
-      if (!input) {
-        grid.innerHTML = '<div class="no-results" id="noResults">Kuch search karo bhai... 😄</div>';
-        return;
-      }
+function searchComics(){
 
-      const filtered = comics.filter(comic => comic.name.toLowerCase().includes(input));
+const input=document.getElementById("searchInput").value.toLowerCase().trim();
+const grid=document.getElementById("resultsGrid");
 
-      if (filtered.length === 0) {
-        grid.innerHTML = '<div class="no-results" id="noResults">Koi comic nahi mila... 😔</div>';
-        return;
-      }
+grid.innerHTML="";
 
-      filtered.forEach(comic => {
-        const card = document.createElement('a');
-        card.href = comic.link;
-        card.innerHTML = `
-          <div class="card">
-            <img src="${comic.cover}" alt="${comic.name}" loading="lazy">
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-  </script>
+if(!input){
+grid.innerHTML='<div class="no-results">Kuch search karo bhai... 😄</div>';
+return;
+}
+
+const filtered=comics.filter(comic=>
+comic.title.toLowerCase().includes(input)
+);
+
+if(filtered.length===0){
+grid.innerHTML='<div class="no-results">Koi comic nahi mila... 😔</div>';
+return;
+}
+
+filtered.forEach(comic=>{
+
+const card=document.createElement("a");
+card.href=comic.page;
+
+card.innerHTML=`
+<div class="card">
+<img src="${comic.cover}" alt="${comic.title}" loading="lazy">
+</div>
+`;
+
+grid.appendChild(card);
+
+});
+
+}
+
+</script>
 
 </body>
 </html>
