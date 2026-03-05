@@ -1,0 +1,74 @@
+[
+  {
+    "title": "Ishq Par Jor Nahi",
+    "episodes": 150,
+    "cover": "https://i.ibb.co/RpV5MWv2/file-0000000071087207b8fdc85d969f22b3.png",
+    "page": "pages/ishq-par-jor-nahi.html",
+    "badge": "pg",
+    "date": "2026-03-01"
+  },
+  {
+    "title": "Bepanah Ishq",
+    "episodes": 25,
+    "cover": "https://i.ibb.co/Q7HN7z02/file-00000000068071fa864f9ef6edef8793.png",
+    "page": "pages/bepanah-ishq.html",
+    "badge": "pg",
+    "date": "2026-03-01"
+  },
+  {
+    "title": "Anguthi Ka Bhoot",
+    "episodes": 10,
+    "cover": "https://i.ibb.co/HDRJgPXj/file-00000000edf07209be446a70ab82ac9c.png",
+    "page": "pages/anguthi-ka-bhoot.html",
+    "badge": "pg",
+    "date": "2026-03-01"
+  },
+  {
+    "title": "I Moogie You",
+    "episodes": 6,
+    "cover": "https://i.ibb.co/4nN5qpNm/file-0000000049c87207b0b1e2b84d663b23.png",
+    "page": "pages/i-moogie-you.html",
+    "badge": "pg",
+    "date": "2026-03-01"
+  },
+  {
+    "title": "Moh Moh Ke Dhaage",
+    "episodes": 13,
+    "cover": "https://i.ibb.co/XqX7fkQ/file-000000003c0c71fdb8d5d564439c4e4d.png",
+    "page": "pages/moh-moh-ke-dhaage.html",
+    "badge": "pg",
+    "date": "2026-03-01"
+  },
+  {
+    "title": "Mera Saya",
+    "episodes": 11,
+    "cover": "https://i.ibb.co/fVK3G04c/file-00000000ba2c7208a669f0210cdabb70.png",
+    "page": "pages/mera-saya.html",
+    "badge": "pg",
+    "date": "2026-03-01"
+  },
+  {
+    "title": "Dil Dishkiyaoon",
+    "episodes": 10,
+    "cover": "https://i.ibb.co/spzf05r7/file-0000000053c07207a7b2385eb2603ef2.png",
+    "page": "pages/dil-dishkiyaoon.html",
+    "badge": "pg",
+    "date": "2026-03-01"
+  },
+  {
+    "title": "Tute Dilon Ki Mohabbat",
+    "episodes": 8,
+    "cover": "https://i.ibb.co/5x8pjp9w/file-000000001f94720789c7a2a43382e1e7.png",
+    "page": "pages/tute-dilon-ki-mohabbat.html",
+    "badge": "pg",
+    "date": "2026-03-01"
+  },
+  {
+    "title": "IIT Diaries",
+    "episodes": 19,
+    "cover": "https://i.ibb.co/B5yhXQkf/file-000000008a2c720796589f629980ccab.png",
+    "page": "pages/iit-diaries.html",
+    "badge": "pg",
+    "date": "2026-03-01"
+  }
+]
