@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -10,29 +12,33 @@
 
 body{
 margin:0;
-font-family:Arial, sans-serif;
 background:#0f172a;
+font-family:Arial, sans-serif;
 color:white;
 }
 
 header{
 text-align:center;
-padding:20px;
+padding:30px 10px;
 }
 
 h1{
 color:#1e40af;
-font-size:28px;
-margin-bottom:15px;
+font-size:32px;
+letter-spacing:1px;
+font-weight:800;
+font-family:Verdana, sans-serif;
+margin-bottom:20px;
 }
 
 #searchInput{
-width:80%;
-max-width:400px;
-padding:10px;
+width:85%;
+max-width:420px;
+padding:12px;
 border-radius:8px;
 border:none;
 font-size:16px;
+outline:none;
 }
 
 .comic-grid{
@@ -47,6 +53,11 @@ position:relative;
 border-radius:10px;
 overflow:hidden;
 background:#1e293b;
+transition:0.2s;
+}
+
+.comic-card:hover{
+transform:scale(1.05);
 }
 
 .comic-card img{
@@ -60,8 +71,8 @@ display:block;
 position:absolute;
 bottom:0;
 width:100%;
-background:linear-gradient(transparent, rgba(0,0,0,0.9));
 padding:10px;
+background:linear-gradient(transparent, rgba(0,0,0,0.9));
 box-sizing:border-box;
 }
 
@@ -93,7 +104,14 @@ background:#16a34a;
 background:#dc2626;
 }
 
+.message{
+text-align:center;
+margin-top:40px;
+opacity:0.6;
+}
+
 </style>
+
 </head>
 
 <body>
@@ -106,8 +124,11 @@ background:#dc2626;
 
 </header>
 
-<div class="comic-grid" id="comicGrid"></div>
+<div id="message" class="message">
+Start typing to search comics
+</div>
 
+<div class="comic-grid" id="comicGrid"></div>
 
 <script>
 
@@ -119,16 +140,24 @@ fetch("comic.json")
 
 comics = data;
 
-displayComics(comics);
-
 });
 
 
 function displayComics(list){
 
 const grid = document.getElementById("comicGrid");
+const message = document.getElementById("message");
 
 grid.innerHTML = "";
+
+if(list.length === 0){
+
+message.innerText = "No comics found";
+return;
+
+}
+
+message.style.display = "none";
 
 list.forEach(comic => {
 
@@ -168,7 +197,20 @@ ${comic.episodes} Episodes
 document.getElementById("searchInput")
 .addEventListener("input", function(){
 
-const value = this.value.toLowerCase();
+const value = this.value.toLowerCase().trim();
+
+const grid = document.getElementById("comicGrid");
+const message = document.getElementById("message");
+
+if(value === ""){
+
+grid.innerHTML = "";
+message.style.display = "block";
+message.innerText = "Start typing to search comics";
+
+return;
+
+}
 
 const filtered = comics.filter(c =>
 c.title.toLowerCase().includes(value)
@@ -181,4 +223,5 @@ displayComics(filtered);
 </script>
 
 </body>
+
 </html>
