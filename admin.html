@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Comic PUR Admin Panel</title>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+  <style>
+    :root {
+      --primary: #00d4ff;
+      --dark: #0f001f;
+      --dark2: #1a003f;
+      --light: #e0e0ff;
+      --danger: #f44336;
+      --success: #4caf50;
+    }
+    body {
+      margin: 0;
+      background: var(--dark);
+      color: var(--light);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container { max-width: 900px; margin: 0 auto; }
+    h1 { text-align: center; color: var(--primary); margin-bottom: 30px; }
+    .form-card, .controls { background: var(--dark2); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(0,212,255,0.2); }
+    input, button {
+      padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid rgba(0,212,255,0.3);
+      background: var(--dark); color: white; font-size: 16px;
+    }
+    input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0,212,255,0.2); }
+    button { cursor: pointer; border: none; font-weight: bold; }
+    .add-btn { background: var(--primary); color: black; }
+    .save-btn { background: var(--success); color: white; width: 100%; font-size: 18px; padding: 15px; }
+    .del-btn { background: var(--danger); color: white; }
+    #sortable { list-style: none; padding: 0; }
+    .comic-item {
+      background: rgba(26,0,63,0.6); margin: 10px 0; padding: 15px; border-radius: 10px;
+      border: 1px solid rgba(0,212,255,0.15); cursor: move; display: flex; align-items: center; gap: 15px;
+      transition: all 0.2s;
+    }
+    .comic-item:hover { background: rgba(26,0,63,0.9); border-color: var(--primary); }
+    .comic-item img { width: 70px; height: 105px; object-fit: cover; border-radius: 6px; }
+    .info { flex: 1; }
+    .status { text-align: center; margin: 15px 0; font-weight: bold; }
+    .loading { color: var(--primary); }
+    .error { color: var(--danger); }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Comic PUR Admin Panel</h1>
+
+    <div class="form-card">
+      <form id="addForm">
+        <input type="text" id="title" placeholder="Comic Title" required />
+        <input type="url" id="image" placeholder="Image URL (e.g. ibb.co)" required />
+        <input type="text" id="page" placeholder="Page Path (pages/comic-name.html)" required />
+        <button type="submit" class="add-btn" style="width:100%;">+ Add New Comic (Top pe aayega)</button>
+      </form>
+    </div>
+
+    <div class="controls">
+      <button id="saveBtn" class="save-btn">💾 SAVE CHANGES TO GITHUB (Live Update)</button>
+      <p id="status" class="status"></p>
+    </div>
+
+    <ul id="sortable"></ul>
+  </div>
+
+  <script>
+    // === CONFIG === Change these
+    const OWNER = 'YOUR_USERNAME_HERE';          // e.g. maxton007
+    const REPO = 'YOUR_REPO_NAME_HERE';           // e.g. comic-pur
+    const BRANCH = 'main';                        // usually main or master
+    const FILE_PATH = 'comics.json';              // ya data/comics.json
+
+    let comics = [];
+    let token = '';
+    const statusEl = document.getElementById('status');
+    const sortableEl = document.getElementById('sortable');
+
+    // Token prompt (secure – har baar maangega, code mein save nahi)
+    function getToken() {
+      if (!token) {
+        token = prompt('GitHub PAT (Personal Access Token) daalo (repo scope wala):');
+        if (!token) {
+          alert('Token bina kaam nahi chalega!');
+          return false;
+        }
+      }
+      return true;
+    }
+
+    async function loadComics() {
+      if (!getToken()) return;
+      statusEl.textContent = 'Loading comics.json...';
+      statusEl.className = 'status loading';
+
+      try {
+        const res = await fetch(`https://api.github.com/repos/\( {OWNER}/ \){REPO}/contents/\( {FILE_PATH}?ref= \){BRANCH}`, {
+          headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' }
+        });
+        if (!res.ok) throw new Error(await res.text());
+        const data = await res.json();
+        comics = JSON.parse(atob(data.content));
+        renderItems();
+        statusEl.textContent = 'Loaded successfully!';
+        statusEl.className = 'status';
+      } catch (err) {
+        statusEl.textContent = 'Error loading: ' + err.message;
+        statusEl.className = 'status error';
+      }
+    }
+
+    function renderItems() {
+      sortableEl.innerHTML = '';
+      comics.forEach((comic, i) => {
+        const li = document.createElement('li');
+        li.className = 'comic-item';
+        li.draggable = true;
+        li.dataset.index = i;
+        li.innerHTML = `
+          <img src="\( {comic.image}" alt=" \){comic.title}" />
+          <div class="info">
+            <strong>${comic.title}</strong><br />
+            <small>${comic.page}</small>
+          </div>
+          <button class="del-btn" onclick="deleteComic(${i})">Delete</button>
+        `;
+        sortableEl.appendChild(li);
+      });
+    }
+
+    function deleteComic(index) {
+      if (!confirm('Is comic ko delete karna hai?')) return;
+      comics.splice(index, 1);
+      renderItems();
+    }
+
+    document.getElementById('addForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const newComic = {
+        title: document.getElementById('title').value.trim(),
+        image: document.getElementById('image').value.trim(),
+        page: document.getElementById('page').value.trim()
+      };
+      if (!newComic.title || !newComic.image || !newComic.page) return alert('Sab fields bharo!');
+      comics.unshift(newComic); // Top pe add
+      renderItems();
+      document.getElementById('addForm').reset();
+    });
+
+    // Drag & Drop
+    Sortable.create(sortableEl, {
+      animation: 200,
+      onEnd: evt => {
+        const moved = comics.splice(evt.oldIndex, 1)[0];
+        comics.splice(evt.newIndex, 0, moved);
+        renderItems();
+      }
+    });
+
+    // Save to GitHub
+    document.getElementById('saveBtn').addEventListener('click', async () => {
+      if (!getToken()) return;
+      if (!confirm('GitHub pe save karna hai? Changes live ho jaayenge!')) return;
+
+      statusEl.textContent = 'Saving...';
+      statusEl.className = 'status loading';
+
+      try {
+        // Get current SHA
+        const getRes = await fetch(`https://api.github.com/repos/\( {OWNER}/ \){REPO}/contents/\( {FILE_PATH}?ref= \){BRANCH}`, {
+          headers: { Authorization: `token ${token}` }
+        });
+        const file = await getRes.json();
+        const sha = file.sha;
+
+        // Update
+        const content = btoa(JSON.stringify(comics, null, 2));
+        const updateRes = await fetch(`https://api.github.com/repos/\( {OWNER}/ \){REPO}/contents/${FILE_PATH}`, {
+          method: 'PUT',
+          headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' },
+          body: JSON.stringify({
+            message: `Admin update: ${new Date().toISOString()}`,
+            content: content,
+            sha: sha,
+            branch: BRANCH
+          })
+        });
+        if (!updateRes.ok) throw new Error(await updateRes.text());
+
+        statusEl.textContent = 'Saved! 10-60 sec mein site update ho jaayegi.';
+        statusEl.className = 'status';
+      } catch (err) {
+        statusEl.textContent = 'Save failed: ' + err.message;
+        statusEl.className = 'status error';
+      }
+    });
+
+    // Start
+    loadComics();
+  </script>
+</body>
+</html>
