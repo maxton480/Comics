@@ -107,6 +107,28 @@ background:#2b0066;
 
 </style>
 
+<script>
+function getCookie(name) {
+  let matches = document.cookie.match(new RegExp(
+    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+  ));
+  return matches ? decodeURIComponent(matches[1]) : "";
+}
+
+if (getCookie("site_access") !== "true") {
+  document.documentElement.innerHTML = `
+    <head><title>Access Blocked</title></head>
+    <body style="margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px;">
+      <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
+        ⚠️ Direct Access Blocked<br><br>
+        Shortener solve karke hi site open hogi.<br><br>
+        <a href="https://gplinks.co/BFmfakvr" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
+      </div>
+    </body>`;
+  throw new Error("Access blocked");
+}
+</script>
+
 </head>
 
 <body>
