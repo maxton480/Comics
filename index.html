@@ -1,19 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Comic PUR</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
 
-*{margin:0;padding:0;box-sizing:border-box;}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
 
 body{
 background:#0f001f;
-color:#e0e0ff;
-font-family:'Segoe UI',system-ui,sans-serif;
+color:white;
+font-family:Poppins;
 }
+
 
 /* HEADER */
 
@@ -24,26 +34,23 @@ align-items:center;
 justify-content:space-between;
 background:linear-gradient(to right,#0a001f,#1a003f);
 border-bottom:1px solid rgba(0,212,255,0.25);
-height:64px;
 }
 
 .logo img{
 width:52px;
 height:52px;
 border-radius:50%;
-border:3px solid #00d4ff;
-box-shadow:0 0 20px rgba(0,212,255,0.6);
 }
 
 .heading-img{
-max-width:220px;
-margin:auto;
+max-width:200px;
 }
 
 .search-icon{
-width:68px;
+width:60px;
 cursor:pointer;
 }
+
 
 /* SLIDER */
 
@@ -54,26 +61,54 @@ position:relative;
 }
 
 .slide{
-position:relative;
 display:none;
+position:relative;
 }
 
 .slide img{
 width:100%;
-height:230px;
+height:220px;
 object-fit:cover;
 }
 
+
+/* TITLE */
+
 .slide-title{
 position:absolute;
-top:16px;
-left:16px;
-font-size:28px;
-font-weight:900;
-background:rgba(0,0,0,0.6);
-padding:6px 12px;
-border-radius:8px;
+top:20px;
+left:20px;
+
+font-size:36px;
+font-family:'Bebas Neue';
+letter-spacing:2px;
+
+text-shadow:0 4px 20px rgba(0,0,0,0.8);
 }
+
+
+/* BADGE */
+
+.badge{
+position:absolute;
+top:20px;
+right:20px;
+
+padding:4px 10px;
+border-radius:6px;
+
+font-size:12px;
+font-weight:bold;
+}
+
+.pg{
+background:#00c853;
+}
+
+.adult{
+background:#ff1744;
+}
+
 
 /* GRID */
 
@@ -82,16 +117,13 @@ display:grid;
 grid-template-columns:repeat(2,1fr);
 gap:16px;
 padding:16px;
-max-width:1200px;
-margin:auto;
 }
 
 .card{
-border-radius:16px;
+border-radius:14px;
 overflow:hidden;
 position:relative;
 aspect-ratio:2/3;
-box-shadow:0 8px 25px rgba(0,0,0,0.6);
 }
 
 .card img{
@@ -105,6 +137,7 @@ position:absolute;
 bottom:0;
 width:100%;
 padding:10px;
+
 background:linear-gradient(transparent,rgba(0,0,0,0.9));
 }
 
@@ -123,31 +156,19 @@ font-size:11px;
 opacity:.8;
 }
 
-/* BADGE */
-
-.badge{
-position:absolute;
-top:6px;
-right:6px;
-font-size:10px;
-padding:3px 6px;
-border-radius:4px;
-font-weight:bold;
-color:white;
-}
-
-.pg{background:#00c853;}
-.adult{background:#ff1744;}
-
 a{
 text-decoration:none;
 color:white;
 }
 
 </style>
+
 </head>
 
+
+
 <body>
+
 
 <header>
 
@@ -166,12 +187,17 @@ color:white;
 </header>
 
 
+
 <!-- SLIDER -->
+
 <div class="slider" id="slider"></div>
 
 
+
 <!-- GRID -->
+
 <div class="grid" id="comicGrid"></div>
+
 
 
 <script>
@@ -180,23 +206,31 @@ fetch("comic.json")
 .then(res=>res.json())
 .then(data=>{
 
-const comics=data.comics;
+const comics=data.comics
+
 
 /* DATE SORT */
 
-comics.sort((a,b)=> new Date(b.date)-new Date(a.date));
+comics.sort((a,b)=> new Date(b.date)-new Date(a.date))
+
 
 /* SLIDER */
 
-const slider=document.getElementById("slider");
+const slider=document.getElementById("slider")
 
 comics.forEach(c=>{
 
 if(c.slider.enabled){
 
+let badgeClass="pg"
+
+if(c.badge==="18+" || c.badge==="AD-18"){
+badgeClass="adult"
+}
+
 slider.innerHTML+=`
 
-<a href="pages/${c.slug}.html">
+<a href="${c.page}">
 <div class="slide">
 
 <img src="${c.slider.image}">
@@ -205,55 +239,61 @@ slider.innerHTML+=`
 ${c.title}
 </div>
 
+<span class="badge ${badgeClass}">
+${c.badge}
+</span>
+
 </div>
 </a>
 
-`;
+`
 
 }
 
-});
+})
+
 
 
 /* AUTO SLIDE */
 
-let slides=document.querySelectorAll(".slide");
-let i=0;
+let slides=document.querySelectorAll(".slide")
+let i=0
 
 function showSlide(){
 
-slides.forEach(s=>s.style.display="none");
+slides.forEach(s=>s.style.display="none")
 
-i++;
+i++
 
-if(i>slides.length){i=1;}
+if(i>slides.length){i=1}
 
-slides[i-1].style.display="block";
+slides[i-1].style.display="block"
 
-setTimeout(showSlide,3000);
+setTimeout(showSlide,3000)
 
 }
 
 if(slides.length>0){
-showSlide();
+showSlide()
 }
+
 
 
 /* GRID */
 
-const grid=document.getElementById("comicGrid");
+const grid=document.getElementById("comicGrid")
 
 comics.forEach(comic=>{
 
-let badgeClass="pg";
+let badgeClass="pg"
 
-if(comic.badge==="18+"){
-badgeClass="adult";
+if(comic.badge==="18+" || comic.badge==="AD-18"){
+badgeClass="adult"
 }
 
-const card=`
+grid.innerHTML+=`
 
-<a href="pages/${comic.slug}.html">
+<a href="${comic.page}">
 <div class="card">
 
 <span class="badge ${badgeClass}">
@@ -281,15 +321,15 @@ ${comic.genre[0]}
 </div>
 </a>
 
-`;
+`
 
-grid.innerHTML+=card;
+})
 
-});
-
-});
+})
 
 </script>
+
+
 
 </body>
 </html>
