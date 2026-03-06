@@ -7,191 +7,108 @@
 
 <title>Search - Comic PUR</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Orbitron:wght@600&display=swap" rel="stylesheet">
-
 <style>
 
+*{margin:0;padding:0;box-sizing:border-box;}
+
 body{
-margin:0;
-background:#0b1d3a;
-font-family:'Poppins',sans-serif;
-color:white;
+background:#0f001f;
+color:#e0e0ff;
+font-family:'Segoe UI',system-ui,sans-serif;
 }
 
-/* HEADER */
+/* SEARCH HEADER */
 
-header{
+.search-header{
 text-align:center;
-padding:25px 20px 15px;
+padding:20px 16px;
 position:sticky;
 top:0;
-background:#0b1d3a;
+background:#0f001f;
 z-index:10;
 }
 
 .search-title{
-
-font-family:'Orbitron',sans-serif;
-font-size:32px;
-color:#0a3cff;
-
-text-shadow:
-0 0 10px rgba(0,60,255,0.6),
-0 0 25px rgba(0,60,255,0.4);
-
-letter-spacing:2px;
-margin-bottom:15px;
-
-}
-
-.search-box{
-display:flex;
-justify-content:center;
+font-size:24px;
+font-weight:800;
+margin-bottom:10px;
 }
 
 #searchInput{
-
 width:90%;
-max-width:450px;
-
-padding:16px 20px;
-
+max-width:420px;
+padding:14px 18px;
 border-radius:40px;
-border:2px solid #1e40af;
-
-background:#132a52;
-
+border:2px solid #00d4ff;
+background:#160033;
 color:white;
-
-font-size:16px;
-
+font-size:15px;
 outline:none;
-
-transition:0.25s;
-
-box-shadow:0 0 15px rgba(0,0,0,0.4);
-
 }
 
-#searchInput:focus{
+/* GRID SAME AS INDEX */
 
-border-color:#2563eb;
-
-box-shadow:0 0 20px rgba(37,99,235,0.6);
-
-}
-
-#searchInput::placeholder{
-color:#94a3b8;
-}
-
-/* GRID */
-
-.comic-grid{
-
+.grid{
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
-
-gap:22px;
-
-padding:20px;
-max-width:1100px;
+grid-template-columns:repeat(2,1fr);
+gap:16px;
+padding:16px;
+max-width:1200px;
 margin:auto;
-
 }
 
 /* CARD */
 
-.comic-card{
-
-position:relative;
-
-border-radius:14px;
+.card{
+border-radius:16px;
 overflow:hidden;
-
-background:#142850;
-
-transition:0.3s;
-
-box-shadow:0 6px 25px rgba(0,0,0,0.6);
-
+position:relative;
+aspect-ratio:2/3;
+box-shadow:0 8px 25px rgba(0,0,0,0.6);
 }
 
-.comic-card:hover{
-transform:translateY(-6px) scale(1.04);
-}
-
-.comic-card img{
-
+.card img{
 width:100%;
-height:auto;   /* ORIGINAL SIZE */
-
-display:block;
-
+height:100%;
+object-fit:cover;
 }
 
-.comic-info{
-
+.overlay{
 position:absolute;
-
 bottom:0;
-
 width:100%;
-
-padding:12px;
-
+padding:10px;
 background:linear-gradient(transparent,rgba(0,0,0,0.9));
-
 }
 
-.comic-title{
-
-font-size:15px;
-font-weight:600;
-
+.title{
+font-size:14px;
+font-weight:700;
 }
 
 .episodes{
-
 font-size:12px;
-opacity:0.8;
-
+opacity:.9;
 }
 
 .badge{
-
 position:absolute;
-
-top:8px;
-right:8px;
-
-padding:4px 7px;
-
-font-size:11px;
-
-border-radius:6px;
-
-font-weight:700;
-
+top:6px;
+right:6px;
+font-size:10px;
+padding:3px 6px;
+border-radius:4px;
+font-weight:bold;
+color:white;
 }
 
-.pg{
-background:#16a34a;
-}
-
-.adult{
-background:#dc2626;
-}
+.pg{background:#00c853;}
+.adult{background:#ff1744;}
 
 .message{
-
 text-align:center;
-margin-top:40px;
-
-opacity:0.6;
-
-font-size:15px;
-
+margin-top:30px;
+opacity:.6;
 }
 
 a{
@@ -200,28 +117,28 @@ color:white;
 }
 
 </style>
-
 </head>
 
 <body>
 
-<header>
+
+<div class="search-header">
 
 <div class="search-title">
 Search Comic
 </div>
 
-<div class="search-box">
 <input type="text" id="searchInput" placeholder="Search comics...">
+
 </div>
 
-</header>
 
 <div id="message" class="message">
 Start typing to search comics
 </div>
 
-<div id="comicGrid" class="comic-grid"></div>
+<div class="grid" id="comicGrid"></div>
+
 
 <script>
 
@@ -232,6 +149,7 @@ fetch("comic.json")
 .then(data=>{
 comics=data;
 });
+
 
 function displayComics(list){
 
@@ -253,45 +171,36 @@ message.style.display="none";
 list.forEach(comic=>{
 
 const badgeClass=comic.badge==="18+"?"adult":"pg";
-const badgeText=comic.badge==="PG"?"PG-13":comic.badge;
 
-grid.innerHTML+=`
+const card=`
 
-<a href="${comic.link}">
+<a href="${comic.page}">
+<div class="card">
 
-<div class="comic-card">
+<span class="badge ${badgeClass}">
+${comic.badge==="pg"?"PG-13":"18+"}
+</span>
 
-<img src="${comic.cover}" loading="lazy">
+<img src="${comic.cover}">
 
-<div class="badge ${badgeClass}">
-${badgeText}
-</div>
-
-<div class="comic-info">
-
-<div class="comic-title">
-${comic.title}
-</div>
-
-<div class="episodes">
-${comic.episodes} Episodes
+<div class="overlay">
+<div class="title">${comic.title}</div>
+<div class="episodes">Episodes: ${comic.episodes}</div>
 </div>
 
 </div>
-
-</div>
-
 </a>
 
 `;
+
+grid.innerHTML+=card;
 
 });
 
 }
 
-document
-.getElementById("searchInput")
-.addEventListener("input",function(){
+
+document.getElementById("searchInput").addEventListener("input",function(){
 
 const value=this.value.toLowerCase().trim();
 
