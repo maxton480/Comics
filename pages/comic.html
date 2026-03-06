@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Comic Info</title>
+
+<style>
+
+body{
+margin:0;
+background:#0f001f;
+color:#e0e0ff;
+font-family:system-ui;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+padding:20px;
+}
+
+/* TOP SECTION */
+
+.top{
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+}
+
+.cover{
+width:200px;
+border-radius:10px;
+overflow:hidden;
+}
+
+.cover img{
+width:100%;
+display:block;
+}
+
+.info{
+flex:1;
+}
+
+.title{
+font-size:26px;
+font-weight:800;
+margin-bottom:8px;
+}
+
+.badge{
+display:inline-block;
+padding:4px 8px;
+font-size:12px;
+border-radius:4px;
+margin-bottom:10px;
+}
+
+.genre{
+font-size:14px;
+opacity:.8;
+margin-bottom:8px;
+}
+
+.episodes{
+font-size:14px;
+margin-bottom:8px;
+}
+
+.summary{
+font-size:14px;
+line-height:1.6;
+opacity:.9;
+margin-top:10px;
+}
+
+/* EPISODES */
+
+.chapter-title{
+font-size:20px;
+margin-top:30px;
+margin-bottom:10px;
+font-weight:700;
+}
+
+.chapter-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+}
+
+.chapter{
+background:#1a0033;
+padding:10px;
+text-align:center;
+border-radius:6px;
+text-decoration:none;
+color:white;
+font-size:14px;
+}
+
+.chapter:hover{
+background:#2b0066;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="top">
+
+<div class="cover">
+<img id="cover">
+</div>
+
+<div class="info">
+
+<div class="title" id="title"></div>
+
+<div class="badge" id="badge"></div>
+
+<div class="genre" id="genre"></div>
+
+<div class="episodes" id="episodes"></div>
+
+<div class="summary" id="summary"></div>
+
+</div>
+
+</div>
+
+
+<div class="chapter-title">
+Episodes
+</div>
+
+<div class="chapter-grid" id="chapterGrid"></div>
+
+</div>
+
+<script>
+
+const slug=new URLSearchParams(location.search).get("slug");
+
+fetch("../comic.json")
+.then(res=>res.json())
+.then(data=>{
+
+const comic=data.comics.find(c=>c.slug===slug);
+
+if(!comic)return;
+
+document.title=comic.title;
+
+document.getElementById("title").innerText=comic.title;
+
+document.getElementById("cover").src=comic.cover;
+
+document.getElementById("badge").innerText=comic.badge;
+
+document.getElementById("genre").innerText="Genre: "+comic.genre.join(", ");
+
+document.getElementById("episodes").innerText="Total Episodes: "+comic.episodes;
+
+document.getElementById("summary").innerText=comic.summary;
+
+const grid=document.getElementById("chapterGrid");
+
+for(let i=1;i<=comic.episodes;i++){
+
+grid.innerHTML+=`
+
+<a class="chapter" href="../${comic.reader}ch${i}.html">
+
+Episode ${i}
+
+</a>
+
+`;
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
