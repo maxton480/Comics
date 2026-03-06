@@ -170,15 +170,20 @@ message.style.display="none";
 
 list.forEach(comic=>{
 
-const badgeClass=comic.badge==="18+"?"adult":"pg";
+let badgeText="PG-13";
+let badgeClass="pg";
+
+if(comic.badge==="adult"){
+badgeText="AD-18+";
+badgeClass="adult";
+}
 
 const card=`
-const card = `
 <a href="${comic.page}">
 <div class="card">
 
-<span class="badge ${comic.badge}">
-${comic.badge === "pg" ? "PG-13" : "AD-18+"}
+<span class="badge ${badgeClass}">
+${badgeText}
 </span>
 
 <img src="${comic.cover}">
