@@ -18,9 +18,7 @@
 
       "date": "2026-03-01",
 
-      "summary": "A romantic story full of emotions where two people slowly fall in love despite their differences.",
-
-      "reader": "reader/ishq-par-jor-nahi/"
+      "page": "pages/ishq-par-jor-nahi.html"
     },
 
     {
@@ -40,9 +38,7 @@
 
       "date": "2026-03-01",
 
-      "summary": "A passionate love story filled with heartbreak, destiny and intense emotions.",
-
-      "reader": "reader/bepanah-ishq/"
+      "page": "pages/bepanah-ishq.html"
     },
 
     {
@@ -62,9 +58,7 @@
 
       "date": "2026-03-01",
 
-      "summary": "A funny supernatural story where a mysterious ring brings unexpected chaos into someone's life.",
-
-      "reader": "reader/anguthi-ka-bhoot/"
+      "page": "pages/anguthi-ka-bhoot.html"
     },
 
     {
@@ -84,9 +78,7 @@
 
       "date": "2026-03-01",
 
-      "summary": "A lighthearted romantic comedy where unexpected love grows between two quirky people.",
-
-      "reader": "reader/i-moogie-you/"
+      "page": "pages/i-moogie-you.html"
     },
 
     {
@@ -106,9 +98,7 @@
 
       "date": "2026-03-01",
 
-      "summary": "A heartfelt love story where emotional bonds slowly grow stronger with time.",
-
-      "reader": "reader/moh-moh-ke-dhaage/"
+      "page": "pages/moh-moh-ke-dhaage.html"
     },
 
     {
@@ -128,9 +118,7 @@
 
       "date": "2026-03-01",
 
-      "summary": "A mysterious story where a strange shadow begins to affect someone's life in unexpected ways.",
-
-      "reader": "reader/mera-saya/"
+      "page": "pages/mera-saya.html"
     },
 
     {
@@ -150,9 +138,7 @@
 
       "date": "2026-03-01",
 
-      "summary": "A chaotic love story filled with misunderstandings, humor and heartfelt moments.",
-
-      "reader": "reader/dil-dishkiyaoon/"
+      "page": "pages/dil-dishkiyaoon.html"
     },
 
     {
@@ -172,9 +158,7 @@
 
       "date": "2026-03-01",
 
-      "summary": "Two broken hearts slowly learn to trust and love again in this emotional romance.",
-
-      "reader": "reader/tute-dilon-ki-mohabbat/"
+      "page": "pages/tute-dilon-ki-mohabbat.html"
     },
 
     {
@@ -194,9 +178,7 @@
 
       "date": "2026-03-01",
 
-      "summary": "A college life story full of friendship, relationships, struggles and unforgettable memories.",
-
-      "reader": "reader/iit-diaries/"
+      "page": "pages/iit-diaries.html"
     }
 
   ]
