@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Comic PUR</title>
+<title>Comic PUR Slider</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -39,6 +39,7 @@ header{
 .slide{
   min-width:100%;
   position:relative;
+  flex-shrink:0;
 }
 .slide img{
   width:100%;
@@ -95,54 +96,6 @@ header{
   border-radius:50%;
 }
 .dot.active{background:#00d4ff;}
-
-/* GRID */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:16px;
-  padding:16px;
-}
-.card{
-  border-radius:16px;
-  overflow:hidden;
-  position:relative;
-  aspect-ratio:2/3;
-  box-shadow:0 8px 25px rgba(0,0,0,0.6);
-}
-.card img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-.overlay{
-  position:absolute;
-  bottom:0;
-  width:100%;
-  padding:10px;
-  background:linear-gradient(transparent,rgba(0,0,0,0.9));
-}
-.title{font-size:14px;font-weight:700;}
-.episodes{font-size:12px;opacity:.9;}
-.genre{font-size:11px;opacity:.8;}
-
-/* ALL COMICS BUTTON */
-.all-comics-btn{
-  display:block;
-  margin:20px auto;
-  padding:12px 28px;
-  background:#00d4ff;
-  color:#111;
-  font-weight:bold;
-  border-radius:12px;
-  text-align:center;
-  cursor:pointer;
-  width:max-content;
-  text-decoration:none;
-  box-shadow:0 4px 15px rgba(0,212,255,0.5);
-}
-
-a{text-decoration:none;color:white;}
 </style>
 </head>
 <body>
@@ -159,12 +112,6 @@ a{text-decoration:none;color:white;}
   <div class="slider-dots" id="dots"></div>
 </div>
 
-<!-- RECENT COMICS GRID -->
-<div class="grid" id="comicGrid"></div>
-
-<!-- ALL COMICS BUTTON -->
-<a href="all-comics/page1.html" class="all-comics-btn">ALL COMICS</a>
-
 <script>
 fetch("comic.json")
 .then(res=>res.json())
@@ -172,10 +119,10 @@ fetch("comic.json")
   const comics=data.comics;
   comics.sort((a,b)=> new Date(b.date)-new Date(a.date));
 
-  /* SLIDER */
   const slider=document.getElementById("slider");
   const dots=document.getElementById("dots");
 
+  // Add slides
   comics.forEach(c=>{
     if(c.slider.enabled){
       let badgeClass=c.badge==="AD-18"?"adult":"pg";
@@ -196,11 +143,12 @@ fetch("comic.json")
 
   const slides=document.querySelectorAll(".slide");
   const dot=document.querySelectorAll(".dot");
+  const container=document.querySelector(".slides-container");
   let slideIndex=0;
   let startX=0, currentX=0, isDragging=false;
 
   function updateSlider(index){
-    slider.style.transform=`translateX(-${index*100}%)`;
+    container.style.transform=`translateX(-${index*100}%)`;
     dot.forEach(d=>d.classList.remove("active"));
     if(dot[index]) dot[index].classList.add("active");
   }
@@ -212,15 +160,15 @@ fetch("comic.json")
 
   let autoSlide=setInterval(nextSlide,3000);
 
-  // Swipe
-  const container=slider.parentElement;
-  container.addEventListener("mousedown", startDrag);
-  container.addEventListener("mousemove", drag);
-  container.addEventListener("mouseup", endDrag);
-  container.addEventListener("mouseleave", endDrag);
-  container.addEventListener("touchstart", startDrag);
-  container.addEventListener("touchmove", drag);
-  container.addEventListener("touchend", endDrag);
+  // Swipe events
+  const sliderParent=document.querySelector(".slider");
+  sliderParent.addEventListener("mousedown", startDrag);
+  sliderParent.addEventListener("mousemove", drag);
+  sliderParent.addEventListener("mouseup", endDrag);
+  sliderParent.addEventListener("mouseleave", endDrag);
+  sliderParent.addEventListener("touchstart", startDrag);
+  sliderParent.addEventListener("touchmove", drag);
+  sliderParent.addEventListener("touchend", endDrag);
 
   function startDrag(e){
     clearInterval(autoSlide);
@@ -231,7 +179,7 @@ fetch("comic.json")
     if(!isDragging) return;
     currentX=e.type.includes("touch")? e.touches[0].clientX:e.clientX;
     let diff=currentX-startX;
-    slider.style.transform=`translateX(-${slideIndex*100 - diff/slides[0].offsetWidth*100}%)`;
+    container.style.transform=`translateX(-${slideIndex*100 - diff/slides[0].offsetWidth*100}%)`;
   }
   function endDrag(){
     if(!isDragging) return;
@@ -242,25 +190,8 @@ fetch("comic.json")
     updateSlider(slideIndex);
     autoSlide=setInterval(nextSlide,3000);
   }
-  if(slides.length>0) updateSlider(0);
 
-  /* RECENT 10 COMICS GRID */
-  const grid=document.getElementById("comicGrid");
-  comics.slice(0,10).forEach(comic=>{
-    let badgeClass=comic.badge==="AD-18"?"adult":"pg";
-    grid.innerHTML+=`
-      <a href="${comic.page}">
-        <div class="card">
-          <span class="badge ${badgeClass}">${comic.badge}</span>
-          <img src="${comic.cover}">
-          <div class="overlay">
-            <div class="title">${comic.title}</div>
-            <div class="episodes">Episodes: ${comic.episodes}</div>
-            <div class="genre">${comic.genre.join(", ")}</div>
-          </div>
-        </div>
-      </a>`;
-  });
+  if(slides.length>0) updateSlider(0);
 });
 </script>
 </body>
