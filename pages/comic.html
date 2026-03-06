@@ -1,212 +1,371 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Comic Info</title>
+<title>Comic - Comic PUR</title>
 
 <style>
 
+*{margin:0;padding:0;box-sizing:border-box;}
+
 body{
-margin:0;
-background:#0f001f;
-color:#e0e0ff;
-font-family:system-ui;
+background:linear-gradient(135deg,#0a001f,#1a003f);
+color:white;
+font-family:'Segoe UI',system-ui,sans-serif;
 }
 
-.container{
-max-width:1000px;
-margin:auto;
-padding:20px;
-}
+/* HEADER */
 
-/* TOP SECTION */
-
-.top{
+header{
+padding:10px 16px;
 display:flex;
-gap:20px;
-flex-wrap:wrap;
+align-items:center;
+justify-content:space-between;
+background:#0a001f;
+border-bottom:1px solid rgba(0,212,255,.3);
+height:64px;
 }
+
+.logo img{
+width:52px;
+height:52px;
+border-radius:50%;
+border:3px solid #00d4ff;
+box-shadow:0 0 20px rgba(0,212,255,.6);
+}
+
+.heading-img{
+max-width:220px;
+margin:auto;
+}
+
+.search-icon{
+width:60px;
+cursor:pointer;
+}
+
+/* MAIN */
+
+main{
+padding:20px 16px;
+max-width:900px;
+margin:auto;
+}
+
+/* COVER */
 
 .cover{
-width:200px;
-border-radius:10px;
-overflow:hidden;
-}
-
-.cover img{
 width:100%;
+max-width:360px;
+margin:auto;
 display:block;
+border-radius:14px;
+box-shadow:0 12px 40px rgba(0,212,255,.3);
+margin-bottom:30px;
 }
 
-.info{
-flex:1;
-}
+/* TITLE */
 
 .title{
 font-size:26px;
 font-weight:800;
+text-align:center;
 margin-bottom:8px;
 }
 
-.badge{
-display:inline-block;
-padding:4px 8px;
-font-size:12px;
-border-radius:4px;
-margin-bottom:10px;
+.meta{
+text-align:center;
+margin-bottom:20px;
+opacity:.8;
 }
+
+/* GENRE */
 
 .genre{
-font-size:14px;
-opacity:.8;
-margin-bottom:8px;
+text-align:center;
+margin-bottom:20px;
 }
 
-.episodes{
-font-size:14px;
-margin-bottom:8px;
+.genre span{
+background:#00d4ff20;
+border:1px solid #00d4ff50;
+padding:4px 10px;
+margin:3px;
+border-radius:20px;
+font-size:12px;
 }
+
+/* SUMMARY */
 
 .summary{
-font-size:14px;
+background:#160033;
+padding:18px;
+border-radius:12px;
 line-height:1.6;
-opacity:.9;
-margin-top:10px;
+margin-bottom:30px;
+border:1px solid rgba(0,212,255,.3);
 }
 
-/* EPISODES */
+/* EPISODE FINDER */
 
-.chapter-title{
-font-size:20px;
-margin-top:30px;
-margin-bottom:10px;
-font-weight:700;
+.search-bar{
+width:100%;
+padding:14px;
+border-radius:30px;
+border:2px solid #00d4ff;
+background:#160033;
+color:white;
+margin-bottom:20px;
 }
 
-.chapter-grid{
+/* EPISODES GRID */
+
+.episodes-grid{
 display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:10px;
+grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+gap:12px;
 }
 
-.chapter{
-background:#1a0033;
-padding:10px;
+.btn{
+background:linear-gradient(45deg,#00d4ff,#ff69b4);
+padding:12px;
+border-radius:10px;
 text-align:center;
-border-radius:6px;
 text-decoration:none;
 color:white;
-font-size:14px;
+font-weight:bold;
 }
 
-.chapter:hover{
-background:#2b0066;
+.btn:hover{
+opacity:.85;
+}
+
+/* PAGINATION */
+
+.pagination{
+display:flex;
+flex-wrap:wrap;
+gap:6px;
+justify-content:center;
+margin-bottom:20px;
+}
+
+.page-btn{
+padding:6px 12px;
+border-radius:6px;
+border:1px solid #00d4ff;
+background:#00d4ff20;
+color:#00d4ff;
+cursor:pointer;
+}
+
+.page-btn.active{
+background:#00d4ff;
+color:black;
+}
+
+/* BACK */
+
+.back{
+text-align:center;
+margin-top:40px;
+}
+
+.back a{
+color:#aaa;
+text-decoration:none;
 }
 
 </style>
-
-<script>
-function getCookie(name) {
-  let matches = document.cookie.match(new RegExp(
-    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-  ));
-  return matches ? decodeURIComponent(matches[1]) : "";
-}
-
-if (getCookie("site_access") !== "true") {
-  document.documentElement.innerHTML = `
-    <head><title>Access Blocked</title></head>
-    <body style="margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px;">
-      <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
-        ⚠️ Direct Access Blocked<br><br>
-        Shortener solve karke hi site open hogi.<br><br>
-        <a href="https://gplinks.co/BFmfakvr" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
-      </div>
-    </body>`;
-  throw new Error("Access blocked");
-}
-</script>
-
 </head>
 
 <body>
 
-<div class="container">
+<header>
 
-<div class="top">
-
-<div class="cover">
-<img id="cover">
+<div class="logo">
+<img src="../assets/heading.png">
 </div>
 
-<div class="info">
+<div>
+<img src="../assets/logo-circle.png" class="heading-img">
+</div>
+
+<div>
+<img src="../assets/search-icon.png" class="search-icon" onclick="window.location.href='../search.html'">
+</div>
+
+</header>
+
+<main>
+
+<img id="cover" class="cover">
 
 <div class="title" id="title"></div>
 
-<div class="badge" id="badge"></div>
+<div class="meta" id="episodes"></div>
 
 <div class="genre" id="genre"></div>
 
-<div class="episodes" id="episodes"></div>
-
 <div class="summary" id="summary"></div>
 
+
+<h2 style="text-align:center;margin-bottom:15px;">Episodes</h2>
+
+<input type="text" id="episodeSearch" class="search-bar" placeholder="Episode number search karo">
+
+
+<div class="pagination" id="pagination"></div>
+
+<div class="episodes-grid" id="episodesGrid"></div>
+
+
+<div class="back">
+<a href="../index.html">← Back to Home</a>
 </div>
 
-</div>
+</main>
 
-
-<div class="chapter-title">
-Episodes
-</div>
-
-<div class="chapter-grid" id="chapterGrid"></div>
-
-</div>
 
 <script>
 
-const slug=new URLSearchParams(location.search).get("slug");
+const urlParams = new URLSearchParams(window.location.search);
+const slug = urlParams.get("slug");
+
+let totalEpisodes = 0;
+let readerPath = "";
+let episodesPerPage = 20;
+let currentPage = 1;
 
 fetch("../comic.json")
 .then(res=>res.json())
 .then(data=>{
 
-const comic=data.comics.find(c=>c.slug===slug);
+const comic = data.comics.find(c=>c.slug===slug);
 
-if(!comic)return;
+if(!comic) return;
 
-document.title=comic.title;
+document.title = comic.title + " - Comic PUR";
 
-document.getElementById("title").innerText=comic.title;
+document.getElementById("cover").src = comic.cover;
+document.getElementById("title").innerText = comic.title;
 
-document.getElementById("cover").src=comic.cover;
+document.getElementById("episodes").innerText =
+"Total Episodes : " + comic.episodes;
 
-document.getElementById("badge").innerText=comic.badge;
+document.getElementById("summary").innerText = comic.summary;
 
-document.getElementById("genre").innerText="Genre: "+comic.genre.join(", ");
+readerPath = "../" + comic.reader;
+totalEpisodes = comic.episodes;
 
-document.getElementById("episodes").innerText="Total Episodes: "+comic.episodes;
+/* GENRE */
 
-document.getElementById("summary").innerText=comic.summary;
+const genreDiv = document.getElementById("genre");
 
-const grid=document.getElementById("chapterGrid");
+comic.genre.forEach(g=>{
+genreDiv.innerHTML += `<span>${g}</span>`;
+});
 
-for(let i=1;i<=comic.episodes;i++){
+createPagination();
+renderEpisodes();
+
+});
+
+
+function createPagination(){
+
+const pagination=document.getElementById("pagination");
+pagination.innerHTML="";
+
+const totalPages=Math.ceil(totalEpisodes/episodesPerPage);
+
+for(let i=1;i<=totalPages;i++){
+
+const btn=document.createElement("button");
+
+btn.className="page-btn";
+
+if(i===currentPage) btn.classList.add("active");
+
+btn.textContent=
+`${(i-1)*episodesPerPage+1}-${Math.min(i*episodesPerPage,totalEpisodes)}`;
+
+btn.onclick=()=>{
+
+currentPage=i;
+renderEpisodes();
+createPagination();
+
+};
+
+pagination.appendChild(btn);
+
+}
+
+}
+
+
+function renderEpisodes(){
+
+const grid=document.getElementById("episodesGrid");
+
+grid.innerHTML="";
+
+const start=(currentPage-1)*episodesPerPage+1;
+const end=Math.min(start+episodesPerPage-1,totalEpisodes);
+
+for(let i=start;i<=end;i++){
 
 grid.innerHTML+=`
 
-<a class="chapter" href="../${comic.reader}ch${i}.html">
-
+<a href="${readerPath}ch${i}.html" class="btn">
 Episode ${i}
-
 </a>
 
 `;
 
 }
+
+}
+
+
+/* SEARCH */
+
+document.getElementById("episodeSearch")
+.addEventListener("input",function(){
+
+const val=this.value.trim();
+
+if(val===""){
+renderEpisodes();
+return;
+}
+
+const num=parseInt(val);
+
+const grid=document.getElementById("episodesGrid");
+
+grid.innerHTML="";
+
+if(isNaN(num)||num<1||num>totalEpisodes){
+
+grid.innerHTML=
+"<p style='grid-column:1/-1;text-align:center;color:#aaa;'>Episode nahi mila</p>";
+
+return;
+
+}
+
+grid.innerHTML=`
+
+<a href="${readerPath}ch${num}.html" class="btn">
+Episode ${num}
+</a>
+
+`;
 
 });
 
