@@ -140,13 +140,12 @@ const grid=document.getElementById("comicGrid");
 
 data.forEach(comic=>{
 
-const card=`
-
+const card = `
 <a href="${comic.page}">
 <div class="card">
 
 <span class="badge ${comic.badge}">
-${comic.badge==="pg"?"PG-13":"18+"}
+${comic.badge === "pg" ? "PG-13" : "AD-18+"}
 </span>
 
 <img src="${comic.cover}">
@@ -158,9 +157,8 @@ ${comic.badge==="pg"?"PG-13":"18+"}
 
 </div>
 </a>
-
 `;
-
+  
 grid.innerHTML+=card;
 
 });
