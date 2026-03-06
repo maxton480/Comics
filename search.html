@@ -17,6 +17,8 @@ color:#e0e0ff;
 font-family:'Segoe UI',system-ui,sans-serif;
 }
 
+/* SEARCH HEADER */
+
 .search-header{
 text-align:center;
 padding:20px 16px;
@@ -44,6 +46,8 @@ font-size:15px;
 outline:none;
 }
 
+/* GRID */
+
 .grid{
 display:grid;
 grid-template-columns:repeat(2,1fr);
@@ -52,6 +56,8 @@ padding:16px;
 max-width:1200px;
 margin:auto;
 }
+
+/* CARD */
 
 .card{
 border-radius:16px;
@@ -115,6 +121,7 @@ color:white;
 
 <body>
 
+
 <div class="search-header">
 
 <div class="search-title">
@@ -125,11 +132,13 @@ Search Comic
 
 </div>
 
+
 <div id="message" class="message">
 Start typing to search comics
 </div>
 
 <div class="grid" id="comicGrid"></div>
+
 
 <script>
 
@@ -138,11 +147,9 @@ let comics=[];
 fetch("comic.json")
 .then(res=>res.json())
 .then(data=>{
-
-data.sort((a,b)=> new Date(b.date) - new Date(a.date));
-comics=data;
-
+comics=data.comics;
 });
+
 
 function displayComics(list){
 
@@ -166,8 +173,8 @@ list.forEach(comic=>{
 let badgeText="PG-13";
 let badgeClass="pg";
 
-if(comic.badge==="adult"){
-badgeText="AD-18";
+if(comic.badge==="18+"){
+badgeText="18+";
 badgeClass="adult";
 }
 
@@ -196,6 +203,7 @@ grid.innerHTML+=card;
 
 }
 
+
 document.getElementById("searchInput").addEventListener("input",function(){
 
 const value=this.value.toLowerCase().trim();
@@ -213,7 +221,7 @@ return;
 
 }
 
-const filtered=comics.filter(c =>
+const filtered=comics.filter(c=>
 c.title.toLowerCase().includes(value)
 );
 
