@@ -1,131 +1,347 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Comic PUR</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:#0f001f;color:#e0e0ff;font-family:'Segoe UI',system-ui,sans-serif;}
-header{padding:6px 14px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(to right,#0a001f,#1a003f);border-bottom:1px solid rgba(0,212,255,0.25);height:50px;}
-.logo img{width:38px;height:38px;border-radius:50%;border:2px solid #00d4ff;}
-.heading-img{max-width:190px;}
-.search-icon{width:44px;cursor:pointer;}
-.slider{width:100%;overflow:hidden;position:relative;border-radius:18px;margin-top:10px;}
-.slide{position:absolute;top:0;left:100%;width:100%;height:230px;transition:left 0.5s ease-in-out;border-radius:18px;}
-.slide.active{left:0;}
-.slide.prev{left:-100%;}
-.slide img{width:100%;height:100%;object-fit:cover;border-radius:18px;}
-.slide-text{position:absolute;left:20px;top:50%;transform:translateY(-50%);max-width:55%;}
-.slide-title{font-family:'Arial Black', Gadget, sans-serif;font-size:30px;font-weight:900;letter-spacing:1px;text-shadow:0 0 10px black;}
-.slide-info{font-size:14px;margin-top:6px;font-weight:600;text-shadow:0 0 6px black;}
-.badge{position:absolute;top:0;right:0;font-size:11px;padding:4px 8px;border-bottom-left-radius:10px;font-weight:bold;color:white;}
-.pg{background:#00c853;}
-.adult{background:#ff1744;}
-.slider-dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:6px;}
-.dot{width:8px;height:8px;background:#888;border-radius:50%;cursor:pointer;}
-.dot.active{background:#00d4ff;}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;padding:16px;}
-.card{border-radius:16px;overflow:hidden;position:relative;aspect-ratio:2/3;box-shadow:0 8px 25px rgba(0,0,0,0.6);}
-.card img{width:100%;height:100%;object-fit:cover;}
-.overlay{position:absolute;bottom:0;width:100%;padding:10px;background:linear-gradient(transparent,rgba(0,0,0,0.9));}
-.title{font-size:14px;font-weight:700;}
-.episodes{font-size:12px;opacity:.9;}
-.genre{font-size:11px;opacity:.8;}
-a{text-decoration:none;color:white;}
-</style>
-</head>
-<body>
-
-<header>
-  <div class="logo"><img src="assets/heading.png"></div>
-  <img src="assets/logo-circle.png" class="heading-img">
-  <img src="assets/search-icon.png" class="search-icon" onclick="location.href='search.html'">
-</header>
-
-<!-- SLIDER -->
-<div class="slider">
-  <div id="slider"></div>
-  <div class="slider-dots" id="dots"></div>
-</div>
-
-<!-- GRID -->
-<div class="grid" id="comicGrid"></div>
-
-<script>
-fetch("comic.json").then(res=>res.json()).then(data=>{
-const comics=data.comics;
-comics.sort((a,b)=> new Date(b.date)-new Date(a.date));
-
-const slider=document.getElementById("slider");
-const dots=document.getElementById("dots");
-
-comics.forEach(c=>{
-  if(c.slider.enabled){
-    let badgeClass=c.badge==="AD-18"?"adult":"pg";
-    slider.innerHTML+=`
-    <a href="${c.page}">
-      <div class="slide">
-        <span class="badge ${badgeClass}">${c.badge}</span>
-        <img src="${c.slider.image}">
-        <div class="slide-text">
-          <div class="slide-title">${c.title}</div>
-          <div class="slide-info">${c.episodes} Episodes • ${c.genre.join(", ")}</div>
-        </div>
-      </div>
-    </a>`;
-    dots.innerHTML+=`<div class="dot"></div>`;
-  }
-});
-
-let slides=document.querySelectorAll(".slide");
-let dot=document.querySelectorAll(".dot");
-let slideIndex=0;
-
-function updateSlides(n){
-  slides.forEach((s,i)=>{
-    s.classList.remove('active','prev');
-    if(i===n)s.classList.add('active');
-    if(i===((n-1+slides.length)%slides.length)) s.classList.add('prev');
-  });
-  dot.forEach((d,i)=>d.classList.toggle('active', i===n));
-}
-
-function nextSlide(){slideIndex=(slideIndex+1)%slides.length;updateSlides(slideIndex);}
-let autoSlide=setInterval(nextSlide,3000);
-updateSlides(slideIndex);
-
-// DOT CLICK
-dot.forEach((d,i)=>d.addEventListener('click',()=>{slideIndex=i;updateSlides(slideIndex);clearInterval(autoSlide);autoSlide=setInterval(nextSlide,3000);}))
-
-// TOUCH SUPPORT
-let startX=0,endX=0;
-slider.addEventListener('touchstart',e=>{startX=e.touches[0].clientX;});
-slider.addEventListener('touchmove',e=>{endX=e.touches[0].clientX;});
-slider.addEventListener('touchend',()=>{
-  let diff=startX-endX;
-  if(diff>50){nextSlide();}
-  else if(diff<-50){slideIndex=(slideIndex-1+slides.length)%slides.length;updateSlides(slideIndex);}
-});
-
-// GRID
-const grid=document.getElementById("comicGrid");
-comics.forEach(comic=>{
-  let badgeClass=comic.badge==="AD-18"?"adult":"pg";
-  grid.innerHTML+=`
-    <a href="${comic.page}">
-      <div class="card">
-        <span class="badge ${badgeClass}">${comic.badge}</span>
-        <img src="${comic.cover}">
-        <div class="overlay">
-          <div class="title">${comic.title}</div>
-          <div class="episodes">Episodes: ${comic.episodes}</div>
-          <div class="genre">${comic.genre.join(", ")}</div>
-        </div>
-      </div>
-    </a>`;
-});
-});
-</script>
-</body>
+<!DOCTYPE html>  <html lang="en">  
+<head>  
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+<title>Comic PUR</title>  <style>  
+  
+*{margin:0;padding:0;box-sizing:border-box;}  
+  
+body{  
+background:#0f001f;  
+color:#e0e0ff;  
+font-family:'Segoe UI',system-ui,sans-serif;  
+}  
+  
+/* HEADER */  
+  
+header{  
+padding:6px 14px;  
+display:flex;  
+align-items:center;  
+justify-content:space-between;  
+background:linear-gradient(to right,#0a001f,#1a003f);  
+border-bottom:1px solid rgba(0,212,255,0.25);  
+height:50px;  
+}  
+  
+.logo img{  
+width:38px;  
+height:38px;  
+border-radius:50%;  
+border:2px solid #00d4ff;  
+}  
+  
+.heading-img{  
+max-width:190px;  
+}  
+  
+.search-icon{  
+width:44px;  
+cursor:pointer;  
+}  
+  
+  
+/* SLIDER */  
+  
+.slider{  
+width:100%;  
+overflow:hidden;  
+position:relative;  
+border-radius:18px;  
+margin-top:10px;  
+}  
+  
+.slide{  
+display:none;  
+position:relative;  
+}  
+  
+.slide img{  
+width:100%;  
+height:230px;  
+object-fit:cover;  
+border-radius:18px;  
+}  
+  
+.slide-text{  
+  
+position:absolute;  
+left:20px;  
+top:50%;  
+transform:translateY(-50%);  
+  
+max-width:55%;  
+  
+}  
+  
+.slide-title{  
+  
+font-size:30px;  
+font-weight:900;  
+letter-spacing:1px;  
+text-shadow:0 0 10px black;  
+  
+}  
+  
+.slide-info{  
+  
+font-size:14px;  
+margin-top:6px;  
+font-weight:600;  
+text-shadow:0 0 6px black;  
+  
+}  
+  
+/* BADGE */  
+  
+.badge{  
+  
+position:absolute;  
+top:0;  
+right:0;  
+  
+font-size:11px;  
+padding:4px 8px;  
+  
+border-bottom-left-radius:10px;  
+  
+font-weight:bold;  
+color:white;  
+  
+}  
+  
+.pg{  
+background:#00c853;  
+}  
+  
+.adult{  
+background:#ff1744;  
+}  
+  
+  
+/* SLIDER DOTS */  
+  
+.slider-dots{  
+position:absolute;  
+bottom:10px;  
+left:50%;  
+transform:translateX(-50%);  
+display:flex;  
+gap:6px;  
+}  
+  
+.dot{  
+width:8px;  
+height:8px;  
+background:#888;  
+border-radius:50%;  
+}  
+  
+.dot.active{  
+background:#00d4ff;  
+}  
+  
+  
+/* GRID */  
+  
+.grid{  
+  
+display:grid;  
+grid-template-columns:repeat(2,1fr);  
+gap:16px;  
+padding:16px;  
+  
+}  
+  
+.card{  
+  
+border-radius:16px;  
+overflow:hidden;  
+position:relative;  
+aspect-ratio:2/3;  
+box-shadow:0 8px 25px rgba(0,0,0,0.6);  
+  
+}  
+  
+.card img{  
+  
+width:100%;  
+height:100%;  
+object-fit:cover;  
+  
+}  
+  
+.overlay{  
+  
+position:absolute;  
+bottom:0;  
+width:100%;  
+padding:10px;  
+background:linear-gradient(transparent,rgba(0,0,0,0.9));  
+  
+}  
+  
+.title{  
+font-size:14px;  
+font-weight:700;  
+}  
+  
+.episodes{  
+font-size:12px;  
+opacity:.9;  
+}  
+  
+.genre{  
+font-size:11px;  
+opacity:.8;  
+}  
+  
+a{  
+text-decoration:none;  
+color:white;  
+}  
+  
+</style>  </head>  <body>  <header>  <div class="logo">  
+<img src="assets/heading.png">  
+</div>  <img src="assets/logo-circle.png" class="heading-img">  <img src="assets/search-icon.png" class="search-icon" onclick="location.href='search.html'">  </header>  <!-- SLIDER -->  <div class="slider">  <div id="slider"></div>  <div class="slider-dots" id="dots"></div>  </div>  <!-- GRID -->  <div class="grid" id="comicGrid"></div>  <script>  
+  
+fetch("comic.json")  
+.then(res=>res.json())  
+.then(data=>{  
+  
+const comics=data.comics;  
+  
+comics.sort((a,b)=> new Date(b.date)-new Date(a.date));  
+  
+  
+/* SLIDER */  
+  
+const slider=document.getElementById("slider");  
+const dots=document.getElementById("dots");  
+  
+comics.forEach(c=>{  
+  
+if(c.slider.enabled){  
+  
+let badgeClass="pg";  
+  
+if(c.badge==="AD-18"){  
+badgeClass="adult";  
+}  
+  
+slider.innerHTML+=`  
+  
+<a href="${c.page}">  
+<div class="slide">  
+  
+<span class="badge ${badgeClass}">  
+${c.badge}  
+</span>  
+  
+<img src="${c.slider.image}">  
+  
+<div class="slide-text">  
+  
+<div class="slide-title">  
+${c.title}  
+</div>  
+  
+<div class="slide-info">  
+${c.episodes} Episodes • ${c.genre.join(", ")}  
+</div>  
+  
+</div>  
+  
+</div>  
+</a>  
+  
+`;  
+  
+dots.innerHTML+=`<div class="dot"></div>`;  
+  
+}  
+  
+});  
+  
+  
+/* AUTO SLIDE */  
+  
+let slides=document.querySelectorAll(".slide");  
+let dot=document.querySelectorAll(".dot");  
+  
+let i=0;  
+  
+function showSlide(){  
+  
+slides.forEach(s=>s.style.display="none");  
+dot.forEach(d=>d.classList.remove("active"));  
+  
+i++;  
+  
+if(i>slides.length){i=1;}  
+  
+slides[i-1].style.display="block";  
+dot[i-1].classList.add("active");  
+  
+setTimeout(showSlide,3000);  
+  
+}  
+  
+if(slides.length>0){  
+showSlide();  
+}  
+  
+  
+  
+/* GRID */  
+  
+const grid=document.getElementById("comicGrid");  
+  
+comics.forEach(comic=>{  
+  
+let badgeClass="pg";  
+  
+if(comic.badge==="AD-18"){  
+badgeClass="adult";  
+}  
+  
+grid.innerHTML+=`  
+  
+<a href="${comic.page}">  
+  
+<div class="card">  
+  
+<span class="badge ${badgeClass}">  
+${comic.badge}  
+</span>  
+  
+<img src="${comic.cover}">  
+  
+<div class="overlay">  
+  
+<div class="title">  
+${comic.title}  
+</div>  
+  
+<div class="episodes">  
+Episodes: ${comic.episodes}  
+</div>  
+  
+<div class="genre">  
+${comic.genre.join(", ")}  
+</div>  
+  
+</div>  
+  
+</div>  
+  
+</a>  
+  
+`;  
+  
+});  
+  
+});  
+  
+</script>  </body>  
 </html>
