@@ -29,7 +29,7 @@ header{
   overflow:hidden;
   position:relative;
   border-radius:18px;
-  margin-top:10px;
+  margin:10px 0;
   touch-action: pan-y;
 }
 .slides-container{
@@ -96,22 +96,6 @@ header{
 }
 .dot.active{background:#00d4ff;}
 
-/* ALL COMICS BUTTON */
-.all-comics-btn{
-  display:block;
-  margin:20px auto;
-  padding:12px 28px;
-  background:#00d4ff;
-  color:#111;
-  font-weight:bold;
-  border-radius:12px;
-  text-align:center;
-  cursor:pointer;
-  width:max-content;
-  text-decoration:none;
-  box-shadow:0 4px 15px rgba(0,212,255,0.5);
-}
-
 /* GRID */
 .grid{
   display:grid;
@@ -141,10 +125,26 @@ header{
 .title{font-size:14px;font-weight:700;}
 .episodes{font-size:12px;opacity:.9;}
 .genre{font-size:11px;opacity:.8;}
+
+/* ALL COMICS BUTTON */
+.all-comics-btn{
+  display:block;
+  margin:20px auto;
+  padding:12px 28px;
+  background:#00d4ff;
+  color:#111;
+  font-weight:bold;
+  border-radius:12px;
+  text-align:center;
+  cursor:pointer;
+  width:max-content;
+  text-decoration:none;
+  box-shadow:0 4px 15px rgba(0,212,255,0.5);
+}
+
 a{text-decoration:none;color:white;}
 </style>
 </head>
-
 <body>
 
 <header>
@@ -159,11 +159,11 @@ a{text-decoration:none;color:white;}
   <div class="slider-dots" id="dots"></div>
 </div>
 
+<!-- RECENT COMICS GRID -->
+<div class="grid" id="comicGrid"></div>
+
 <!-- ALL COMICS BUTTON -->
 <a href="all-comics/page1.html" class="all-comics-btn">ALL COMICS</a>
-
-<!-- GRID -->
-<div class="grid" id="comicGrid"></div>
 
 <script>
 fetch("comic.json")
@@ -175,8 +175,6 @@ fetch("comic.json")
   /* SLIDER */
   const slider=document.getElementById("slider");
   const dots=document.getElementById("dots");
-  let slideIndex=0;
-  let startX=0, currentX=0, isDragging=false;
 
   comics.forEach(c=>{
     if(c.slider.enabled){
@@ -198,6 +196,8 @@ fetch("comic.json")
 
   const slides=document.querySelectorAll(".slide");
   const dot=document.querySelectorAll(".dot");
+  let slideIndex=0;
+  let startX=0, currentX=0, isDragging=false;
 
   function updateSlider(index){
     slider.style.transform=`translateX(-${index*100}%)`;
@@ -212,41 +212,41 @@ fetch("comic.json")
 
   let autoSlide=setInterval(nextSlide,3000);
 
-  /* TOUCH / MOUSE SWIPE */
-  slider.parentElement.addEventListener("mousedown", startDrag);
-  slider.parentElement.addEventListener("mousemove", drag);
-  slider.parentElement.addEventListener("mouseup", endDrag);
-  slider.parentElement.addEventListener("mouseleave", endDrag);
-  slider.parentElement.addEventListener("touchstart", startDrag);
-  slider.parentElement.addEventListener("touchmove", drag);
-  slider.parentElement.addEventListener("touchend", endDrag);
+  // Swipe
+  const container=slider.parentElement;
+  container.addEventListener("mousedown", startDrag);
+  container.addEventListener("mousemove", drag);
+  container.addEventListener("mouseup", endDrag);
+  container.addEventListener("mouseleave", endDrag);
+  container.addEventListener("touchstart", startDrag);
+  container.addEventListener("touchmove", drag);
+  container.addEventListener("touchend", endDrag);
 
   function startDrag(e){
     clearInterval(autoSlide);
     isDragging=true;
-    startX = e.type.includes("touch") ? e.touches[0].clientX : e.clientX;
+    startX=e.type.includes("touch")? e.touches[0].clientX:e.clientX;
   }
   function drag(e){
     if(!isDragging) return;
-    currentX = e.type.includes("touch") ? e.touches[0].clientX : e.clientX;
-    const diff = currentX - startX;
-    slider.style.transform = `translateX(-${slideIndex*100 - diff/slides[0].offsetWidth*100}%)`;
+    currentX=e.type.includes("touch")? e.touches[0].clientX:e.clientX;
+    let diff=currentX-startX;
+    slider.style.transform=`translateX(-${slideIndex*100 - diff/slides[0].offsetWidth*100}%)`;
   }
   function endDrag(){
     if(!isDragging) return;
     isDragging=false;
-    const diff = currentX - startX;
-    if(diff>50) slideIndex = (slideIndex-1 + slides.length)%slides.length;
-    if(diff<-50) slideIndex = (slideIndex+1)%slides.length;
+    let diff=currentX-startX;
+    if(diff>50) slideIndex=(slideIndex-1+slides.length)%slides.length;
+    if(diff<-50) slideIndex=(slideIndex+1)%slides.length;
     updateSlider(slideIndex);
     autoSlide=setInterval(nextSlide,3000);
   }
-
   if(slides.length>0) updateSlider(0);
 
-  /* GRID */
+  /* RECENT 10 COMICS GRID */
   const grid=document.getElementById("comicGrid");
-  comics.forEach(comic=>{
+  comics.slice(0,10).forEach(comic=>{
     let badgeClass=comic.badge==="AD-18"?"adult":"pg";
     grid.innerHTML+=`
       <a href="${comic.page}">
@@ -263,6 +263,5 @@ fetch("comic.json")
   });
 });
 </script>
-
 </body>
 </html>
