@@ -22,6 +22,26 @@
     },
 
     {
+      "slug": "mera-lucky-saiyaan",
+      "title": "Mera Lucky Saiyaan",
+      "cover": "https://i.ibb.co/wNSmfJJh/file-000000000c3c722f98bd920154a53b9e.png",
+
+      "slider": {
+        "enabled": true,
+        "image": "https://i.ibb.co/V00cbcQw/file-000000001cc871faae890fde65604f1d.png"
+      },
+
+      "episodes": 5,
+      "genre": ["Romance","Drama"],
+      "category": "Manhwa",
+      "badge": "PG-13",
+
+      "date": "2026-03-07",
+
+      "page": "pages/mera-lucky-saiyaan.html"
+    },
+    
+    {
       "slug": "bepanah-ishq",
       "title": "Bepanah Ishq",
       "cover": "https://i.ibb.co/Q7HN7z02/file-00000000068071fa864f9ef6edef8793.png",
