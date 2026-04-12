@@ -7,12 +7,11 @@
 
 <style>
 
-*{margin:0;padding:0;box-sizing:border-box;}
-
 body{
-background:#0b0f2a;
-color:#e0e6ff;
-font-family:'Segoe UI',system-ui,sans-serif;
+margin:0;
+background:#0f001f;
+color:#e0e0ff;
+font-family:'Segoe UI',system-ui;
 }
 
 /* HEADER */
@@ -22,28 +21,15 @@ height:52px;
 display:flex;
 align-items:center;
 justify-content:space-between;
-padding:0 12px;
-background:#070b20;
-border-bottom:1px solid rgba(0,212,255,0.2);
+padding:0 14px;
+background:#0a001f;
 }
 
-.logo img{
-width:40px;
-height:40px;
-border-radius:50%;
+header img{
+height:42px;
 }
 
-.heading{
-font-weight:900;
-font-size:18px;
-}
-
-.search-icon{
-width:42px;
-cursor:pointer;
-}
-
-/* FILTER SLIDER */
+/* FILTER */
 
 .filter{
 display:flex;
@@ -51,17 +37,20 @@ justify-content:center;
 margin:10px;
 }
 
-.filter button{
-flex:1;
-padding:10px;
-border:none;
-background:#12173a;
-color:white;
-font-weight:bold;
+.toggle{
+background:#1a003f;
+border-radius:20px;
+display:flex;
+overflow:hidden;
+}
+
+.toggle div{
+padding:8px 14px;
+font-size:12px;
 cursor:pointer;
 }
 
-.filter button.active{
+.toggle .active{
 background:#00d4ff;
 color:black;
 }
@@ -71,13 +60,13 @@ color:black;
 .slider{
 overflow:hidden;
 position:relative;
-border-radius:14px;
 margin:10px;
+border-radius:16px;
 }
 
 .slider-track{
 display:flex;
-transition:transform 0.4s ease;
+transition:0.4s ease;
 }
 
 .slide{
@@ -89,30 +78,24 @@ position:relative;
 width:100%;
 height:220px;
 object-fit:cover;
-border-radius:14px;
 }
-
-/* TEXT */
 
 .slide-text{
 position:absolute;
 left:16px;
 top:50%;
 transform:translateY(-50%);
-max-width:55%;
+max-width:60%;
 }
 
 .slide-title{
 font-size:28px;
 font-weight:900;
-font-family:Impact, sans-serif;
-text-shadow:0 0 10px black;
 }
 
 .slide-info{
 font-size:13px;
-margin-top:5px;
-font-weight:600;
+margin-top:6px;
 }
 
 /* BADGE */
@@ -123,35 +106,12 @@ top:0;
 right:0;
 padding:4px 8px;
 font-size:11px;
-border-bottom-left-radius:10px;
 font-weight:bold;
-color:white;
+border-bottom-left-radius:10px;
 }
 
 .pg{background:#00c853;}
-.adult{background:#ff1744;}
-
-/* DOTS */
-
-.dots{
-position:absolute;
-bottom:10px;
-left:50%;
-transform:translateX(-50%);
-display:flex;
-gap:6px;
-}
-
-.dot{
-width:8px;
-height:8px;
-background:#777;
-border-radius:50%;
-}
-
-.dot.active{
-background:#00d4ff;
-}
+.ad{background:#ff1744;}
 
 /* GRID */
 
@@ -164,9 +124,8 @@ padding:14px;
 
 .card{
 position:relative;
-border-radius:12px;
+border-radius:14px;
 overflow:hidden;
-aspect-ratio:2/3;
 }
 
 .card img{
@@ -178,29 +137,20 @@ object-fit:cover;
 .overlay{
 position:absolute;
 bottom:0;
-width:100%;
 padding:8px;
-background:linear-gradient(transparent,rgba(0,0,0,0.9));
-}
-
-.title{
+background:linear-gradient(transparent,black);
+width:100%;
 font-size:13px;
-font-weight:700;
 }
 
 .ep{
 font-size:11px;
-opacity:.9;
-}
-
-.genre{
-font-size:10px;
-opacity:.7;
+opacity:.8;
 }
 
 a{
-color:white;
 text-decoration:none;
+color:white;
 }
 
 </style>
@@ -209,22 +159,23 @@ text-decoration:none;
 <body>
 
 <header>
-<div class="logo"><img src="assets/logo.png"></div>
-<div class="heading">Comic PUR</div>
-<img src="assets/search-icon.png" class="search-icon" onclick="location.href='search.html'">
+<img src="assets/heading.png">
+<img src="assets/logo-circle.png">
+<img src="assets/search-icon.png" onclick="location.href='search.html'">
 </header>
 
 <!-- FILTER -->
 <div class="filter">
-<button onclick="setFilter('pg')">SAFE</button>
-<button class="active" onclick="setFilter('mix')">MIX</button>
-<button onclick="setFilter('adult')">18+</button>
+<div class="toggle">
+<div onclick="setMode(event,'pg')">PG</div>
+<div class="active" onclick="setMode(event,'all')">ALL</div>
+<div onclick="setMode(event,'adult')">18+</div>
+</div>
 </div>
 
 <!-- SLIDER -->
 <div class="slider">
-<div class="slider-track" id="sliderTrack"></div>
-<div class="dots" id="dots"></div>
+<div class="slider-track" id="slider"></div>
 </div>
 
 <!-- GRID -->
@@ -232,170 +183,144 @@ text-decoration:none;
 
 <script>
 
-let allComics=[];
-let currentFilter="mix";
+let mode="all";
+let comicsData=[];
+let episodesData=[];
+
+/* FILTER FIX */
+
+function setMode(e,m){
+mode=m;
+document.querySelectorAll(".toggle div").forEach(el=>el.classList.remove("active"));
+e.target.classList.add("active");
+render();
+}
 
 /* LOAD JSON */
 
 Promise.all([
 fetch("data/comics.json").then(r=>r.json()),
-fetch("data/updates.json").then(r=>r.json())
+fetch("data/episodes.json").then(r=>r.json())
 ])
-.then(([comicData, updateData])=>{
-
-allComics = comicData.comics.map(c=>{
-return {...c, ...updateData[c.slug]};
+.then(([c,e])=>{
+comicsData=c.comics;
+episodesData=e.episodes;
+render();
 });
 
-render();
-
-});
-
-/* FILTER */
-
-function setFilter(type){
-currentFilter=type;
-document.querySelectorAll(".filter button").forEach(b=>b.classList.remove("active"));
-event.target.classList.add("active");
-render();
-}
-
-/* RENDER */
+/* MAIN RENDER */
 
 function render(){
 
-let comics = allComics.filter(c=>{
-if(currentFilter==="pg") return c.badge==="PG-13";
-if(currentFilter==="adult") return c.badge==="AD-18";
-return true;
-});
+let list=[...comicsData];
 
-/* SORT */
-comics.sort((a,b)=> new Date(b.date)-new Date(a.date));
+/* FILTER */
 
-buildSlider(comics);
-buildGrid(comics);
-
+if(mode==="pg"){
+list=list.filter(c=>c.badge==="PG-13");
+}
+if(mode==="adult"){
+list=list.filter(c=>c.badge==="AD-18");
 }
 
 /* SLIDER */
 
-function buildSlider(comics){
-
-const slider=document.getElementById("sliderTrack");
-const dots=document.getElementById("dots");
-
+const slider=document.getElementById("slider");
 slider.innerHTML="";
-dots.innerHTML="";
+let slideIndex=0;
 
-let slides = comics.filter(c=>c.slider?.enabled);
+list.forEach(c=>{
 
-slides.forEach(c=>{
+if(c.slider && c.slider.enabled){
 
-let badgeClass = c.badge==="AD-18"?"adult":"pg";
+let ep = episodesData.find(e=>e.slug===c.slug);
 
 slider.innerHTML+=`
 <div class="slide">
 
-<span class="badge ${badgeClass}">${c.badge}</span>
+<span class="badge ${c.badge==="AD-18"?"ad":"pg"}">
+${c.badge}
+</span>
 
 <img src="${c.slider.image}">
 
 <div class="slide-text">
 <div class="slide-title">${c.title}</div>
-<div class="slide-info">${c.episodes} Episodes • ${c.genre.join(", ")}</div>
+<div class="slide-info">
+${ep ? ep.total+" Episodes" : ""}
+</div>
 </div>
 
 </div>
 `;
 
-dots.innerHTML+=`<div class="dot"></div>`;
+}
+
 });
-
-initSlider();
-
-}
-
-/* SWIPE SLIDER */
-
-function initSlider(){
-
-const track=document.getElementById("sliderTrack");
-const slides=document.querySelectorAll(".slide");
-const dots=document.querySelectorAll(".dot");
-
-let i=0;
-
-function update(){
-track.style.transform=`translateX(-${i*100}%)`;
-dots.forEach(d=>d.classList.remove("active"));
-if(dots[i]) dots[i].classList.add("active");
-}
-
-function auto(){
-i++;
-if(i>=slides.length) i=0;
-update();
-}
-
-let autoSlide=setInterval(auto,3000);
-
-/* TOUCH */
-
-let startX=0;
-
-track.addEventListener("touchstart",e=>{
-startX=e.touches[0].clientX;
-clearInterval(autoSlide);
-});
-
-track.addEventListener("touchend",e=>{
-let endX=e.changedTouches[0].clientX;
-let diff=startX-endX;
-
-if(diff>50) i++;
-if(diff<-50) i--;
-
-if(i<0)i=0;
-if(i>=slides.length)i=slides.length-1;
-
-update();
-autoSlide=setInterval(auto,3000);
-});
-
-update();
-
-}
 
 /* GRID */
-
-function buildGrid(comics){
 
 const grid=document.getElementById("grid");
 grid.innerHTML="";
 
-comics.forEach(c=>{
+list.forEach(c=>{
 
-let badgeClass = c.badge==="AD-18"?"adult":"pg";
+let ep = episodesData.find(e=>e.slug===c.slug);
 
 grid.innerHTML+=`
 <a href="comic.html?comic=${c.slug}">
+
 <div class="card">
 
-<span class="badge ${badgeClass}">${c.badge}</span>
+<span class="badge ${c.badge==="AD-18"?"ad":"pg"}">
+${c.badge}
+</span>
 
 <img src="${c.cover}">
 
 <div class="overlay">
-<div class="title">${c.title}</div>
-<div class="ep">${c.episodes} Episodes</div>
-<div class="genre">${c.genre.join(", ")}</div>
+${c.title}<br>
+<span class="ep">
+${ep ? ep.total+" Episodes" : ""}
+</span>
 </div>
 
 </div>
+
 </a>
 `;
 
+});
+
+initSlider();
+}
+
+/* TOUCH SLIDER FIXED */
+
+function initSlider(){
+
+let track=document.getElementById("slider");
+let index=0;
+let startX=0;
+
+track.style.transform="translateX(0)";
+
+track.addEventListener("touchstart",e=>{
+startX=e.touches[0].clientX;
+});
+
+track.addEventListener("touchend",e=>{
+let endX=e.changedTouches[0].clientX;
+
+if(startX-endX>50) index++;
+if(endX-startX>50) index--;
+
+let slides=document.querySelectorAll(".slide");
+
+if(index<0) index=0;
+if(index>=slides.length) index=slides.length-1;
+
+track.style.transform=`translateX(-${index*100}%)`;
 });
 
 }
