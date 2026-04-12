@@ -1,23 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
+<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Comic PUR</title>
 
 <style>
-:root{
-  --primary:#00d4ff;
-  --accent:#ff69b4;
-  --dark:#0a001f;
-}
-
-*{margin:0;padding:0;box-sizing:border-box;}
-
 body{
-  background:linear-gradient(135deg,var(--dark),#1a003f);
+  margin:0;
+  font-family:sans-serif;
+  background:linear-gradient(135deg,#0a001f,#1a003f);
   color:white;
-  font-family:'Segoe UI',sans-serif;
 }
 
 /* HEADER */
@@ -26,46 +19,70 @@ header{
   justify-content:space-between;
   align-items:center;
   padding:10px 16px;
-  background:rgba(10,0,31,0.9);
+  background:#111;
   position:sticky;
   top:0;
-  z-index:10;
+  z-index:100;
 }
 
-header img{
-  height:45px;
+.logo img{
+  width:55px;
+  height:55px;
+  border-radius:50%;
+  border:2px solid #00d4ff;
+}
+
+.heading img{
+  height:90px; /* BIG TITLE FIX */
+  object-fit:contain;
+}
+
+.search img{
+  width:42px;
+  cursor:pointer;
 }
 
 /* COVER */
 .cover{
-  width:100%;
-  max-width:350px;
-  margin:30px auto;
+  width:90%;
+  max-width:400px;
   display:block;
-  border-radius:16px;
-  box-shadow:0 10px 30px rgba(0,212,255,0.3);
+  margin:20px auto;
+  border-radius:15px;
 }
 
 /* SUMMARY */
 .summary{
-  margin:20px;
-  padding:20px;
+  padding:15px;
+  margin:10px;
   background:rgba(255,255,255,0.05);
-  border-radius:15px;
-  line-height:1.6;
-  border:1px solid rgba(0,212,255,0.2);
+  border-radius:12px;
 }
 
-/* SEARCH */
-.search-bar{
-  width:90%;
-  margin:20px auto;
+/* EPISODES */
+.episodes-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  padding:10px;
+}
+
+.btn{
   display:block;
-  padding:12px;
-  border-radius:25px;
-  border:2px solid var(--primary);
-  background:transparent;
+  background:linear-gradient(45deg,#00d4ff,#ff4fd8);
   color:white;
+  padding:14px;
+  border-radius:12px;
+  text-align:center;
+  font-weight:bold;
+  text-decoration:none;
+  box-shadow:0 4px 15px rgba(0,212,255,0.3);
+  transition:0.3s;
+}
+
+.btn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 25px rgba(255,79,216,0.4);
 }
 
 /* PAGINATION */
@@ -73,164 +90,181 @@ header img{
   display:flex;
   flex-wrap:wrap;
   justify-content:center;
-  gap:8px;
-  margin:10px;
+  gap:5px;
+  padding:10px;
 }
 
-.pagination button{
+.page-btn{
   padding:8px 12px;
   border:none;
   border-radius:8px;
-  background:#111;
+  background:#222;
   color:white;
   cursor:pointer;
 }
 
-.pagination button.active{
-  background:var(--primary);
+.page-btn.active{
+  background:#00d4ff;
   color:black;
 }
 
-/* GRID */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
-  gap:10px;
+/* SEARCH */
+.search-bar{
+  width:90%;
+  margin:10px auto;
+  display:block;
   padding:10px;
-}
-
-.episode{
-  padding:12px;
-  text-align:center;
-  background:rgba(255,255,255,0.08);
-  border-radius:12px;
-  cursor:pointer;
-  transition:0.3s;
-}
-
-.episode:hover{
-  background:var(--primary);
-  color:black;
-  transform:scale(1.05);
-}
-
-/* BACK */
-.back{
-  text-align:center;
-  margin:40px;
-}
-
-.back a{
-  color:#aaa;
-  text-decoration:none;
-}
-
-.back a:hover{
-  color:var(--primary);
+  border-radius:10px;
+  border:none;
+  outline:none;
 }
 </style>
 </head>
 
 <body>
 
+<!-- ACCESS CONTROL -->
+<script>
+function getCookie(name) {
+  let matches = document.cookie.match(new RegExp(
+    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+  ));
+  return matches ? decodeURIComponent(matches[1]) : "";
+}
+
+if (getCookie("site_access") !== "true") {
+  document.documentElement.innerHTML = `
+    <head><title>Access Blocked</title></head>
+    <body style="margin:0; background:#111; color:white; font-family:Arial; text-align:center; padding:50px;">
+      <div style="font-size:24px; background:#900; padding:30px; border-radius:15px; max-width:90%; margin:auto;">
+        ⚠️ Direct Access Blocked<br><br>
+        Shortener solve karke hi site open hogi.<br><br>
+        <a href="https://gplinks.co/BFmfakvr" style="color:#fff; background:#f00; padding:15px; border-radius:10px; text-decoration:none;">Unlock Site</a>
+      </div>
+    </body>`;
+  throw new Error("Blocked");
+}
+</script>
+
+<!-- HEADER -->
 <header>
-  <img src="assets/heading.png">
-  <img src="assets/search-icon.png" onclick="location.href='search.html'">
+  <div class="logo">
+    <img src="../assets/logo.png">
+  </div>
+
+  <div class="heading">
+    <img src="../assets/logo-circle.png">
+  </div>
+
+  <div class="search" onclick="location.href='../search.html'">
+    <img src="../assets/search.png">
+  </div>
 </header>
 
+<!-- COVER -->
 <img id="cover" class="cover">
+
+<!-- SUMMARY -->
 <div class="summary" id="summary"></div>
 
-<input class="search-bar" id="search" placeholder="Episode search..." onkeyup="searchEpisode()">
+<!-- SEARCH EPISODE -->
+<input class="search-bar" id="search" placeholder="Episode number search..." onkeyup="filterEpisodes()">
 
+<!-- PAGINATION -->
 <div class="pagination" id="pagination"></div>
 
-<div class="grid" id="grid"></div>
-
-<div class="back">
-  <a href="index.html">← Back to Home</a>
-</div>
+<!-- EPISODES -->
+<div class="episodes-grid" id="episodesGrid"></div>
 
 <script>
-// GET COMIC NAME FROM URL
 const params = new URLSearchParams(location.search);
-const comic = params.get("comic");
+const comicSlug = params.get("comic");
 
-// CONFIG DATA (FROM JSON OR INLINE)
-let data = {};
-
-fetch("comics.json")
-.then(r=>r.json())
-.then(list=>{
-  data = list.find(c=>c.slug===comic);
-
-  document.title = data.title + " - Comic PUR";
-  document.getElementById("cover").src = data.cover;
-  document.getElementById("summary").innerText = data.summary;
-
-  initEpisodes();
-});
-
+let totalEpisodes = 100;
 let currentPage = 1;
 const perPage = 20;
 
-function initEpisodes(){
+let comicData={};
+
+fetch("../comics.json")
+.then(r=>r.json())
+.then(data=>{
+  comicData = data.find(c=>c.slug===comicSlug);
+
+  document.getElementById("cover").src = comicData.cover;
+  document.getElementById("summary").innerText = comicData.summary;
+
+  totalEpisodes = comicData.episodes;
+
   render();
-  pagination();
-}
+});
 
 function render(){
-  const grid = document.getElementById("grid");
+  renderPagination();
+  renderEpisodes();
+}
+
+/* PAGINATION */
+function renderPagination(){
+  const pag=document.getElementById("pagination");
+  pag.innerHTML="";
+
+  let pages=Math.ceil(totalEpisodes/perPage);
+
+  for(let i=1;i<=pages;i++){
+    let btn=document.createElement("button");
+    btn.innerText=`${(i-1)*perPage+1}-${Math.min(i*perPage,totalEpisodes)}`;
+    btn.className="page-btn"+(i===currentPage?" active":"");
+
+    btn.onclick=()=>{
+      currentPage=i;
+      renderEpisodes();
+      renderPagination();
+    };
+
+    pag.appendChild(btn);
+  }
+}
+
+/* EPISODES */
+function renderEpisodes(){
+  const grid=document.getElementById("episodesGrid");
   grid.innerHTML="";
 
   let start=(currentPage-1)*perPage+1;
-  let end=Math.min(start+perPage-1,data.episodes);
+  let end=Math.min(start+perPage-1,totalEpisodes);
 
   for(let i=start;i<=end;i++){
-    grid.innerHTML+=`
-      <div class="episode" onclick="openEp(${i})">
-        EP ${i}
-      </div>
-    `;
+    let a=document.createElement("a");
+    a.href=`../reader/${comicSlug}/ch${i}.html`;
+    a.className="btn";
+    a.innerText="Episode "+i;
+    grid.appendChild(a);
   }
 }
 
-function pagination(){
-  const p=document.getElementById("pagination");
-  p.innerHTML="";
-
-  let pages=Math.ceil(data.episodes/perPage);
-
-  for(let i=1;i<=pages;i++){
-    p.innerHTML+=`
-      <button onclick="change(${i})">${i}</button>
-    `;
-  }
-}
-
-function change(i){
-  currentPage=i;
-  render();
-}
-
-function openEp(n){
-  location.href=`reader/${comic}/ch${n}.html`;
-}
-
-function searchEpisode(){
-  const val=document.getElementById("search").value;
-  const grid=document.getElementById("grid");
+/* SEARCH */
+function filterEpisodes(){
+  let val=document.getElementById("search").value;
+  const grid=document.getElementById("episodesGrid");
+  grid.innerHTML="";
 
   if(!val){
-    render();
+    renderEpisodes();
     return;
   }
 
-  let n=parseInt(val);
-
-  if(n>=1 && n<=data.episodes){
-    grid.innerHTML=`<div class="episode" onclick="openEp(${n})">EP ${n}</div>`;
+  let num=parseInt(val);
+  if(isNaN(num) || num<1 || num>totalEpisodes){
+    grid.innerHTML="No episode found";
+    return;
   }
+
+  let a=document.createElement("a");
+  a.href=`../reader/${comicSlug}/ch${num}.html`;
+  a.className="btn";
+  a.innerText="Episode "+num;
+  grid.appendChild(a);
 }
 </script>
 
