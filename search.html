@@ -1,49 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Search - Comic PUR</title>
 
 <style>
 
-*{margin:0;padding:0;box-sizing:border-box;}
-
 body{
+margin:0;
 background:#0f001f;
 color:#e0e0ff;
-font-family:'Segoe UI',system-ui,sans-serif;
+font-family:'Segoe UI',system-ui;
 }
 
-/* SEARCH HEADER */
+/* HEADER */
 
-.search-header{
-text-align:center;
-padding:20px 16px;
-position:sticky;
-top:0;
-background:#0f001f;
-z-index:10;
+header{
+height:52px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 14px;
+background:#0a001f;
 }
 
-.search-title{
-font-size:24px;
-font-weight:800;
-margin-bottom:10px;
+header img{
+height:42px;
 }
 
-#searchInput{
-width:90%;
-max-width:420px;
-padding:14px 18px;
-border-radius:40px;
-border:2px solid #00d4ff;
-background:#160033;
-color:white;
-font-size:15px;
+/* SEARCH BOX */
+
+.search-box{
+padding:14px;
+}
+
+input{
+width:100%;
+padding:12px;
+border-radius:10px;
+border:none;
 outline:none;
+background:#1a003f;
+color:white;
+font-size:14px;
 }
 
 /* GRID */
@@ -51,20 +51,14 @@ outline:none;
 .grid{
 display:grid;
 grid-template-columns:repeat(2,1fr);
-gap:16px;
-padding:16px;
-max-width:1200px;
-margin:auto;
+gap:14px;
+padding:14px;
 }
 
-/* CARD */
-
 .card{
-border-radius:16px;
-overflow:hidden;
 position:relative;
-aspect-ratio:2/3;
-box-shadow:0 8px 25px rgba(0,0,0,0.6);
+border-radius:14px;
+overflow:hidden;
 }
 
 .card img{
@@ -76,44 +70,34 @@ object-fit:cover;
 .overlay{
 position:absolute;
 bottom:0;
+padding:8px;
+background:linear-gradient(transparent,black);
 width:100%;
-padding:10px;
-background:linear-gradient(transparent,rgba(0,0,0,0.9));
-}
-
-.title{
-font-size:14px;
-font-weight:700;
-}
-
-.episodes{
-font-size:12px;
-opacity:.9;
+font-size:13px;
 }
 
 .badge{
 position:absolute;
-top:6px;
-right:6px;
-font-size:10px;
-padding:3px 6px;
-border-radius:4px;
+top:0;
+right:0;
+padding:4px 8px;
+font-size:11px;
 font-weight:bold;
-color:white;
+border-bottom-left-radius:10px;
 }
 
 .pg{background:#00c853;}
-.adult{background:#ff1744;}
-
-.message{
-text-align:center;
-margin-top:30px;
-opacity:.6;
-}
+.ad{background:#ff1744;}
 
 a{
 text-decoration:none;
 color:white;
+}
+
+.no-result{
+text-align:center;
+margin-top:30px;
+opacity:.7;
 }
 
 </style>
@@ -121,113 +105,98 @@ color:white;
 
 <body>
 
+<header>
+<img src="assets/heading.png">
+<img src="assets/logo-circle.png">
+<img src="assets/search-icon.png" onclick="location.href='index.html'">
+</header>
 
-<div class="search-header">
-
-<div class="search-title">
-Search Comic
+<!-- SEARCH -->
+<div class="search-box">
+<input type="text" id="searchInput" placeholder="Search comics..." onkeyup="search()">
 </div>
 
-<input type="text" id="searchInput" placeholder="Search comics...">
+<!-- RESULT -->
+<div class="grid" id="grid"></div>
 
-</div>
-
-
-<div id="message" class="message">
-Start typing to search comics
-</div>
-
-<div class="grid" id="comicGrid"></div>
-
+<div id="noResult" class="no-result"></div>
 
 <script>
 
-let comics=[];
+let comicsData=[];
+let episodesData=[];
 
-fetch("comic.json")
-.then(res=>res.json())
-.then(data=>{
-comics=data.comics;
+/* LOAD JSON */
+
+Promise.all([
+fetch("data/comics.json").then(r=>r.json()),
+fetch("data/episodes.json").then(r=>r.json())
+])
+.then(([c,e])=>{
+comicsData=c.comics;
+episodesData=e.episodes;
+render(comicsData);
 });
 
+/* RENDER */
 
-function displayComics(list){
+function render(list){
 
-const grid=document.getElementById("comicGrid");
-const message=document.getElementById("message");
+const grid=document.getElementById("grid");
+const noResult=document.getElementById("noResult");
 
 grid.innerHTML="";
+noResult.innerHTML="";
 
 if(list.length===0){
-
-message.style.display="block";
-message.innerText="No comics found";
+noResult.innerHTML="No comics found";
 return;
-
 }
 
-message.style.display="none";
+list.forEach(c=>{
 
-list.forEach(comic=>{
+let ep = episodesData.find(e=>e.slug===c.slug);
 
-let badgeText="PG-13";
-let badgeClass="pg";
+grid.innerHTML+=`
+<a href="comic.html?comic=${c.slug}">
 
-if(comic.badge==="18+"){
-badgeText="18+";
-badgeClass="adult";
-}
-
-const card=`
-<a href="${comic.page}">
 <div class="card">
 
-<span class="badge ${badgeClass}">
-${badgeText}
+<span class="badge ${c.badge==="AD-18"?"ad":"pg"}">
+${c.badge}
 </span>
 
-<img src="${comic.cover}">
+<img src="${c.cover}">
 
 <div class="overlay">
-<div class="title">${comic.title}</div>
-<div class="episodes">Episodes: ${comic.episodes}</div>
+${c.title}<br>
+<span style="font-size:11px;">
+${ep ? ep.total+" Episodes" : ""}
+</span>
 </div>
 
 </div>
+
 </a>
 `;
 
-grid.innerHTML+=card;
-
 });
 
 }
 
+/* SEARCH */
 
-document.getElementById("searchInput").addEventListener("input",function(){
+function search(){
 
-const value=this.value.toLowerCase().trim();
+let value=document.getElementById("searchInput").value.toLowerCase();
 
-const grid=document.getElementById("comicGrid");
-const message=document.getElementById("message");
-
-if(value===""){
-
-grid.innerHTML="";
-message.style.display="block";
-message.innerText="Start typing to search comics";
-
-return;
-
-}
-
-const filtered=comics.filter(c=>
+let filtered=comicsData.filter(c=>
 c.title.toLowerCase().includes(value)
 );
 
-displayComics(filtered);
+render(filtered);
 
-});
+}
 
 </script>
 
